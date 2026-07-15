@@ -3,16 +3,13 @@
 // ==========================================================
 
 try {
-    // --- 1. Load Storybook & Handwritten Fonts ---
     const fontLink = document.createElement('link');
     fontLink.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Serif+Display&display=swap';
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 
-    // --- 2. The Magical CSS ---
     const letterStyles = document.createElement('style');
     letterStyles.innerHTML = `
-        /* --- The Drawer Environment --- */
         #drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(245, 240, 235, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -26,80 +23,47 @@ try {
             margin: 80px 0 50px 0; font-size: 2.5rem; line-height: 1.4;
         }
 
-        .drawer-subtitle {
-            font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #6D5E85; font-style: italic; opacity: 0.8;
-        }
+        .drawer-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #6D5E85; font-style: italic; opacity: 0.8; }
 
-        #envelope-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 50px; width: 90%; max-width: 1100px;
-        }
+        #envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; width: 90%; max-width: 1100px; }
 
-        /* --- The Envelopes --- */
-        .envelope-container {
-            width: 280px; height: 180px; position: relative; cursor: pointer;
-            perspective: 1500px; margin: 0 auto;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
-        }
+        .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
         
         .envelope-body {
-            position: absolute; bottom: 0; width: 100%; height: 100%;
-            border-radius: 12px;
+            position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
             box-shadow: 0 15px 35px rgba(90, 74, 120, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
-            display: flex; justify-content: center; 
-            align-items: flex-end; padding-bottom: 25px; box-sizing: border-box;
-            text-align: center; border: 1px solid rgba(255,255,255,0.4); z-index: 3;
-            transition: all 0.5s ease;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: flex-end; padding-bottom: 25px; box-sizing: border-box;
+            text-align: center; border: 1px solid rgba(255,255,255,0.4); z-index: 3; transition: all 0.5s ease; overflow: hidden;
         }
         
-        .envelope-label {
-            font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: #4A3B5C;
-            padding: 0 15px; line-height: 1.2; z-index: 4; font-weight: 600;
-        }
+        .envelope-label { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: #4A3B5C; padding: 0 15px; line-height: 1.2; z-index: 4; font-weight: 600; }
 
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
-            border-left: 140px solid transparent; border-right: 140px solid transparent;
-            z-index: 5; transform-origin: top; 
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
+            border-left: 140px solid transparent; border-right: 140px solid transparent; z-index: 5; transform-origin: top; 
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
         }
 
         .wax-seal {
-            position: absolute; top: 80px; left: 120px; width: 40px; height: 40px;
-            border-radius: 50%; z-index: 6;
+            position: absolute; top: 80px; left: 120px; width: 40px; height: 40px; border-radius: 50%; z-index: 6;
             display: flex; justify-content: center; align-items: center; color: white;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.15), inset 0 -3px 5px rgba(0,0,0,0.2); font-size: 1.2rem;
-            transition: all 0.4s ease;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15), inset 0 -3px 5px rgba(0,0,0,0.2); font-size: 1.2rem; transition: all 0.4s ease;
         }
 
-        /* Hover Animations */
         .envelope-container:hover { transform: translateY(-12px); filter: drop-shadow(0 20px 30px rgba(90, 74, 120, 0.2)); }
         .envelope-container:hover .envelope-flap { transform: rotateX(170deg); z-index: 1; }
         .envelope-container:hover .wax-seal { opacity: 0; transform: scale(0.5); }
-        
-        /* The Poetic Preview Card (At bottom of screen) */
-        #preview-zone {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; z-index: 2500; pointer-events: none;
-            display: flex; justify-content: center;
-        }
+        .envelope-container:hover .preview-card { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+
+        #preview-zone { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; z-index: 2500; pointer-events: none; display: flex; justify-content: center; }
 
         .preview-card {
-            background: #FFFDF9; border-radius: 20px; padding: 25px 35px;
-            box-shadow: 0 15px 40px rgba(50,30,80,0.15);
-            text-align: center; border: 2px solid white;
-            position: absolute; bottom: 0; 
-            opacity: 0; transform: translate(-50%, 20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            width: 100%;
+            background: #FFFDF9; border-radius: 20px; padding: 25px 35px; box-shadow: 0 15px 40px rgba(50,30,80,0.15);
+            text-align: center; border: 2px solid white; position: absolute; bottom: 0; 
+            opacity: 0; transform: translate(-50%, 20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); width: 100%;
         }
 
-        .preview-line {
-            font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #5D4E75;
-            margin: 8px 0; opacity: 0; transform: translateY(10px);
-            transition: all 0.6s ease; font-style: italic;
-        }
+        .preview-line { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #5D4E75; margin: 8px 0; opacity: 0; transform: translateY(10px); transition: all 0.6s ease; font-style: italic; }
         .preview-card.show .preview-line { opacity: 1; transform: translateY(0); }
 
         .envelope-opening { pointer-events: none; }
@@ -107,62 +71,41 @@ try {
         .envelope-opening .wax-seal { opacity: 0; }
         .envelope-opening .envelope-body { filter: brightness(1.2); transform: scale(1.05); opacity: 0; transition: all 1.5s ease; }
 
-        /* --- The Reading Room (The Cinematic Letter) --- */
         #letter-room {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             display: none; justify-content: center; align-items: center; z-index: 3000;
-            opacity: 0; transition: opacity 1.5s ease;
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
+            opacity: 0; transition: opacity 1.5s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
         }
 
-        /* Environmental Backgrounds */
         .bg-sad { background: linear-gradient(135deg, #2a2d34, #4b5267); }
         .bg-happy { background: linear-gradient(135deg, #FFF0B3, #FFDCEB); }
         .bg-night { background: linear-gradient(135deg, #1A1A2E, #16213E); }
         .bg-sick { background: linear-gradient(135deg, #D4E6D2, #E8F2E6); }
         .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
 
-        /* The Paper */
         .letter-paper-full {
-            background: linear-gradient(180deg, #fffdf9, #fdf7ef);
-            width: 90%; max-width: 650px; height: 85vh;
-            padding: 80px 60px 150px 60px; border-radius: 6px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 20px rgba(255,255,255,0.2) inset;
-            transform: rotate(3deg) translateY(60px); opacity: 0;
-            transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
-            overflow-y: auto; overflow-x: hidden; position: relative;
-            scroll-behavior: smooth;
+            background: linear-gradient(180deg, #fffdf9, #fdf7ef); width: 90%; max-width: 650px; height: 85vh;
+            padding: 80px 60px 150px 60px; border-radius: 6px; box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 20px rgba(255,255,255,0.2) inset;
+            transform: rotate(3deg) translateY(60px); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
         
-        /* Texture Overlay */
-        .letter-paper-full::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.05; pointer-events: none; z-index: 0; mix-blend-mode: multiply;
-        }
-        
+        .letter-paper-full::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.05; pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
         .letter-paper-full::-webkit-scrollbar { display: none; }
-        
-        /* Unfolding Animation */
         .paper-ready { transform: rotate(0deg) translateY(0); opacity: 1; }
-
         .paper-content-wrapper { position: relative; z-index: 1; }
         
-        /* Dynamic Decorations */
         .decor-top-left { position: absolute; top: 10px; left: 10px; font-size: 1.8rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .decor-bottom-right { position: absolute; bottom: 10px; right: 10px; font-size: 1.8rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .memory-pin { position: absolute; top: -30px; right: 20px; font-family: 'Caveat', cursive; font-size: 1.2rem; color: #8B6F97; transform: rotate(5deg); opacity: 0.7; }
 
         .paper-header { font-family: 'DM Serif Display', serif; font-size: 38px; color: #4A3B5C; text-align: center; margin-bottom: 40px; }
         .paper-greeting { font-family: 'Caveat', cursive; font-size: 26px; color: #5D4E75; margin-bottom: 30px; font-weight: 600; }
-        
         .paper-body { font-family: 'Cormorant Garamond', serif; font-size: 21px; color: #3A3542; line-height: 2.2; white-space: pre-wrap; text-align: left; font-weight: 500; }
         
-        /* Handwriting Imperfections */
         .imperfection-1 { display: inline-block; transform: rotate(-0.5deg) translateY(1px); }
         .imperfection-2 { display: inline-block; transform: rotate(0.5deg) translateY(-1px); }
         
-        /* Line Reveal Animation */
         .reveal-line { opacity: 0; transform: translateY(10px); transition: all 1s ease; }
         .reveal-line.visible { opacity: 1; transform: translateY(0); }
 
@@ -173,20 +116,17 @@ try {
         .ps-content { font-family: 'Caveat', cursive; font-size: 20px; color: #6D5E85; line-height: 1.6; }
 
         .signature-text { font-family: 'Caveat', cursive; font-size: 30px; color: #4A3B5C; text-align: right; line-height: 1.4; font-weight: 700; margin-top: 40px; }
-        
         .you-exist { display: block; font-family: 'Caveat', cursive; color: #8B6F97; font-size: 1.3rem; margin: 30px 0; text-align: center; opacity: 0.7; }
 
         .letter-controls { position: fixed; bottom: 30px; display: flex; gap: 20px; z-index: 3100; opacity: 0; transition: opacity 1s ease; }
         .letter-btn { background: rgba(255,255,255,0.85); border: 1px solid rgba(200, 180, 220, 0.5); color: #5D4E75; padding: 12px 25px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
         .letter-btn:hover { background: #FFFDF9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-        /* Ambient Particles */
         #room-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; overflow: hidden; }
         .ambient-p { position: absolute; transition: all linear; opacity: 0; }
     `;
     document.head.appendChild(letterStyles);
 
-    // --- 3. The Magical Envelope Data ---
     window.lettersData = [
         { 
             id: "insecure", title: "When You're Feeling Insecure", theme: "warm", 
@@ -392,7 +332,6 @@ try {
 
     const hungryText = `Before you continue reading...\nI have one very important question.\nHave.\nYou.\nEaten?\nNo, "I'll eat later" is not an acceptable answer.\nNeither is "I forgot."\nAnd absolutely not "I just had coffee."\nThat is not food.\nI know you.\nYou'll keep saying,\n"I'll eat in five minutes."\nAnd somehow five minutes turns into three hours.\nWe're not doing that today.\nSo here's the deal.\nPause whatever you're doing.\nGo find something to eat.\nI genuinely don't care if it's a full meal, leftovers from yesterday, instant noodles, a sandwich, or breakfast at 4 p.m.\nJust eat something.\nYour body has been working hard for you all day.\nThe least you can do is give it some fuel.\nAnd before you say,\n"I'm not that hungry."\nYou probably are.\nYou've just ignored it long enough that your stomach gave up trying to convince you.\nAlso...\nIf you're sitting there thinking,\n"I don't really have anything to eat."\nTell me.\nSeriously.\nI'll order you food.\nNo arguments.\nNo "it's okay."\nNo "you don't have to."\nI know exactly what you're about to say, and the answer is still no.\nLet me.\nBesides...\nYes, I will make sure you eat.\nYes, I'm absolutely threatening you with food.\nAnd yes, it's because I know you'll somehow convince yourself you can survive on absolutely nothing all day.\nYou might get away with fooling everyone else.\nYou're not fooling me.\nNow...\nClose this letter.\nGo eat.\nThen you can come back and tell me what you had.\nAnd if your answer is,\n"Nothing."\nI'm going to pretend to be very disappointed in you.\n(Okay... not pretend. I actually will be.)\nSo go.\nShoo.\nYour food is waiting.`;
 
-
     // --- 4. The HTML Injection Function ---
     window.injectLettersEngine = function() {
         if (!document.getElementById('drawer-overlay')) {
@@ -407,7 +346,8 @@ try {
                     
                     <div id="preview-zone">
                         <div class="preview-card" id="preview-card">
-                            </div>
+                            <!-- Lines injected here dynamically -->
+                        </div>
                     </div>
                 </div>
 
@@ -507,7 +447,6 @@ try {
 
         card.classList.add('show');
         
-        // Staggered reveal
         previewTimers.forEach(t => clearTimeout(t));
         previewTimers = [];
         
@@ -515,7 +454,7 @@ try {
         lines.forEach((line, index) => {
             const timer = setTimeout(() => {
                 line.classList.add('visible');
-            }, index * 600); // 0.6s per line
+            }, index * 600);
             previewTimers.push(timer);
         });
     };
@@ -532,13 +471,24 @@ try {
         window.hidePreview();
         element.classList.add('envelope-opening');
         
-        // Drop music to 20%
+        // Dampen existing music to a whisper
         const dashMusic = document.getElementById('bg-dashboard');
-        if (dashMusic && dashMusic.volume > 0) {
+        if (dashMusic && !dashMusic.paused) {
             dashMusic.dataset.oldVol = dashMusic.volume;
-            let fade = setInterval(() => {
-                if (dashMusic.volume > 0.05) dashMusic.volume -= 0.01;
-                else clearInterval(fade);
+            let fadeDown = setInterval(() => {
+                if (dashMusic.volume > 0.02) dashMusic.volume -= 0.01;
+                else clearInterval(fadeDown);
+            }, 100);
+        }
+        
+        // Add ambient rain
+        const rainMusic = document.getElementById('sfx-rain');
+        if(rainMusic) {
+            rainMusic.volume = 0;
+            rainMusic.play().catch(e=>{});
+            let rainFadeIn = setInterval(() => {
+                if(rainMusic.volume < 0.1) rainMusic.volume += 0.01;
+                else clearInterval(rainFadeIn);
             }, 100);
         }
 
@@ -550,7 +500,6 @@ try {
             document.getElementById('drawer-overlay').style.display = 'none';
             room.className = `bg-${activeLetter.theme}`;
             
-            // Set static elements
             document.getElementById('paper-title').innerText = activeLetter.title;
             document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
             document.getElementById('paper-signature').innerHTML = activeLetter.closing || "Love,";
@@ -572,7 +521,6 @@ try {
                 document.getElementById('paper-ps-box').style.display = 'none';
             }
 
-            // Prepare Interactive Zones
             const interactive = document.getElementById('interactive-zone');
             const footer = document.getElementById('paper-footer');
             interactive.innerHTML = '';
@@ -603,13 +551,11 @@ try {
                 window.revealTextLineByLine(body, activeLetter.content);
             }
 
-            // Show Room
             room.style.display = 'flex';
             window.startAmbientParticles(activeLetter.theme);
             
             setTimeout(() => { room.style.opacity = '1'; }, 50);
             
-            // Wait for custom open time before showing paper
             setTimeout(() => { 
                 paper.classList.add('paper-ready'); 
                 document.getElementById('letter-controls').style.opacity = '1';
@@ -618,7 +564,6 @@ try {
         }, 1200); 
     };
 
-    // The Line-by-Line Typewriter Reveal
     window.revealTextLineByLine = function(container, text) {
         container.innerHTML = '';
         const lines = text.split('\n');
@@ -630,12 +575,12 @@ try {
             }
             const div = document.createElement('div');
             div.className = 'reveal-line';
-            div.innerHTML = line; // allows spans
+            div.innerHTML = line;
             container.appendChild(div);
             
             setTimeout(() => {
                 div.classList.add('visible');
-            }, 800 + (index * 800)); // 0.8s pause before starting, then 0.8s per line
+            }, 800 + (index * 800)); 
         });
     };
 
@@ -663,7 +608,6 @@ try {
         }
     };
 
-    // Ambient Particles based on Theme
     let particleInterval;
     window.startAmbientParticles = function(theme) {
         clearInterval(particleInterval);
@@ -684,7 +628,6 @@ try {
             p.style.left = Math.random() * 100 + 'vw';
             
             if (type === '💧' || type === '🌸' || type === '🍂') {
-                // Falling
                 p.style.top = '-5vh';
                 container.appendChild(p);
                 setTimeout(() => p.style.opacity = '0.4', 100);
@@ -693,7 +636,6 @@ try {
                     p.style.transform = `rotate(${Math.random() * 360}deg)`;
                 }, 200);
             } else {
-                // Floating up
                 p.style.top = '105vh';
                 container.appendChild(p);
                 setTimeout(() => p.style.opacity = '0.6', 100);
@@ -703,11 +645,10 @@ try {
                 }, 200);
             }
             
-            setTimeout(() => p.remove(), 15000); // 15 seconds
-        }, 2000); // Spawn every 2 seconds
+            setTimeout(() => p.remove(), 15000);
+        }, 2000);
     };
 
-    // Closing Functions
     window.foldLetter = function() {
         clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
@@ -717,7 +658,16 @@ try {
         document.getElementById('letter-controls').style.opacity = '0';
         room.style.opacity = '0';
         
-        // Restore music volume
+        // Stop Rain
+        const rainMusic = document.getElementById('sfx-rain');
+        if(rainMusic) {
+            let rainFadeOut = setInterval(() => {
+                if(rainMusic.volume > 0.02) rainMusic.volume -= 0.02;
+                else { rainMusic.pause(); clearInterval(rainFadeOut); }
+            }, 100);
+        }
+
+        // Restore Music
         const dashMusic = document.getElementById('bg-dashboard');
         if (dashMusic && dashMusic.dataset.oldVol) {
             let fade = setInterval(() => {
@@ -742,6 +692,24 @@ try {
         document.getElementById('letter-controls').style.opacity = '0';
         room.style.opacity = '0';
         
+        // Stop Rain
+        const rainMusic = document.getElementById('sfx-rain');
+        if(rainMusic) {
+            let rainFadeOut = setInterval(() => {
+                if(rainMusic.volume > 0.02) rainMusic.volume -= 0.02;
+                else { rainMusic.pause(); clearInterval(rainFadeOut); }
+            }, 100);
+        }
+
+        // Restore Music
+        const dashMusic = document.getElementById('bg-dashboard');
+        if (dashMusic && dashMusic.dataset.oldVol) {
+            let fade = setInterval(() => {
+                if (dashMusic.volume < parseFloat(dashMusic.dataset.oldVol)) dashMusic.volume += 0.01;
+                else clearInterval(fade);
+            }, 100);
+        }
+
         setTimeout(() => { 
             room.style.display = 'none'; 
             overlay.style.display = 'flex';
