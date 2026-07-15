@@ -149,26 +149,28 @@ sbStyles.innerHTML = `
     #sb-particles { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
     /* The Heart Symbol (Now inside the cards) */
-    .sb-flower { width: 50px; height: 50px; fill: none; stroke: #C8B6D9; stroke-width: 1.5; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); margin: 0 auto 20px auto; display: block; transition: all 1s ease; }
+    .sb-flower { width: 50px; height: 50px; fill: none; stroke: #C8B6D9; stroke-width: 1.5; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); margin: 0 auto 20px auto; display: block; transition: all 1s ease; flex-shrink: 0; }
     .theme-happy .sb-flower { stroke: #FFD700; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
     .theme-sad .sb-flower { stroke: #A8B8FF; filter: drop-shadow(0 0 15px rgba(168, 184, 255, 0.6)); }
     .theme-night .sb-flower { stroke: #E6E6FA; filter: drop-shadow(0 0 20px rgba(230, 230, 250, 0.8)); }
     .theme-comfort .sb-flower { stroke: #FFB7B2; filter: drop-shadow(0 0 15px rgba(255, 183, 178, 0.6)); }
 
     /* --- Floating Journal Page (The Questions) --- */
-    #sb-journal-zone { width: 90%; max-width: 450px; position: relative; min-height: 350px; display: flex; justify-content: center; align-items: flex-start; z-index: 5; cursor: default; }
+    #sb-journal-zone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 450px; display: flex; justify-content: center; align-items: center; z-index: 5; cursor: default; }
     
     .journal-page {
-        position: absolute; top: 0; width: 100%; background: #FFFDF9; border-radius: 15px;
+        position: absolute; top: 50%; left: 50%; width: 100%; background: #FFFDF9; border-radius: 15px;
         padding: 40px 30px; box-sizing: border-box;
         box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.1);
-        transform: translateY(30px); opacity: 0;
+        transform: translate(-50%, calc(-50% + 30px)); opacity: 0;
         transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         display: flex; flex-direction: column;
+        max-height: 85vh; overflow-y: auto; /* Limits height and adds scroll so it stays centered */
     }
+    .journal-page::-webkit-scrollbar { display: none; }
     
-    .journal-page.active { transform: translateY(0); opacity: 1; z-index: 5; }
-    .journal-page.exiting { transform: translateX(-50px) scale(0.95); opacity: 0; z-index: 4; }
+    .journal-page.active { transform: translate(-50%, -50%); opacity: 1; z-index: 5; }
+    .journal-page.exiting { transform: translate(calc(-50% - 50px), -50%) scale(0.95); opacity: 0; z-index: 4; }
 
     .j-corner-tl { position: absolute; top: 15px; left: 15px; font-size: 1.2rem; opacity: 0.5; color: #8B6F97; }
     .j-corner-br { position: absolute; bottom: 15px; right: 15px; font-size: 1.2rem; opacity: 0.5; color: #8B6F97; }
@@ -205,18 +207,18 @@ sbStyles.innerHTML = `
     }
 
     /* The 'Thinking' Text */
-    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
 
     /* The Final Unfolding Letter */
     #sb-letter-view {
-        position: absolute; width: 90%; max-width: 600px;
+        position: fixed; top: 50%; left: 50%; width: 90%; max-width: 600px;
         background: #FFF8F0; padding: 50px; border-radius: 15px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 5000;
-        transform: scaleY(0); transform-origin: top; opacity: 0;
+        transform: translate(-50%, -50%) scaleY(0); transform-origin: center; opacity: 0;
         transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
         max-height: 80vh; overflow-y: auto; cursor: pointer;
     }
-    #sb-letter-view.open { transform: scaleY(1); opacity: 1; }
+    #sb-letter-view.open { transform: translate(-50%, -50%) scaleY(1); opacity: 1; }
     #sb-letter-view::-webkit-scrollbar { display: none; }
 
     /* Utility */
