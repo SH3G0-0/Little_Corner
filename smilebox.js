@@ -134,7 +134,7 @@ sbStyles.innerHTML = `
     #sb-overlay {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: rgba(15, 10, 25, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-        display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 4000;
+        display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 4000;
         opacity: 0; transition: opacity 1.5s ease, background 1.5s ease;
         overflow: hidden; cursor: pointer;
     }
@@ -148,24 +148,28 @@ sbStyles.innerHTML = `
     /* Particles Container */
     #sb-particles { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-    /* The Heart Symbol (Now inside the cards) */
+    /* The Heart Symbol (Inside the cards) */
     .sb-flower { width: 50px; height: 50px; fill: none; stroke: #C8B6D9; stroke-width: 1.5; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); margin: 0 auto 20px auto; display: block; transition: all 1s ease; flex-shrink: 0; }
     .theme-happy .sb-flower { stroke: #FFD700; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
     .theme-sad .sb-flower { stroke: #A8B8FF; filter: drop-shadow(0 0 15px rgba(168, 184, 255, 0.6)); }
     .theme-night .sb-flower { stroke: #E6E6FA; filter: drop-shadow(0 0 20px rgba(230, 230, 250, 0.8)); }
     .theme-comfort .sb-flower { stroke: #FFB7B2; filter: drop-shadow(0 0 15px rgba(255, 183, 178, 0.6)); }
 
-    /* --- Floating Journal Page (The Questions) --- */
-    #sb-journal-zone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 450px; display: flex; justify-content: center; align-items: center; z-index: 5; cursor: default; }
+    /* --- Floating Journal Page (PERFECTLY CENTERED) --- */
+    #sb-journal-zone { 
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+        z-index: 5; cursor: pointer; 
+    }
     
     .journal-page {
-        position: absolute; top: 50%; left: 50%; width: 100%; background: #FFFDF9; border-radius: 15px;
+        position: absolute; top: 48%; left: 50%; width: 90%; max-width: 450px; 
+        background: #FFFDF9; border-radius: 15px;
         padding: 40px 30px; box-sizing: border-box;
         box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.1);
         transform: translate(-50%, calc(-50% + 30px)); opacity: 0;
         transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         display: flex; flex-direction: column;
-        max-height: 85vh; overflow-y: auto; /* Limits height and adds scroll so it stays centered */
+        max-height: 80vh; overflow-y: auto; cursor: default;
     }
     .journal-page::-webkit-scrollbar { display: none; }
     
@@ -175,7 +179,7 @@ sbStyles.innerHTML = `
     .j-corner-tl { position: absolute; top: 15px; left: 15px; font-size: 1.2rem; opacity: 0.5; color: #8B6F97; }
     .j-corner-br { position: absolute; bottom: 15px; right: 15px; font-size: 1.2rem; opacity: 0.5; color: #8B6F97; }
 
-    .j-greeting { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: #5E4B7D; margin-bottom: 10px; }
+    .j-greeting { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: #5E4B7D; margin-bottom: 10px; text-align: center; }
     .j-text { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #4B4453; line-height: 1.8; font-weight: 500; margin-bottom: 30px; white-space: pre-wrap; }
 
     /* --- Magical Tags (Buttons) --- */
@@ -206,17 +210,26 @@ sbStyles.innerHTML = `
         100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,200,240,0.5); }
     }
 
+    /* Primary Action Buttons */
+    .sb-btn {
+        background: linear-gradient(135deg, #FCF8FF, #F4E8FF); border: 1px solid #D8C8E8;
+        padding: 15px 35px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700;
+        font-size: 1.1rem; color: #5E4B7D; cursor: pointer; transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(90, 74, 120, 0.1); margin-top: 10px;
+    }
+    .sb-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(200, 180, 240, 0.4); background: #FFFDFB; }
+
     /* The 'Thinking' Text */
-    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
 
     /* The Final Unfolding Letter */
     #sb-letter-view {
-        position: fixed; top: 50%; left: 50%; width: 90%; max-width: 600px;
+        position: fixed; top: 48%; left: 50%; width: 90%; max-width: 600px;
         background: #FFF8F0; padding: 50px; border-radius: 15px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 5000;
         transform: translate(-50%, -50%) scaleY(0); transform-origin: center; opacity: 0;
         transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
-        max-height: 80vh; overflow-y: auto; cursor: pointer;
+        max-height: 80vh; overflow-y: auto; cursor: default;
     }
     #sb-letter-view.open { transform: translate(-50%, -50%) scaleY(1); opacity: 1; }
     #sb-letter-view::-webkit-scrollbar { display: none; }
@@ -378,7 +391,7 @@ window.injectSmileBox = function() {
                     <div id="sb-thinking">Hmm...</div>
                 </div>
                 
-                <div id="sb-letter-view" onclick="window.closeSmileBox()">
+                <div id="sb-letter-view">
                     ${heartSVG}
                     <div class="j-greeting" id="sb-l-greet" style="font-size: 2rem; color: #5D4E75;"></div>
                     <div class="j-text" id="sb-l-text"></div>
@@ -391,11 +404,16 @@ window.injectSmileBox = function() {
         `;
         document.body.insertAdjacentHTML('beforeend', html);
 
-        // Click outside background to escape
+        // Allow clicking the blurred background to close it
         document.getElementById('sb-overlay').addEventListener('click', function(e) {
             if (e.target.id === 'sb-overlay' || e.target.id === 'sb-journal-zone') {
                 window.closeSmileBox();
             }
+        });
+        
+        // Also allow clicking the final letter container to close it
+        document.getElementById('sb-letter-view').addEventListener('click', function(e) {
+            window.closeSmileBox();
         });
     }
 };
@@ -450,10 +468,13 @@ window.startSmileBox = function() {
     }
 
     overlay.className = 'theme-neutral';
-    overlay.style.display = 'flex';
+    
+    // Reset state properly
     document.getElementById('sb-letter-view').classList.remove('open');
     document.getElementById('sb-journal-zone').innerHTML = '<div id="sb-thinking">Hmm...</div>';
     
+    // Display with a tiny timeout to ensure CSS transitions trigger
+    overlay.style.display = 'flex';
     setTimeout(() => { overlay.style.opacity = '1'; }, 50);
     
     window.spawnParticles();
