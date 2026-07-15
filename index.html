@@ -439,8 +439,8 @@
         </div>
     </div>
 
-    <script src="smilebox.js?v=6"></script>
-    <script src="letters.js?v=6"></script>
+    <script src="smilebox.js?v=3"></script>
+    <script src="letters.js?v=3"></script>
 
     <script>
         // --- Hover Toast Logic ---
@@ -479,7 +479,7 @@
             }
         });
 
-        // --- Cinematic Cassette Player Logic (Restored to perfect normal volume!) ---
+        // --- Cinematic Cassette Player Logic (Master Toggle) ---
         let isPlaying = false;
 
         function toggleMusic() {
@@ -487,21 +487,24 @@
             const dashboardMusic = document.getElementById('bg-dashboard');
 
             if (isPlaying) {
+                // MASTER PAUSE
                 if (window.stopAllMusic) {
                     window.stopAllMusic();
                 } else {
+                    // Fallback if smilebox.js isn't loaded yet
                     if(dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
                     if(playerUI) playerUI.classList.remove('playing');
                 }
                 isPlaying = false;
             } else {
+                // MASTER PLAY
                 const trackToResume = (window.currentTrack && !window.currentTrack.paused) ? window.currentTrack : dashboardMusic;
                 
                 if (trackToResume) {
                     trackToResume.play().catch(e => console.log("Playback blocked:", e));
                     if(playerUI) playerUI.classList.add('playing');
                     
-                    // Fade it in to original normal 15% volume
+                    // Fade it in
                     let fade = setInterval(() => {
                         if (trackToResume.volume < 0.15) {
                             trackToResume.volume = Math.min(trackToResume.volume + 0.01, 0.15);
@@ -526,7 +529,7 @@
             totalVisits = localStorage.getItem('siteVisits') ? parseInt(localStorage.getItem('siteVisits')) : 0;
             totalVisits++;
             localStorage.setItem('siteVisits', totalVisits);
-        } catch(e) {}
+        } catch(e) {} // Failsafe for local testing!
 
         if (totalVisits >= 10) {
             const secretBtn = document.getElementById('secret-song-btn');
@@ -543,6 +546,7 @@
         }
 
         // --- Sequence Control ---
+        // 1. Remove Loading Screen, Show Storybook Cover
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
@@ -551,17 +555,20 @@
                 let cover = document.getElementById('storybook-cover');
                 if(cover) {
                     cover.style.display = 'flex';
+                    // Trigger reflow to ensure transition works
                     void cover.offsetWidth; 
                     cover.style.opacity = '1';
                 }
             }, 1000);
         }, 3000);
 
+        // 2. Click Cover to Open Book
         function openStorybook() {
             let cover = document.getElementById('storybook-cover');
             cover.style.opacity = '0';
             cover.style.transform = 'scale(1.1)'; 
             
+            // Start music IMMEDIATELY upon human click
             if(!isPlaying) {
                 toggleMusic();
             }
@@ -569,6 +576,7 @@
             setTimeout(() => {
                 cover.style.display = 'none';
                 
+                // Show Nav & Cozy Corner
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
                 
@@ -580,6 +588,7 @@
                     if(corner) corner.style.opacity = '1';
                 }, 50);
 
+                // Show Dashboard
                 let dashboard = document.getElementById('main-dashboard');
                 if(dashboard) {
                     dashboard.style.display = 'block';
