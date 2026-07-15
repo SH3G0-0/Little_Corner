@@ -1,8 +1,7 @@
 // ==========================================================
-// 🌸 MAGICAL SMILE BOX ENGINE (FLOATING CARDS & AUDIO)
+// 🌸 MAGICAL SMILE BOX ENGINE
 // ==========================================================
 
-// --- 1. State & Tracking ---
 let sbVisits = 0;
 try {
     const stored = localStorage.getItem('smileBoxVisits');
@@ -11,27 +10,19 @@ try {
 } catch(e) {}
 
 let currentSbTheme = 'neutral';
-
-// --- Cinematic Audio Engine (MASTER OVERRIDE) ---
 let currentTrack = null;
 
 window.crossfade = function(newTrackId, targetVolume = 0.4) {
-    // ENFORCE WHISPER VOLUME GLOBALLY 
-    targetVolume = 0.04; 
-
     const newTrack = document.getElementById(newTrackId);
     if (!newTrack) return;
 
-    // 1. Find ANY audio currently playing and fade it out
     document.querySelectorAll('audio').forEach(audio => {
         if (audio !== newTrack && !audio.paused && audio.id !== 'sfx-rain') {
-            
             if (audio.id === 'bg-dashboard') {
                 const playerUI = document.getElementById('cassette-player');
                 if (playerUI) playerUI.classList.remove('playing');
                 if (typeof window.isPlaying !== 'undefined') window.isPlaying = false;
             }
-
             let fadeOut = setInterval(() => {
                 if (audio.volume > 0.02) {
                     audio.volume = Math.max(audio.volume - 0.02, 0);
@@ -44,7 +35,6 @@ window.crossfade = function(newTrackId, targetVolume = 0.4) {
         }
     });
 
-    // 2. Fade IN the new track
     if (newTrack.paused) {
         newTrack.volume = 0;
         let playPromise = newTrack.play();
@@ -55,7 +45,7 @@ window.crossfade = function(newTrackId, targetVolume = 0.4) {
     
     let fadeIn = setInterval(() => {
         if (newTrack.volume < targetVolume) {
-            newTrack.volume = Math.min(newTrack.volume + 0.005, targetVolume);
+            newTrack.volume = Math.min(newTrack.volume + 0.02, targetVolume);
         } else {
             clearInterval(fadeIn);
         }
@@ -64,22 +54,21 @@ window.crossfade = function(newTrackId, targetVolume = 0.4) {
     currentTrack = newTrack;
 };
 
-// Global Rain Overlay logic
 window.toggleRain = function(turnOn) {
     const rain = document.getElementById('sfx-rain');
     if(!rain) return;
     
     if(turnOn) {
-        // Boost slightly for sad themes
+        rain.volume = 0;
+        rain.play().catch(e => console.log(e));
         let rainFadeIn = setInterval(() => {
-            if(rain.volume < 0.15) rain.volume = Math.min(rain.volume + 0.01, 0.15);
+            if(rain.volume < 0.15) rain.volume += 0.01;
             else clearInterval(rainFadeIn);
         }, 100);
     } else {
-        // Don't turn it off! Return to soft background hum (10%)
         let rainFadeOut = setInterval(() => {
-            if(rain.volume > 0.1) rain.volume -= 0.01;
-            else clearInterval(rainFadeOut);
+            if(rain.volume > 0.01) rain.volume -= 0.01;
+            else { rain.pause(); clearInterval(rainFadeOut); }
         }, 100);
     }
 };
@@ -110,22 +99,32 @@ const randomEndings = [
     "I'm sending you a hug right now. A really long one."
 ];
 
-// --- 2. The Magical CSS ---
 const sbStyles = document.createElement('style');
 sbStyles.innerHTML = `
     .shooting-star {
-        position: absolute; width: 3px; height: 3px; background: #fff; border-radius: 50%;
+        position: absolute; width: 3px; height: 3px;
+        background: #fff; border-radius: 50%;
         box-shadow: 0 0 10px #fff, 0 0 20px #A8B8FF, 0 0 30px #A8B8FF;
-        animation: shoot 3s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 100; opacity: 0; pointer-events: none;
+        animation: shoot 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        z-index: 100; opacity: 0; pointer-events: none;
     }
-    .shooting-star::after { content: ''; position: absolute; top: 50%; transform: translateY(-50%); width: 150px; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent); }
-    @keyframes shoot { 0% { transform: translate(120vw, -20vh) rotate(-35deg); opacity: 1; } 100% { transform: translate(-20vw, 80vh) rotate(-35deg); opacity: 0; } }
+    .shooting-star::after {
+        content: ''; position: absolute; top: 50%; transform: translateY(-50%);
+        width: 150px; height: 1px;
+        background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+    }
+    
+    @keyframes shoot {
+        0% { transform: translate(120vw, -20vh) rotate(-35deg); opacity: 1; }
+        100% { transform: translate(-20vw, 80vh) rotate(-35deg); opacity: 0; }
+    }
 
     #sb-overlay {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: rgba(15, 10, 25, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 4000;
-        opacity: 0; transition: opacity 1.5s ease, background 1.5s ease; overflow: hidden; cursor: pointer;
+        opacity: 0; transition: opacity 1.5s ease, background 1.5s ease;
+        overflow: hidden; cursor: pointer;
     }
 
     #sb-overlay.theme-happy { background: rgba(30, 20, 10, 0.6); } 
@@ -141,14 +140,16 @@ sbStyles.innerHTML = `
     .theme-night .sb-flower { stroke: #E6E6FA; filter: drop-shadow(0 0 20px rgba(230, 230, 250, 0.8)); }
     .theme-comfort .sb-flower { stroke: #FFB7B2; filter: drop-shadow(0 0 15px rgba(255, 183, 178, 0.6)); }
 
-    #sb-journal-zone { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 5; cursor: pointer; }
+    #sb-journal-zone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 450px; display: flex; justify-content: center; align-items: center; z-index: 5; cursor: default; }
     
     .journal-page {
-        position: absolute; top: 40%; left: 50%; width: 90%; max-width: 450px; 
-        background: #FFFDF9; border-radius: 15px; padding: 40px 30px; box-sizing: border-box;
+        position: absolute; top: 50%; left: 50%; width: 100%; background: #FFFDF9; border-radius: 15px;
+        padding: 40px 30px; box-sizing: border-box;
         box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.1);
-        transform: translate(-50%, calc(-50% + 30px)); opacity: 0; transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-        display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; cursor: default;
+        transform: translate(-50%, calc(-50% + 30px)); opacity: 0;
+        transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        display: flex; flex-direction: column;
+        max-height: 85vh; overflow-y: auto;
     }
     .journal-page::-webkit-scrollbar { display: none; }
     
@@ -167,22 +168,41 @@ sbStyles.innerHTML = `
         display: flex; align-items: center; gap: 15px; background: linear-gradient(to right, #FCF8FF, #FFFDFB);
         border: 1px solid rgba(200, 180, 220, 0.3); border-radius: 20px; padding: 10px 20px;
         font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 700; color: #5E4B7D;
-        cursor: pointer; transition: all 0.4s ease; text-align: left; opacity: 0; transform: translateY(10px); 
+        cursor: pointer; transition: all 0.4s ease; text-align: left;
+        opacity: 0; transform: translateY(10px); 
     }
-    .magic-tag .tag-icon { width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, #FFEAF6, #FFFDFB); font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.3s ease; }
+    
+    .magic-tag .tag-icon {
+        width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+        background: linear-gradient(135deg, #FFEAF6, #FFFDFB); font-size: 1.1rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.3s ease;
+    }
+
     .magic-tag:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255,200,240,.4); border-color: rgba(255,200,240,.8); }
     .magic-tag:hover .tag-icon { transform: scale(1.1); }
+    
     .magic-tag.selected { animation: selectPulse 0.5s ease forwards; background: linear-gradient(to right, #FFF0F8, #FFFDFB); }
-    @keyframes selectPulse { 0% { transform: scale(1); box-shadow: 0 0 0 rgba(255,200,240,0.8); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,200,240,0.8); } 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,200,240,0.5); } }
+    
+    @keyframes selectPulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 rgba(255,200,240,0.8); }
+        50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,200,240,0.8); }
+        100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,200,240,0.5); }
+    }
 
-    .sb-btn { background: linear-gradient(135deg, #FCF8FF, #F4E8FF); border: 1px solid #D8C8E8; padding: 15px 35px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem; color: #5E4B7D; cursor: pointer; transition: all 0.4s ease; box-shadow: 0 5px 15px rgba(90, 74, 120, 0.1); margin-top: 10px; }
+    .sb-btn {
+        background: linear-gradient(135deg, #FCF8FF, #F4E8FF); border: 1px solid #D8C8E8;
+        padding: 15px 35px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700;
+        font-size: 1.1rem; color: #5E4B7D; cursor: pointer; transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(90, 74, 120, 0.1); margin-top: 10px;
+    }
     .sb-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(200, 180, 240, 0.4); background: #FFFDFB; }
 
-    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
 
     #sb-letter-view {
-        position: fixed; top: 40%; left: 50%; width: 90%; max-width: 600px;
-        background: #FFF8F0; padding: 50px; border-radius: 15px; box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 5000;
+        position: fixed; top: 50%; left: 50%; width: 90%; max-width: 600px;
+        background: #FFF8F0; padding: 50px; border-radius: 15px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 5000;
         transform: translate(-50%, -50%) scaleY(0); transform-origin: center; opacity: 0;
         transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
         max-height: 80vh; overflow-y: auto; cursor: default;
@@ -302,7 +322,7 @@ window.startSmileBox = function() {
     try { sbVisits++; localStorage.setItem('smileBoxVisits', sbVisits); } catch(e) {}
     const overlay = document.getElementById('sb-overlay');
     const dash = document.getElementById('main-dashboard');
-    if(window.crossfade) window.crossfade('bg-smilebox', 0.04);
+    if(window.crossfade) window.crossfade('bg-smilebox', 0.3);
     if(dash) { dash.style.transition = 'filter 1s ease'; dash.style.filter = 'blur(8px) brightness(0.6)'; }
     overlay.className = 'theme-neutral';
     document.getElementById('sb-letter-view').classList.remove('open');
@@ -360,11 +380,11 @@ window.selectSbOption = function(element, nextAction, endingLetter, themeOverrid
     if(themeOverride) { document.getElementById('sb-overlay').className = `theme-${themeOverride}`; }
     if(window.crossfade) {
         if (nextAction === "bad_miss" || endingLetter === "miss") {
-            window.crossfade('bg-katawaredoki', 0.05);
+            window.crossfade('bg-katawaredoki', 0.5);
             setTimeout(() => { const star = document.createElement('div'); star.className = 'shooting-star'; document.getElementById('sb-overlay').appendChild(star); setTimeout(() => star.remove(), 4000); }, 1500);
         }
-        if (nextAction === "heavy_start") { window.crossfade('bg-sad', 0.04); window.toggleRain(true); }
-        if (nextAction === "happy_start") { window.crossfade('bg-happy', 0.04); }
+        if (nextAction === "heavy_start") { window.crossfade('bg-sad', 0.2); window.toggleRain(true); }
+        if (nextAction === "happy_start") { window.crossfade('bg-happy', 0.3); }
     }
     setTimeout(() => {
         const currentPage = element.closest('.journal-page');
@@ -413,7 +433,7 @@ window.closeSmileBox = function() {
     document.querySelectorAll('.journal-page').forEach(p => p.remove());
     overlay.style.opacity = '0';
     if(dash) { dash.style.filter = 'none'; }
-    if(window.crossfade) window.crossfade('bg-dashboard', 0.04);
+    if(window.crossfade) window.crossfade('bg-dashboard', 0.3);
     if(window.toggleRain) window.toggleRain(false);
     setTimeout(() => { overlay.style.display = 'none'; }, 1500);
 };
