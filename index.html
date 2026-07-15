@@ -14,7 +14,7 @@
             --text-color: #5A4A78;
             --glass-bg: rgba(255, 255, 255, 0.4);
             --glass-border: rgba(255, 255, 255, 0.7);
-            --outline-color: #5A4A78;
+            --outline-color: #5A4A78; /* Used for the indie-game illustration outlines */
         }
 
         /* --- Magical Sparkle Cursor --- */
@@ -39,9 +39,18 @@
         /* --- Minimal Navbar --- */
         nav {
             position: fixed;
-            top: 0; left: 0; width: 100%; display: flex; justify-content: center; align-items: center;
-            padding: 20px 40px; box-sizing: border-box; background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 90;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 40px;
+            box-sizing: border-box;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 90;
             border-bottom: 1px solid var(--glass-border);
         }
         
@@ -49,98 +58,222 @@
 
         /* --- Anime Slice-of-Life Cozy Corner --- */
         #cozy-corner {
-            position: fixed; bottom: 30px; left: 40px; display: flex; align-items: flex-end; gap: 15px;
-            z-index: 9999; display: none; opacity: 0; transition: opacity 2s ease;
+            position: fixed;
+            bottom: 30px;
+            left: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            z-index: 9999;
+            display: none; /* Hidden until dashboard loads */
+            opacity: 0;
+            transition: opacity 2s ease;
         }
 
-        .desk-item { position: relative; transition: transform 0.3s ease; filter: drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15)); }
+        .desk-item {
+            position: relative;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15));
+        }
+
         .desk-item:hover { transform: translateY(-5px); }
 
         /* Cassette Player Specifics */
-        .cassette-player { cursor: pointer; transition: all 0.4s ease; }
+        .cassette-player {
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
         
+        /* Tooltip for the Mixtape */
         .cassette-player::before {
             content: "📼 A Little Mixtape";
-            position: absolute; top: -40px; left: 50%; transform: translateX(-50%) scale(0.9);
-            background: white; color: var(--text-color); padding: 5px 12px; border-radius: 20px;
-            font-size: 0.85rem; font-weight: bold; opacity: 0; pointer-events: none;
-            transition: all 0.3s ease; border: 1px solid var(--glass-border); white-space: nowrap;
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: white;
+            color: var(--text-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            white-space: nowrap;
         }
 
-        .cassette-player:hover::before { opacity: 1; transform: translateX(-50%) scale(1); }
+        .cassette-player:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
 
-        .cassette-player.playing { filter: drop-shadow(0 0 15px rgba(255, 230, 150, 0.8)) drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15)); }
-        .cassette-player.playing::before { content: "🎵 Now Playing"; opacity: 1; background: #FFF6CC; }
+        /* Glowing & Spinning logic for active music */
+        .cassette-player.playing {
+            filter: drop-shadow(0 0 15px rgba(255, 230, 150, 0.8)) drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15));
+        }
+        
+        .cassette-player.playing::before {
+            content: "🎵 Now Playing";
+            opacity: 1;
+            background: #FFF6CC;
+        }
 
         .reels-group { transform-origin: center; }
         .playing .reels-group { animation: spinReels 3s linear infinite; }
-        @keyframes spinReels { 100% { transform: rotate(360deg); } }
+
+        @keyframes spinReels {
+            100% { transform: rotate(360deg); }
+        }
 
         /* --- Phase 1: Loading Screen --- */
         #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 200; transition: opacity 1s ease-out;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            transition: opacity 1s ease-out;
         }
 
-        .heart-bar-container { width: 200px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 10px; margin-top: 20px; overflow: hidden; position: relative; }
-        .heart-bar { height: 100%; width: 0%; background: #FFDCEB; border-radius: 10px; animation: fillBar 3s ease-in-out forwards; }
+        .heart-bar-container {
+            width: 200px;
+            height: 10px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heart-bar {
+            height: 100%;
+            width: 0%;
+            background: #FFDCEB;
+            border-radius: 10px;
+            animation: fillBar 3s ease-in-out forwards;
+        }
+
         @keyframes fillBar { to { width: 100%; } }
 
         /* --- Phase 2: Storybook Cover --- */
         #storybook-cover {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient);
-            display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            z-index: 150; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-gradient);
+            display: none; /* Shows after loading */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 150;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+            cursor: pointer; 
         }
 
         .storybook-text {
-            max-width: 500px; padding: 40px; background: rgba(255, 255, 255, 0.4); border-radius: 30px;
-            backdrop-filter: blur(10px); border: 2px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: gentleFloat 4s ease-in-out infinite;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            animation: gentleFloat 4s ease-in-out infinite;
         }
 
         .storybook-text h1 { font-size: 2.8rem; margin: 10px 0; color: #5A4A78; }
         .storybook-text p { font-size: 1.2rem; line-height: 1.8; margin: 20px 0; }
         .storybook-text .hint { font-size: 0.9rem; opacity: 0.6; margin-top: 30px; font-style: italic; }
 
-        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
         /* --- Phase 3: Main Dashboard --- */
         .dashboard-container {
-            max-width: 900px; margin: 120px auto 0; padding: 40px 20px 160px 20px; text-align: center;
-            display: none; opacity: 0; transform: translateY(30px); transition: all 1.5s ease;
+            max-width: 900px;
+            margin: 120px auto 0; 
+            padding: 40px 20px 160px 20px;
+            text-align: center;
+            display: none; 
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease;
         }
 
-        .dashboard-container.visible { opacity: 1; transform: translateY(0); }
+        .dashboard-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-        /* Interactive Garden Decor */
-        .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
+        /* --- Interactive Garden Decor --- */
+        .decor {
+            position: fixed;
+            pointer-events: none; z-index: -5; transition: all 0.5s ease;
+        }
 
+        /* Parallax Clouds */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
         .cloud-mid { font-size: 2.5rem; opacity: 0.5; z-index: -3; filter: blur(1px); }
         .cloud-far { font-size: 1.5rem; opacity: 0.3; z-index: -4; filter: blur(2px); }
         .cloud-farthest { font-size: 1rem; opacity: 0.15; z-index: -5; filter: blur(4px); }
-        @keyframes drift-r { from { transform: translateX(-20vw); } to { transform: translateX(110vw); } }
 
+        @keyframes drift-r {
+            from { transform: translateX(-20vw); }
+            to { transform: translateX(110vw); }
+        }
+
+        /* Stars & Flowers */
         .star { font-size: 1.5rem; opacity: 0.6; z-index: -5; }
         .flower { font-size: 1.8rem; opacity: 0.6; z-index: -5; animation: gentle-sway 8s ease-in-out infinite alternate; }
-        @keyframes gentle-sway { 0% { transform: translateY(0) rotate(-10deg); } 100% { transform: translateY(-20px) rotate(15deg); } }
+        @keyframes gentle-sway {
+            0% { transform: translateY(0) rotate(-10deg); }
+            100% { transform: translateY(-20px) rotate(15deg); }
+        }
 
-        /* Handmade Organic Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 40px; position: relative; z-index: 10; }
+        /* --- Handmade Organic Cards --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 10; 
+        }
 
         .card {
-            padding: 35px 20px; border-radius: 20px 35px 15px 30px; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            font-size: 1.3rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 15px;
-            color: var(--text-color); background: var(--glass-bg); backdrop-filter: blur(8px);
-            border: 2px solid var(--glass-border); box-shadow: 0 8px 20px rgba(0,0,0,0.04); cursor: pointer;
+            padding: 35px 20px;
+            border-radius: 20px 35px 15px 30px; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-color);
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            cursor: pointer;
         }
 
         .card span { font-size: 3.5rem; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); }
 
-        .card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-radius: 30px 15px 35px 20px; }
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-radius: 30px 15px 35px 20px; 
+        }
 
         .card:nth-child(1) { background-color: rgba(255, 220, 235, 0.6); } 
         .card:nth-child(2) { background-color: rgba(221, 238, 255, 0.6); } 
@@ -149,15 +282,32 @@
         .card:nth-child(5) { background-color: rgba(255, 230, 215, 0.6); } 
         .card:nth-child(6) { background-color: rgba(242, 236, 255, 0.6); } 
 
-        .footer { margin-top: 80px; font-size: 1rem; opacity: 0.8; font-family: 'DM Serif Display', serif; }
+        .footer {
+            margin-top: 80px;
+            font-size: 1rem;
+            opacity: 0.8;
+            font-family: 'DM Serif Display', serif;
+        }
 
-        /* New Hover Toast */
+        /* --- New Hover Toast --- */
         #hover-toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 24px;
-            border-radius: 25px; background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
-            color: var(--text-color); font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
-            z-index: 1000; display: none; pointer-events: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 2px solid white; white-space: nowrap;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 25px;
+            background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
+            color: var(--text-color);
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 1000;
+            display: none;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid white;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -198,37 +348,47 @@
                 <rect x="5" y="10" width="80" height="45" rx="6" fill="#F2ECFF" stroke="var(--outline-color)" stroke-width="2"/>
                 <rect x="10" y="15" width="70" height="35" rx="4" fill="#ffffff" stroke="var(--outline-color)" stroke-width="2"/>
                 <rect x="20" y="22" width="50" height="20" rx="2" fill="#3a3a3a"/>
+                
                 <g class="reels-group" style="transform-origin: 32px 32px;">
                     <circle cx="32" cy="32" r="7" fill="#FFF6CC"/>
                     <circle cx="32" cy="32" r="2" fill="#3a3a3a"/>
                     <line x1="32" y1="25" x2="32" y2="39" stroke="#3a3a3a" stroke-width="1.5"/>
                     <line x1="25" y1="32" x2="39" y2="32" stroke="#3a3a3a" stroke-width="1.5"/>
                 </g>
+
                 <g class="reels-group" style="transform-origin: 58px 32px;">
                     <circle cx="58" cy="32" r="7" fill="#FFF6CC"/>
                     <circle cx="58" cy="32" r="2" fill="#3a3a3a"/>
                     <line x1="58" y1="25" x2="58" y2="39" stroke="#3a3a3a" stroke-width="1.5"/>
                     <line x1="51" y1="32" x2="65" y2="32" stroke="#3a3a3a" stroke-width="1.5"/>
                 </g>
+
                 <line x1="32" y1="25" x2="58" y2="25" stroke="#ffffff" stroke-width="1"/>
+                
                 <rect x="25" y="5" width="10" height="5" rx="1" fill="#FFDCEB" stroke="var(--outline-color)" stroke-width="1.5"/>
                 <rect x="40" y="5" width="10" height="5" rx="1" fill="#DDEEFF" stroke="var(--outline-color)" stroke-width="1.5"/>
             </svg>
+            
             <div id="secret-song-btn" onclick="playSecretSong(event)" style="display:none; position:absolute; top:-20px; right:-10px; font-size:1.2rem; cursor:pointer; filter:drop-shadow(0 0 5px rgba(255,255,255,0.8));">🎵</div>
         </div>
     </div>
 
     <div class="dashboard-container" id="main-dashboard">
+        
         <div class="decor cloud cloud-farthest" style="top: 12%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
         <div class="decor cloud cloud-farthest" style="top: 70%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        
         <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
         <div class="decor cloud cloud-far" style="top: 35%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
         <div class="decor cloud cloud-far" style="top: 85%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+
         <div class="decor cloud cloud-mid" style="top: 20%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
         <div class="decor cloud cloud-mid" style="top: 50%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
         <div class="decor cloud cloud-mid" style="top: 80%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
+
         <div class="decor cloud cloud-near" style="top: 25%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
         <div class="decor cloud cloud-near" style="top: 75%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+
         <div class="decor cloud cloud-closest" style="top: 15%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
         <div class="decor cloud cloud-closest" style="top: 65%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
         
@@ -252,18 +412,23 @@
             <div class="card" onclick="window.startSmileBox()" onmouseover="showToast('🌈 Let\'s find a little sunshine together.')" onmouseout="hideToast()">
                 <span>🌸</span> Smile Box
             </div>
+            
             <div class="card" onclick="window.openLetters()" onmouseover="showToast('🌸 Open whenever you need to hear from me.')" onmouseout="hideToast()">
                 <span>💌</span> Letters
             </div>
+            
             <div class="card" onclick="alert('Happy Jar opening...')" onmouseover="showToast('🍯 Pick a note... you never know what you\'ll find.')" onmouseout="hideToast()">
                 <span>🍯</span> Happy Jar
             </div>
+            
             <div class="card" onclick="alert('Compliments opening...')" onmouseover="showToast('✨ A little reminder of how wonderful you are.')" onmouseout="hideToast()">
                 <span>🌈</span> Compliments
             </div>
+            
             <div class="card" onclick="alert('Cat Corner opening...')" onmouseover="showToast('🐱 Tiny paws. Big happiness.')" onmouseout="hideToast()">
                 <span>🐾</span> Cat Corner
             </div>
+
             <div class="card" onclick="alert('Reasons opening...')" onmouseover="showToast('🌸 Just in case you ever forget.')" onmouseout="hideToast()">
                 <span>📖</span> Reasons I Think You're Amazing
             </div>
@@ -274,20 +439,25 @@
         </div>
     </div>
 
-    <!-- Script version forced to bypass cache -->
-    <script src="smilebox.js?v=5"></script>
-    <script src="letters.js?v=5"></script>
+    <script src="smilebox.js?v=6"></script>
+    <script src="letters.js?v=6"></script>
 
     <script>
+        // --- Hover Toast Logic ---
         function showToast(text) {
             const toast = document.getElementById('hover-toast');
-            if(toast) { toast.innerText = text; toast.style.display = 'block'; }
+            if(toast) {
+                toast.innerText = text;
+                toast.style.display = 'block';
+            }
         }
+
         function hideToast() {
             const toast = document.getElementById('hover-toast');
             if(toast) toast.style.display = 'none';
         }
 
+        // --- Click Burst Sparkle Effect ---
         document.addEventListener('click', function(e) {
             for(let i=0; i<3; i++) {
                 let sparkle = document.createElement('div');
@@ -304,24 +474,23 @@
                     sparkle.style.transform = `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px) scale(0)`;
                     sparkle.style.opacity = '0';
                 }, 10);
+                
                 setTimeout(() => { sparkle.remove(); }, 600);
             }
         });
 
-        // --- Cinematic Cassette Player Logic (MASTER) ---
+        // --- Cinematic Cassette Player Logic (Restored to perfect normal volume!) ---
         let isPlaying = false;
 
         function toggleMusic() {
             const playerUI = document.getElementById('cassette-player');
             const dashboardMusic = document.getElementById('bg-dashboard');
-            const rainMusic = document.getElementById('sfx-rain'); // Global Rain Background!
 
             if (isPlaying) {
                 if (window.stopAllMusic) {
                     window.stopAllMusic();
                 } else {
                     if(dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
-                    if(rainMusic) { rainMusic.pause(); rainMusic.volume = 0; }
                     if(playerUI) playerUI.classList.remove('playing');
                 }
                 isPlaying = false;
@@ -330,37 +499,28 @@
                 
                 if (trackToResume) {
                     trackToResume.play().catch(e => console.log("Playback blocked:", e));
-                    if(rainMusic) rainMusic.play().catch(e => console.log("Rain blocked:", e));
                     if(playerUI) playerUI.classList.add('playing');
                     
-                    // Fade it in to a quiet whisper
+                    // Fade it in to original normal 15% volume
                     let fade = setInterval(() => {
-                        let done = true;
-                        
-                        // Drop music to 4% volume
-                        if (trackToResume.volume < 0.04) {
-                            trackToResume.volume = Math.min(trackToResume.volume + 0.002, 0.04);
-                            done = false;
+                        if (trackToResume.volume < 0.15) {
+                            trackToResume.volume = Math.min(trackToResume.volume + 0.01, 0.15);
+                        } else {
+                            clearInterval(fade);
                         }
-                        
-                        // Push rain overlay to 10% volume
-                        if (rainMusic && rainMusic.volume < 0.1) {
-                            rainMusic.volume = Math.min(rainMusic.volume + 0.005, 0.1);
-                            done = false;
-                        }
-                        
-                        if (done) clearInterval(fade);
                     }, 50);
                     isPlaying = true;
                 }
             }
         }
 
+       // --- Hidden Interactions ---
         function twinkle(element) {
             element.classList.add('twinkle');
             setTimeout(() => { element.classList.remove('twinkle'); }, 1000);
         }
 
+        // --- Check for Secret Song ---
         let totalVisits = 0;
         try {
             totalVisits = localStorage.getItem('siteVisits') ? parseInt(localStorage.getItem('siteVisits')) : 0;
@@ -374,13 +534,15 @@
         }
 
         function playSecretSong(e) {
-            e.stopPropagation(); 
+            e.stopPropagation(); // Prevents the cassette player from turning off
             showToast("A song I saved for you. 🤍");
+            
             if(window.crossfade) {
-                window.crossfade('bg-katawaredoki', 0.04);
+                window.crossfade('bg-katawaredoki', 0.4);
             }
         }
 
+        // --- Sequence Control ---
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
@@ -400,10 +562,13 @@
             cover.style.opacity = '0';
             cover.style.transform = 'scale(1.1)'; 
             
-            if(!isPlaying) { toggleMusic(); }
+            if(!isPlaying) {
+                toggleMusic();
+            }
             
             setTimeout(() => {
                 cover.style.display = 'none';
+                
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
                 
