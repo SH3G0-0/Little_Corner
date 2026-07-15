@@ -134,7 +134,7 @@ sbStyles.innerHTML = `
     #sb-overlay {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: rgba(15, 10, 25, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-        display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 4000;
+        display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 4000;
         opacity: 0; transition: opacity 1.5s ease, background 1.5s ease;
         overflow: hidden; cursor: pointer;
     }
@@ -155,14 +155,14 @@ sbStyles.innerHTML = `
     .theme-night .sb-flower { stroke: #E6E6FA; filter: drop-shadow(0 0 20px rgba(230, 230, 250, 0.8)); }
     .theme-comfort .sb-flower { stroke: #FFB7B2; filter: drop-shadow(0 0 15px rgba(255, 183, 178, 0.6)); }
 
-    /* --- Floating Journal Page (PERFECTLY CENTERED) --- */
+    /* --- Floating Journal Page (LIFTED UPWARDS) --- */
     #sb-journal-zone { 
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
         z-index: 5; cursor: pointer; 
     }
     
     .journal-page {
-        position: absolute; top: 48%; left: 50%; width: 90%; max-width: 450px; 
+        position: absolute; top: 40%; left: 50%; width: 90%; max-width: 450px; 
         background: #FFFDF9; border-radius: 15px;
         padding: 40px 30px; box-sizing: border-box;
         box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.1);
@@ -220,11 +220,11 @@ sbStyles.innerHTML = `
     .sb-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(200, 180, 240, 0.4); background: #FFFDFB; }
 
     /* The 'Thinking' Text */
-    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+    #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
 
     /* The Final Unfolding Letter */
     #sb-letter-view {
-        position: fixed; top: 48%; left: 50%; width: 90%; max-width: 600px;
+        position: fixed; top: 40%; left: 50%; width: 90%; max-width: 600px;
         background: #FFF8F0; padding: 50px; border-radius: 15px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 5000;
         transform: translate(-50%, -50%) scaleY(0); transform-origin: center; opacity: 0;
@@ -391,7 +391,7 @@ window.injectSmileBox = function() {
                     <div id="sb-thinking">Hmm...</div>
                 </div>
                 
-                <div id="sb-letter-view">
+                <div id="sb-letter-view" onclick="window.closeSmileBox()">
                     ${heartSVG}
                     <div class="j-greeting" id="sb-l-greet" style="font-size: 2rem; color: #5D4E75;"></div>
                     <div class="j-text" id="sb-l-text"></div>
