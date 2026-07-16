@@ -1,8 +1,7 @@
 // ==========================================================
-// 🌸 MAGICAL SMILE BOX ENGINE (FLOATING CARDS & AUDIO)
+// 🌸 MAGICAL SMILE BOX ENGINE
 // ==========================================================
 
-// --- 1. State & Tracking ---
 let sbVisits = 0;
 try {
     const stored = localStorage.getItem('smileBoxVisits');
@@ -11,8 +10,6 @@ try {
 } catch(e) {}
 
 let currentSbTheme = 'neutral';
-
-// --- Cinematic Audio Engine (MASTER OVERRIDE) ---
 let currentTrack = null;
 
 window.crossfade = function(newTrackId, targetVolume = 0.4) {
@@ -81,7 +78,6 @@ window.toggleRain = function(turnOn) {
     }
 };
 
-// --- Master Audio Stop (For the Cassette Player Pause) ---
 window.stopAllMusic = function() {
     document.querySelectorAll('audio').forEach(audio => {
         audio.pause();
@@ -108,10 +104,8 @@ const randomEndings = [
     "I'm sending you a hug right now. A really long one."
 ];
 
-// --- 2. The Magical CSS ---
 const sbStyles = document.createElement('style');
 sbStyles.innerHTML = `
-    /* --- Tiamat Comet Easter Egg --- */
     .shooting-star {
         position: absolute; width: 3px; height: 3px;
         background: #fff; border-radius: 50%;
@@ -130,7 +124,6 @@ sbStyles.innerHTML = `
         100% { transform: translate(-20vw, 80vh) rotate(-35deg); opacity: 0; }
     }
 
-    /* --- The Dark Environment --- */
     #sb-overlay {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background: rgba(15, 10, 25, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -139,23 +132,19 @@ sbStyles.innerHTML = `
         overflow: hidden; cursor: pointer;
     }
 
-    /* Environmental Themes */
     #sb-overlay.theme-happy { background: rgba(30, 20, 10, 0.6); } 
     #sb-overlay.theme-sad { background: rgba(15, 15, 35, 0.8); } 
     #sb-overlay.theme-night { background: rgba(5, 10, 25, 0.85); } 
     #sb-overlay.theme-comfort { background: rgba(25, 15, 20, 0.7); } 
 
-    /* Particles Container */
     #sb-particles { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-    /* The Heart Symbol (Inside the cards) */
     .sb-flower { width: 50px; height: 50px; fill: none; stroke: #C8B6D9; stroke-width: 1.5; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); margin: 0 auto 20px auto; display: block; transition: all 1s ease; flex-shrink: 0; }
     .theme-happy .sb-flower { stroke: #FFD700; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
     .theme-sad .sb-flower { stroke: #A8B8FF; filter: drop-shadow(0 0 15px rgba(168, 184, 255, 0.6)); }
     .theme-night .sb-flower { stroke: #E6E6FA; filter: drop-shadow(0 0 20px rgba(230, 230, 250, 0.8)); }
     .theme-comfort .sb-flower { stroke: #FFB7B2; filter: drop-shadow(0 0 15px rgba(255, 183, 178, 0.6)); }
 
-    /* --- Floating Journal Page (LIFTED UPWARDS) --- */
     #sb-journal-zone { 
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
         z-index: 5; cursor: pointer; 
@@ -182,7 +171,6 @@ sbStyles.innerHTML = `
     .j-greeting { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: #5E4B7D; margin-bottom: 10px; text-align: center; }
     .j-text { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #4B4453; line-height: 1.8; font-weight: 500; margin-bottom: 30px; white-space: pre-wrap; }
 
-    /* --- Magical Tags (Buttons) --- */
     .sb-options { display: flex; flex-direction: column; gap: 12px; }
     
     .magic-tag {
@@ -210,7 +198,6 @@ sbStyles.innerHTML = `
         100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,200,240,0.5); }
     }
 
-    /* Primary Action Buttons */
     .sb-btn {
         background: linear-gradient(135deg, #FCF8FF, #F4E8FF); border: 1px solid #D8C8E8;
         padding: 15px 35px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700;
@@ -219,28 +206,24 @@ sbStyles.innerHTML = `
     }
     .sb-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(200, 180, 240, 0.4); background: #FFFDFB; }
 
-    /* The 'Thinking' Text */
     #sb-thinking { font-family: 'Caveat', cursive; font-size: 2rem; color: #8B6F97; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
 
-    /* The Final Unfolding Letter */
     #sb-letter-view {
         position: fixed; top: 40%; left: 50%; width: 90%; max-width: 600px;
         background: #FFF8F0; padding: 50px; border-radius: 15px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 5000;
         transform: translate(-50%, -50%) scaleY(0); transform-origin: center; opacity: 0;
         transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
-        max-height: 80vh; overflow-y: auto; cursor: default;
+        max-height: 80vh; overflow-y: auto; cursor: pointer;
     }
     #sb-letter-view.open { transform: translate(-50%, -50%) scaleY(1); opacity: 1; }
     #sb-letter-view::-webkit-scrollbar { display: none; }
 
-    /* Utility */
     .fade-in-seq { animation: slideFadeUp 0.6s ease forwards; }
     @keyframes slideFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 `;
 document.head.appendChild(sbStyles);
 
-// Reusable Heart SVG for inside the cards
 const heartSVG = `
     <svg class="sb-flower" viewBox="0 0 100 100">
         <path d="M50 80 C 50 80, 20 60, 20 40 C 20 20, 40 20, 50 40 C 60 20, 80 20, 80 40 C 80 60, 50 80, 50 80 Z" />
@@ -249,7 +232,6 @@ const heartSVG = `
     </svg>
 `;
 
-// --- 3. The Interactive Data (The Conversation) ---
 const sbStory = {
     'start': {
         greeting: "✨ The Smile Box",
@@ -273,114 +255,35 @@ const sbStory = {
         ]
     },
 
-    // --- PATH: HAPPY ---
-    'happy_start': {
-        greeting: "Really?",
-        text: "That makes me so happy.\nI wish I could've seen your smile just now.\n\nTell me...\nWhat happened?",
-        buttons: [
-            { icon: "✨", text: "Something really good happened.", action: "happy_good" },
-            { icon: "🌼", text: "Nothing special, I just feel happy.", action: "happy_nothing" },
-            { icon: "🤍", text: "I was thinking about you.", action: "happy_you" },
-            { icon: "😂", text: "I honestly don't know.", action: "happy_idk" }
-        ]
-    },
+    'happy_start': { greeting: "Really?", text: "That makes me so happy.\nI wish I could've seen your smile just now.\n\nTell me...\nWhat happened?", buttons: [ { icon: "✨", text: "Something really good happened.", action: "happy_good" }, { icon: "🌼", text: "Nothing special, I just feel happy.", action: "happy_nothing" }, { icon: "🤍", text: "I was thinking about you.", action: "happy_you" }, { icon: "😂", text: "I honestly don't know.", action: "happy_idk" } ] },
     'happy_good': { greeting: "Aww...", text: "I love when life decides to be nice to you for once.\nYou deserve days like this.\n\nPromise me something?\nDon't downplay this moment.\nCelebrate it.\nSmile a little longer.\nTake a picture.\nSave the memory.\n\nBad days have a habit of making us forget that good ones exist.\nDon't let this one disappear.", endingLetter: "goodnews" },
     'happy_nothing': { greeting: "Hmm...", text: "Those are actually my favorite days.\nNothing extraordinary.\nJust peace.\n\nI hope life gives you more ordinary, quiet, beautiful days like this.", endingLetter: "happy" },
     'happy_you': { greeting: "Oh?", text: "So that's why you're smiling?\nHmm...\nI think I like the sound of that.\n\nYou know...\nIf you're smiling because of me...\nThen today has already been a pretty good day.", endingLetter: "smile" },
     'happy_idk': { greeting: "Honestly...", text: "That's kind of magical.\n\nSometimes happiness doesn't need a reason.\nIt just quietly visits.\n\nI hope it stays awhile.", endingLetter: "happy" },
 
-    // --- PATH: OKAY ---
-    'okay_start': {
-        greeting: "Okay is good.", text: "Okay means we survived yesterday, and we have enough energy for today.\n\nBut just in case you need a little boost...\nWhat would make 'okay' turn into 'good'?",
-        buttons: [
-            { icon: "🌈", text: "A compliment.", endingLetter: "proud" },
-            { icon: "🤍", text: "Just hearing from you.", endingLetter: "miss" }
-        ]
-    },
+    'okay_start': { greeting: "Okay is good.", text: "Okay means we survived yesterday, and we have enough energy for today.\n\nBut just in case you need a little boost...\nWhat would make 'okay' turn into 'good'?", buttons: [ { icon: "🌈", text: "A compliment.", endingLetter: "proud" }, { icon: "🤍", text: "Just hearing from you.", endingLetter: "miss" } ] },
 
-    // --- PATH: BETTER DAYS ---
-    'bad_start': {
-        greeting: "Hmm...", text: "I had a tiny feeling you might choose that.\n\nCome here.\nLet's figure this out together.\n\nWhich one sounds closest?",
-        buttons: [
-            { icon: "💔", text: "Someone hurt me.", action: "bad_hurt", theme: "sad" },
-            { icon: "😞", text: "I'm disappointed.", action: "bad_disappointed", theme: "sad" },
-            { icon: "😔", text: "I'm overwhelmed.", action: "heavy_start", theme: "night" },
-            { icon: "🧸", text: "I miss you.", action: "bad_miss", theme: "comfort" },
-            { icon: "😶", text: "I don't know.", action: "idk_start", theme: "comfort" }
-        ]
-    },
-    'bad_hurt': {
-        greeting: "First of all...", text: "Who?\nI just want to talk.\n...\nMostly.\n\nDo you want to tell me about it?",
-        buttons: [
-            { icon: "🗣", text: "Yes.", action: "hurt_yes" },
-            { icon: "🤍", text: "Not really.", action: "hurt_no" }
-        ]
-    },
-    'hurt_yes': {
-        greeting: "I'm listening.", text: "Did they say something...\nOr did they do something?",
-        buttons: [
-            { icon: "💬", text: "They said something.", action: "hurt_ending" },
-            { icon: "🚶", text: "They did something.", action: "hurt_ending" },
-            { icon: "🌧", text: "Both.", action: "hurt_ending" }
-        ]
-    },
+    'bad_start': { greeting: "Hmm...", text: "I had a tiny feeling you might choose that.\n\nCome here.\nLet's figure this out together.\n\nWhich one sounds closest?", buttons: [ { icon: "💔", text: "Someone hurt me.", action: "bad_hurt", theme: "sad" }, { icon: "😞", text: "I'm disappointed.", action: "bad_disappointed", theme: "sad" }, { icon: "😔", text: "I'm overwhelmed.", action: "heavy_start", theme: "night" }, { icon: "🧸", text: "I miss you.", action: "bad_miss", theme: "comfort" }, { icon: "😶", text: "I don't know.", action: "idk_start", theme: "comfort" } ] },
+    'bad_hurt': { greeting: "First of all...", text: "Who?\nI just want to talk.\n...\nMostly.\n\nDo you want to tell me about it?", buttons: [ { icon: "🗣", text: "Yes.", action: "hurt_yes" }, { icon: "🤍", text: "Not really.", action: "hurt_no" } ] },
+    'hurt_yes': { greeting: "I'm listening.", text: "Did they say something...\nOr did they do something?", buttons: [ { icon: "💬", text: "They said something.", action: "hurt_ending" }, { icon: "🚶", text: "They did something.", action: "hurt_ending" }, { icon: "🌧", text: "Both.", action: "hurt_ending" } ] },
     'hurt_ending': { greeting: "I'm really sorry.", text: "I hate that someone made my favorite person feel this way.\n\nPlease don't let one person's words become your own.\nThey don't get to decide your worth.\n\nSeriously...\nLook at you.\nYou're kind.\nYou're beautiful.\nYou're thoughtful.\nYou're the type of person people feel lucky to know.\n\nDon't let someone who couldn't see that convince you otherwise.", endingLetter: "insecure" },
     'hurt_no': { greeting: "That's okay.", text: "You never have to explain yourself to me.\nSometimes just being here is enough.", endingLetter: "down" },
     
-    'bad_disappointed': {
-        greeting: "I see.", text: "Yourself...\nOr someone else?",
-        buttons: [
-            { icon: "🪞", text: "Myself.", action: "dis_self" },
-            { icon: "👥", text: "Someone else.", action: "dis_other" },
-            { icon: "🌎", text: "Life.", action: "dis_life" }
-        ]
-    },
+    'bad_disappointed': { greeting: "I see.", text: "Yourself...\nOr someone else?", buttons: [ { icon: "🪞", text: "Myself.", action: "dis_self" }, { icon: "👥", text: "Someone else.", action: "dis_other" }, { icon: "🌎", text: "Life.", action: "dis_life" } ] },
     'dis_self': { greeting: "Hmm...", text: "Be honest.\n\nIf I came to you feeling exactly the same way...\nWould you speak to me the way you're speaking to yourself?\n...\nI don't think you would.\n\nSo why is it okay when you do it to yourself?\n\nPlease be kinder to yourself.\nYou're still becoming the person you're meant to be.", endingLetter: "proud" },
     'dis_other': { greeting: "I know.", text: "Expectations hurt.\nEspecially when they're attached to someone we care about.\n\nI'm sorry.", endingLetter: "angry" },
     'dis_life': { greeting: "Yeah...", text: "Sometimes life just has terrible timing.\nI wish I could skip those chapters for you.", endingLetter: "longday" },
     
-    'bad_miss': {
-        greeting: "Oh...", text: "Is that why you're here?\nHmm.\nYou're lucky you're cute.\n\nHow much?",
-        buttons: [
-            { icon: "🤏", text: "A little.", action: "miss_flirt" },
-            { icon: "🥺", text: "A lot.", action: "miss_flirt" },
-            { icon: "🫣", text: "An embarrassing amount.", action: "miss_flirt" }
-        ]
-    },
+    'bad_miss': { greeting: "Oh...", text: "Is that why you're here?\nHmm.\nYou're lucky you're cute.\n\nHow much?", buttons: [ { icon: "🤏", text: "A little.", action: "miss_flirt" }, { icon: "🥺", text: "A lot.", action: "miss_flirt" }, { icon: "🫣", text: "An embarrassing amount.", action: "miss_flirt" } ] },
     'miss_flirt': { greeting: "Well...", text: "That's honestly kind of adorable.\n\nIf you're reading this because you miss me...\nYou know you could've just called me, right?\nI would've answered.\nOr if I was free, I'd probably already be on my way to see you.\n\nSo next time...\nDon't sit there missing me all alone.\nCome steal one of my hoodies.\nOr make me buy you food.\nOr just come sit with me while we do absolutely nothing.\n\nI like absolutely nothing...\nAs long as it's with you.", endingLetter: "miss" },
 
-    // --- PATH: TOO MUCH ---
-    'heavy_start': {
-        greeting: "I'm so sorry.", text: "Can I carry a little of it with you?",
-        buttons: [
-            { icon: "🤍", text: "Please.", action: "heavy_please" },
-            { icon: "🛑", text: "I don't want to burden anyone.", action: "heavy_burden" }
-        ]
-    },
-    'heavy_please': {
-        greeting: "Always.", text: "You never even have to ask.\n\nWhat's the heaviest part?",
-        buttons: [
-            { icon: "📚", text: "University", endingLetter: "stressed" },
-            { icon: "🏠", text: "Family", endingLetter: "down" },
-            { icon: "👥", text: "Friends", endingLetter: "insecure" },
-            { icon: "🌎", text: "Everything", endingLetter: "longday" }
-        ]
-    },
+    'heavy_start': { greeting: "I'm so sorry.", text: "Can I carry a little of it with you?", buttons: [ { icon: "🤍", text: "Please.", action: "heavy_please" }, { icon: "🛑", text: "I don't want to burden anyone.", action: "heavy_burden" } ] },
+    'heavy_please': { greeting: "Always.", text: "You never even have to ask.\n\nWhat's the heaviest part?", buttons: [ { icon: "📚", text: "University", endingLetter: "stressed" }, { icon: "🏠", text: "Family", endingLetter: "down" }, { icon: "👥", text: "Friends", endingLetter: "insecure" }, { icon: "🌎", text: "Everything", endingLetter: "longday" } ] },
     'heavy_burden': { greeting: "Hey. Look at me.", text: "Loving someone doesn't suddenly become inconvenient when they're having a hard day.\n\nIf you called me crying...\nMy first thought wouldn't be, 'Ugh.'\nIt would be, 'Where are you?'\n\nSo don't decide you're a burden for people before they've even had the chance to love you.", endingLetter: "reassurance" },
 
-    // --- PATH: I DON'T KNOW ---
-    'idk_start': {
-        greeting: "You know what?", text: "I think 'I don't know' is one of the bravest answers.\nBecause sometimes there isn't a reason.\nSometimes your heart is just tired.\nAnd that's okay.\n\nWhat do you think you need most right now?",
-        buttons: [
-            { icon: "🫂", text: "A hug.", endingLetter: "hug" },
-            { icon: "👂", text: "Someone to listen.", endingLetter: "crying" },
-            { icon: "✨", text: "A distraction.", endingLetter: "smile" },
-            { icon: "🤍", text: "Just stay with me.", endingLetter: "lonely" }
-        ]
-    }
+    'idk_start': { greeting: "You know what?", text: "I think 'I don't know' is one of the bravest answers.\nBecause sometimes there isn't a reason.\nSometimes your heart is just tired.\nAnd that's okay.\n\nWhat do you think you need most right now?", buttons: [ { icon: "🫂", text: "A hug.", endingLetter: "hug" }, { icon: "👂", text: "Someone to listen.", endingLetter: "crying" }, { icon: "✨", text: "A distraction.", endingLetter: "smile" }, { icon: "🤍", text: "Just stay with me.", endingLetter: "lonely" } ] }
 };
 
-// --- 4. The HTML Injection ---
 window.injectSmileBox = function() {
     if(!document.getElementById('sb-overlay')) {
         const html = `
@@ -404,23 +307,15 @@ window.injectSmileBox = function() {
         `;
         document.body.insertAdjacentHTML('beforeend', html);
 
-        // Allow clicking the blurred background to close it
         document.getElementById('sb-overlay').addEventListener('click', function(e) {
             if (e.target.id === 'sb-overlay' || e.target.id === 'sb-journal-zone') {
                 window.closeSmileBox();
             }
         });
-        
-        // Also allow clicking the final letter container to close it
-        document.getElementById('sb-letter-view').addEventListener('click', function(e) {
-            window.closeSmileBox();
-        });
     }
 };
 
 window.injectSmileBox();
-
-// --- 5. Logic & Pacing ---
 
 window.spawnParticles = function() {
     const container = document.getElementById('sb-particles');
@@ -469,11 +364,9 @@ window.startSmileBox = function() {
 
     overlay.className = 'theme-neutral';
     
-    // Reset state properly
     document.getElementById('sb-letter-view').classList.remove('open');
     document.getElementById('sb-journal-zone').innerHTML = '<div id="sb-thinking">Hmm...</div>';
     
-    // Display with a tiny timeout to ensure CSS transitions trigger
     overlay.style.display = 'flex';
     setTimeout(() => { overlay.style.opacity = '1'; }, 50);
     
@@ -499,7 +392,6 @@ window.renderJournalPage = function(nodeId) {
     
     let text = typeof node.text === 'function' ? node.text() : node.text;
     
-    // Heart SVG embedded directly at top of card, perfectly aligned
     let html = `
         <div class="j-corner-tl">❀</div>
         <div class="j-corner-br">🌸</div>
@@ -520,7 +412,6 @@ window.renderJournalPage = function(nodeId) {
         });
         html += `</div>`;
     } else {
-        // --- Click to Continue for Ending Cards ---
         html += `
             <div style="text-align:center; opacity:0.4; font-size:0.95rem; margin-top:30px; font-family:'Quicksand', sans-serif;">
                 ( Click anywhere to continue )
@@ -543,7 +434,8 @@ window.renderJournalPage = function(nodeId) {
                 thinking.style.opacity = '0';
                 setTimeout(() => {
                     if(node.endingLetter) {
-                        window.showSbLetter(node.endingLetter);
+                        // --- CHANGED: Just show a sweet note instead of a full letter ---
+                        window.showSweetNote();
                     } else {
                         window.closeSmileBox();
                     }
@@ -584,7 +476,6 @@ window.selectSbOption = function(element, nextAction, endingLetter, themeOverrid
         }
         if (nextAction === "heavy_start") {
             window.crossfade('bg-sad', 0.2);
-            window.toggleRain(true);
         }
         if (nextAction === "happy_start") {
             window.crossfade('bg-happy', 0.3);
@@ -607,7 +498,8 @@ window.selectSbOption = function(element, nextAction, endingLetter, themeOverrid
             
             setTimeout(() => {
                 if(endingLetter && endingLetter !== 'undefined') {
-                    window.showSbLetter(endingLetter);
+                    // --- CHANGED: Just show a sweet note instead of a full letter ---
+                    window.showSweetNote();
                 } else if(nextAction && nextAction !== 'undefined') {
                     window.renderJournalPage(nextAction);
                 } else {
@@ -618,35 +510,30 @@ window.selectSbOption = function(element, nextAction, endingLetter, themeOverrid
     }, 500);
 };
 
-window.showSbLetter = function(letterId) {
+// --- NEW: Shows a sweet note instead of a letter ---
+window.showSweetNote = function() {
     const thinking = document.getElementById('sb-thinking');
     
     document.querySelectorAll('.journal-page').forEach(p => p.remove());
     
-    thinking.innerText = "One moment...\nI'm looking for something that might help. ✨";
+    thinking.innerText = "✨";
     thinking.style.opacity = '1';
-    thinking.style.fontSize = "1.5rem";
+    thinking.style.fontSize = "2rem";
     thinking.style.textAlign = "center";
     
     setTimeout(() => {
         thinking.style.opacity = '0';
         
         setTimeout(() => {
-            let lData = { title: "For You", content: "I'm always here for you. 🤍" };
-            if(window.lettersData) {
-                const found = window.lettersData.find(l => l.id === letterId);
-                if(found) lData = found;
-            }
-
             const randEnd = randomEndings[Math.floor(Math.random() * randomEndings.length)];
 
-            document.getElementById('sb-l-greet').innerText = `💌 ${lData.title}`;
-            document.getElementById('sb-l-text').innerHTML = lData.content.replace(/\n/g, '<br>') + `<br><br><span style="font-family:'Caveat'; color:#8B6F97;">One last thing...</span><br><span style="font-weight:bold;">${randEnd}</span>`;
+            document.getElementById('sb-l-greet').innerText = `🤍`;
+            document.getElementById('sb-l-text').innerHTML = `<div style="text-align: center; font-size: 1.8rem;">${randEnd}</div>`;
             
             document.getElementById('sb-letter-view').classList.add('open');
             
         }, 500);
-    }, 2500);
+    }, 1500);
 };
 
 window.closeSmileBox = function() {
@@ -663,7 +550,6 @@ window.closeSmileBox = function() {
     }
     
     if(window.crossfade) window.crossfade('bg-dashboard', 0.3);
-    if(window.toggleRain) window.toggleRain(false);
     
     setTimeout(() => {
         overlay.style.display = 'none';
