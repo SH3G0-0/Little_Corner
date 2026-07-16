@@ -1,5 +1,5 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "A Drawer Full Of Days I Couldn't Be There"
+// 💌 MAGICAL LETTERS ENGINE - "A Drawer Full Of Days"
 // ==========================================================
 
 try {
@@ -70,10 +70,10 @@ try {
         /* The Paper peeking out */
         .envelope-paper-preview {
             position: absolute; top: 10px; left: 15px; width: 250px; height: 150px;
-            background: linear-gradient(180deg, #fffdf9, #fdf7ef);
+            background: linear-gradient(180deg, #dcb388, #d4a97b);
             border-radius: 8px; z-index: 2;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(60,20,0,0.2);
         }
 
         .wax-seal {
@@ -88,7 +88,7 @@ try {
         .envelope-container:hover { transform: translateY(-12px); filter: drop-shadow(0 20px 30px rgba(90, 74, 120, 0.2)); }
         .envelope-container:hover .envelope-flap { transform: rotateX(170deg); z-index: 1; }
         .envelope-container:hover .wax-seal { opacity: 0; transform: scale(0.5); }
-        .envelope-container:hover .envelope-paper-preview { transform: translateY(-40px); } /* Paper Peeks Out */
+        .envelope-container:hover .envelope-paper-preview { transform: translateY(-40px); } 
 
         /* Opening Animation */
         .envelope-opening { pointer-events: none; }
@@ -124,41 +124,44 @@ try {
         .bg-sick { background: linear-gradient(135deg, #D4E6D2, #E8F2E6); }
         .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
 
-        /* The Paper */
+        /* --- THE VINTAGE PARCHMENT PAPER --- */
         .letter-paper-full {
-            background: linear-gradient(180deg, #fffdf9, #fdf7ef);
+            background-color: #dcb388; /* Base warm parchment */
+            background-image: 
+                radial-gradient(circle at center, transparent 30%, rgba(80, 40, 10, 0.25) 85%, rgba(60, 20, 0, 0.6) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
             width: 90%; max-width: 650px; height: 85vh;
-            padding: 80px 60px 150px 60px; border-radius: 6px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 20px rgba(255,255,255,0.2) inset;
+            padding: 80px 60px 150px 60px; 
+            border-radius: 3px 8px 4px 6px; /* Irregular torn edge */
+            border: 1px solid rgba(60, 20, 0, 0.4);
+            box-shadow: 
+                inset 0 0 40px rgba(60, 25, 0, 0.5), 
+                inset 0 0 15px rgba(30, 10, 0, 0.8), 
+                0 20px 50px rgba(0,0,0,0.4);
             transform: rotate(3deg) translateY(60px); opacity: 0;
             transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto; overflow-x: hidden; position: relative;
             scroll-behavior: smooth;
         }
         
-        /* Texture Overlay */
-        .letter-paper-full::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.05; pointer-events: none; z-index: 0; mix-blend-mode: multiply;
-        }
-        
         .letter-paper-full::-webkit-scrollbar { display: none; }
-        
-        /* Unfolding Animation */
         .paper-ready { transform: rotate(0deg) translateY(0); opacity: 1; }
 
-        .paper-content-wrapper { position: relative; z-index: 1; }
+        .paper-content-wrapper { position: relative; z-index: 5; }
         
-        /* Dynamic Decorations (PUSHED INTO MARGINS TO AVOID TEXT OVERLAP) */
-        .decor-top-left { position: absolute; top: -40px; left: -30px; font-size: 2.2rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .decor-bottom-right { position: absolute; bottom: -50px; right: -20px; font-size: 2.2rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .memory-pin { position: absolute; top: -30px; right: 20px; font-family: 'Caveat', cursive; font-size: 1.2rem; color: #8B6F97; transform: rotate(5deg); opacity: 0.7; }
+        /* --- Scattered Pressed Flowers --- */
+        .pressed-flower {
+            position: absolute; z-index: 1; opacity: 0.85; pointer-events: none;
+            filter: drop-shadow(2px 4px 5px rgba(0,0,0,0.25)) sepia(0.3) saturate(1.2) darken(0.1);
+        }
 
-        .paper-header { font-family: 'DM Serif Display', serif; font-size: 38px; color: #4A3B5C; text-align: center; margin-bottom: 40px; }
-        .paper-greeting { font-family: 'Caveat', cursive; font-size: 26px; color: #5D4E75; margin-bottom: 30px; font-weight: 600; }
+        .memory-pin { position: absolute; top: -30px; right: 20px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: #4a2e1b; transform: rotate(5deg); opacity: 0.8; font-weight: 700; }
+
+        /* --- Handwritten Ink Typography --- */
+        .paper-header { font-family: 'Caveat', cursive; font-size: 32px; color: #2b1b12; text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(60, 20, 0, 0.2); padding-bottom: 15px; font-weight: 700; }
+        .paper-greeting { font-family: 'Caveat', cursive; font-size: 30px; color: #2b1b12; margin-bottom: 30px; font-weight: 700; }
         
-        .paper-body { font-family: 'Cormorant Garamond', serif; font-size: 21px; color: #3A3542; line-height: 2.2; white-space: pre-wrap; text-align: left; font-weight: 500; }
+        .paper-body { font-family: 'Caveat', cursive; font-size: 26px; color: #2b1b12; line-height: 1.5; white-space: pre-wrap; text-align: left; font-weight: 600; text-shadow: 0px 0px 1px rgba(0,0,0,0.1); }
         
         /* Handwriting Imperfections */
         .imperfection-1 { display: inline-block; transform: rotate(-0.5deg) translateY(1px); }
@@ -168,16 +171,17 @@ try {
         .reveal-line { opacity: 0; transform: translateY(10px); transition: all 1s ease; }
         .reveal-line.visible { opacity: 1; transform: translateY(0); }
 
-        .paper-divider { text-align: center; color: #D8C8E8; font-size: 1.2rem; letter-spacing: 3px; margin: 50px 0; }
+        .paper-divider { border-bottom: 2px dashed rgba(60, 25, 0, 0.2); width: 40%; margin: 40px auto; }
         
-        .ps-box { text-align: left; margin-top: 50px; opacity: 0.8; transform: scale(0.95); transform-origin: left; }
-        .ps-title { font-family: 'Caveat', cursive; font-size: 22px; color: #6D5E85; font-weight: 700; }
-        .ps-content { font-family: 'Caveat', cursive; font-size: 20px; color: #6D5E85; line-height: 1.6; }
+        .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
+        .ps-title { font-family: 'Caveat', cursive; font-size: 26px; color: #2b1b12; font-weight: 700; }
+        .ps-content { font-family: 'Caveat', cursive; font-size: 24px; color: #2b1b12; line-height: 1.5; font-weight: 600; }
 
-        .signature-text { font-family: 'Caveat', cursive; font-size: 30px; color: #4A3B5C; text-align: right; line-height: 1.4; font-weight: 700; margin-top: 40px; margin-right: 20px; }
+        .signature-text { font-family: 'Caveat', cursive; font-size: 36px; color: #2b1b12; text-align: right; line-height: 1.2; font-weight: 700; margin-top: 50px; padding-right: 10px; }
         
-        .you-exist { display: block; font-family: 'Caveat', cursive; color: #8B6F97; font-size: 1.3rem; margin: 30px 0; text-align: center; opacity: 0.7; }
+        .you-exist { display: block; font-family: 'Caveat', cursive; color: #4a2e1b; font-size: 22px; margin: 30px 0; text-align: center; opacity: 0.8; font-weight: 700;}
 
+        /* Buttons */
         .letter-controls { position: fixed; bottom: 30px; display: flex; gap: 20px; z-index: 3100; opacity: 0; transition: opacity 1s ease; }
         .letter-btn { background: rgba(255,255,255,0.85); border: 1px solid rgba(200, 180, 220, 0.5); color: #5D4E75; padding: 12px 25px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
         .letter-btn:hover { background: #FFFDF9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
@@ -193,7 +197,6 @@ try {
         { 
             id: "insecure", title: "When You're Feeling Insecure", theme: "warm", 
             envColor: "#FFF8E7", flapColor: "#F5E6CC", sealColor: "#FFFDF9", sealIcon: "✨", 
-            decorTop: "🌸", decorBot: "✨", 
             preview: "Borrow my eyes for a minute.",
             openTime: 1200,
             greeting: "Hey, pretty girl.", closing: "Always rooting for you,<br>Muzna", 
@@ -203,7 +206,6 @@ try {
         { 
             id: "reassurance", title: "When You Need Reassurance", theme: "warm", 
             envColor: "#FFF5F5", flapColor: "#FCE8E8", sealColor: "#FFFFFF", sealIcon: "🤍",
-            decorTop: "🧸", decorBot: "🤍", 
             preview: "You don't have to carry this alone.",
             openTime: 1500,
             greeting: "Hey, love.", closing: "Until next time,<br>Muzna", 
@@ -213,7 +215,7 @@ try {
         { 
             id: "nosleep", title: "When You Can't Sleep", theme: "night", 
             envColor: "#1A2639", flapColor: "#111A28", sealColor: "#C0C0D0", sealIcon: "🌙",
-            decorTop: "🌙", decorBot: "⭐", memory: "📍 Wish we could stay up talking.",
+            memory: "📍 Wish we could stay up talking.",
             preview: "It's very late, isn't it?",
             openTime: 2300,
             greeting: "Hey, sleepyhead.", closing: "Go to sleep.<br>I'll know if you don't. ♡", 
@@ -223,7 +225,6 @@ try {
         { 
             id: "smile", title: "When You Need A Smile", theme: "happy", 
             envColor: "#FFEFE5", flapColor: "#FFE4D6", sealColor: "#FFD166", sealIcon: "😊",
-            decorTop: "☀", decorBot: "🌼", 
             preview: "Smile inspection.",
             openTime: 700,
             greeting: "Well... look who showed up.", closing: "Now go smile,<br>Muzna", 
@@ -233,7 +234,7 @@ try {
         { 
             id: "down", title: "When You're Feeling Down", theme: "sad", 
             envColor: "#E8E2F2", flapColor: "#D6CCE6", sealColor: "#B09ECA", sealIcon: "🌧",
-            decorTop: "☁", decorBot: "🫧", memory: "🌧 It rained today. Thought of you.",
+            memory: "🌧 It rained today. Thought of you.",
             preview: "I know today probably wasn't your favorite.",
             openTime: 1800,
             greeting: "Hi, sunshine.", closing: "Your favorite person 🤍", 
@@ -243,7 +244,6 @@ try {
         { 
             id: "miss", title: "When You Miss Me", theme: "warm", 
             envColor: "#F5ECE1", flapColor: "#E8DAC6", sealColor: "#C9A680", sealIcon: "🧸",
-            decorTop: "📸", decorBot: "🍂", 
             preview: "Hmm... someone misses me.",
             openTime: 1000,
             greeting: "Oh! It's you again.", closing: "Waiting for you,<br>Muzna", 
@@ -253,7 +253,6 @@ try {
         { 
             id: "exam", title: "Before An Exam", theme: "happy", 
             envColor: "#EDF2E6", flapColor: "#DCE6D2", sealColor: "#A3B899", sealIcon: "✏️",
-            decorTop: "📚", decorBot: "☕", 
             preview: "Breathe first.",
             openTime: 800,
             greeting: "Hello, trouble.", closing: "You've got this,<br>Muzna", 
@@ -263,7 +262,6 @@ try {
         { 
             id: "overthinking", title: "When You're Overthinking", theme: "night", 
             envColor: "#25243B", flapColor: "#1A1A2E", sealColor: "#79728A", sealIcon: "🌌",
-            decorTop: "☾", decorBot: "✨", 
             preview: "Your brain is doing it again.",
             openTime: 2000,
             greeting: "Hey. Yeah, you.", closing: "Take a breath,<br>Muzna", 
@@ -273,7 +271,6 @@ try {
         { 
             id: "longday", title: "After A Long Day", theme: "warm", 
             envColor: "#F4EAE1", flapColor: "#EBDAC8", sealColor: "#BA8C63", sealIcon: "🍂",
-            decorTop: "☕", decorBot: "🍂", 
             preview: "Welcome home.",
             openTime: 1600,
             greeting: "There you are. I've been waiting for you.", closing: "Rest now,<br>Muzna", 
@@ -283,7 +280,6 @@ try {
         { 
             id: "lonely", title: "When You're Feeling Lonely", theme: "sad", 
             envColor: "#DFE5E8", flapColor: "#C5D0D6", sealColor: "#8FA3AD", sealIcon: "☂",
-            decorTop: "☁", decorBot: "🌧", 
             preview: "You're not as alone as you think.",
             openTime: 1900,
             greeting: "Hi, my favorite person.", closing: "Always here,<br>Muzna", 
@@ -293,7 +289,6 @@ try {
         { 
             id: "stressed", title: "When You're Stressed", theme: "sick", 
             envColor: "#EBF2EB", flapColor: "#DCE6DB", sealColor: "#93B391", sealIcon: "🍵",
-            decorTop: "🍃", decorBot: "🍵", 
             preview: "Pause for a second.",
             openTime: 1700,
             greeting: "Okay, let's take a timeout.", closing: "Relax,<br>Muzna", 
@@ -303,7 +298,6 @@ try {
         { 
             id: "motivation", title: "When You Need Motivation", theme: "happy", 
             envColor: "#FFF2E6", flapColor: "#FFE3CC", sealColor: "#FFA366", sealIcon: "🌅",
-            decorTop: "☀", decorBot: "✨", 
             preview: "One step is enough.",
             openTime: 1000,
             greeting: "Hey, you.", closing: "So proud of you,<br>Muzna", 
@@ -313,7 +307,6 @@ try {
         { 
             id: "angry", title: "When You're Angry", theme: "sad", 
             envColor: "#E0DBE5", flapColor: "#CBC3D6", sealColor: "#7A6894", sealIcon: "🌩",
-            decorTop: "🌩", decorBot: "🕯", 
             preview: "Okay... who annoyed you?",
             openTime: 600,
             greeting: "Well... someone's grumpy.", closing: "Still love you,<br>Muzna", 
@@ -323,7 +316,7 @@ try {
         { 
             id: "happy", title: "When You're Happy", theme: "happy", 
             envColor: "#FFFDF0", flapColor: "#FFF6D6", sealColor: "#FFC233", sealIcon: "☀",
-            decorTop: "☀", decorBot: "🌼", memory: "📍 You looked really pretty that day. Just saying.",
+            memory: "📍 You looked really pretty that day. Just saying.",
             preview: "I had a feeling today was kinder to you.",
             openTime: 600,
             greeting: "Heyyy!!", closing: "Keep smiling,<br>Muzna", 
@@ -333,7 +326,6 @@ try {
         { 
             id: "goodnews", title: "After Good News", theme: "happy", 
             envColor: "#FEF7E6", flapColor: "#FDEBCC", sealColor: "#FCA832", sealIcon: "🎉",
-            decorTop: "🎉", decorBot: "✨", 
             preview: "WAIT... you have news?",
             openTime: 500,
             greeting: "WAIT.", closing: "Celebrating with you,<br>Muzna", 
@@ -343,7 +335,6 @@ try {
         { 
             id: "proud", title: "When You're Proud of Yourself", theme: "warm", 
             envColor: "#FCF5F5", flapColor: "#F7E6E6", sealColor: "#E09C9C", sealIcon: "✨",
-            decorTop: "🤍", decorBot: "✨", 
             preview: "I'm proud of you too.",
             openTime: 1000,
             greeting: "Hey, pretty girl.", closing: "Endlessly proud,<br>Muzna", 
@@ -353,7 +344,6 @@ try {
         { 
             id: "hug", title: "When You Need A Hug", theme: "warm", 
             envColor: "#FCEFF2", flapColor: "#F7DBE1", sealColor: "#D18698", sealIcon: "🫂",
-            decorTop: "🤍", decorBot: "🧸", 
             preview: "Come here for a second.",
             openTime: 2000,
             greeting: "Come here for a second.", closing: "Squeezing you tight,<br>Muzna", 
@@ -363,7 +353,6 @@ try {
         { 
             id: "sick", title: "When You're Sick", theme: "sick", 
             envColor: "#E8F5EE", flapColor: "#D0EBD9", sealColor: "#7AA387", sealIcon: "🤒",
-            decorTop: "🍵", decorBot: "🧣", 
             preview: "How's my sick baby doing?",
             openTime: 1800,
             greeting: "Excuse me.", closing: "Get better soon,<br>Muzna", 
@@ -373,7 +362,7 @@ try {
         { 
             id: "crying", title: "When You Feel Like Crying", theme: "sad", 
             envColor: "#F0F4F8", flapColor: "#DFE8EE", sealColor: "#93A8B8", sealIcon: "💧",
-            decorTop: "☁", decorBot: "💧", interactive: "crying",
+            interactive: "crying",
             preview: "You don't have to pretend.",
             openTime: 2200,
             greeting: "Hey, love.", closing: "Sleep well, pretty girl.<br>Muzna", 
@@ -382,7 +371,7 @@ try {
         { 
             id: "hungry", title: "When You're Hungry", theme: "warm", 
             envColor: "#FFF6ED", flapColor: "#FFEAD4", sealColor: "#D19B71", sealIcon: "🍜",
-            decorTop: "🥟", decorBot: "🍵", interactive: "hungry",
+            interactive: "hungry",
             preview: "Have you eaten?",
             openTime: 900,
             greeting: "Ahem.", closing: "Go eat,<br>Muzna", 
@@ -412,9 +401,15 @@ try {
                 <div id="letter-room">
                     <div id="room-particles"></div>
                     <div class="letter-paper-full" id="active-paper">
+                        
+                        <!-- SCATTERED PRESSED FLOWERS (ABSOLUTE BACKGROUND) -->
+                        <div class="pressed-flower" style="top: 5%; left: 3%; font-size: 2.5rem; transform: rotate(15deg);">🥀</div>
+                        <div class="pressed-flower" style="top: 35%; right: 2%; font-size: 2rem; transform: rotate(-25deg);">🌿</div>
+                        <div class="pressed-flower" style="bottom: 12%; left: 4%; font-size: 2.8rem; transform: rotate(45deg);">🌺</div>
+                        <div class="pressed-flower" style="bottom: 5%; right: 12%; font-size: 2.2rem; transform: rotate(-10deg);">🌾</div>
+                        <div class="pressed-flower" style="top: 15%; right: 6%; font-size: 1.8rem; transform: rotate(70deg);">🌸</div>
+
                         <div class="paper-content-wrapper">
-                            <div class="decor-top-left" id="d-tl">🌸</div>
-                            <div class="decor-bottom-right" id="d-br">❀</div>
                             <div class="memory-pin" id="memory-pin"></div>
                             
                             <div class="paper-header" id="paper-title"></div>
@@ -423,7 +418,7 @@ try {
                             <div id="interactive-zone" style="margin-top: 20px;"></div>
                             
                             <div class="paper-footer" id="paper-footer">
-                                <div class="paper-divider">❀ • ─────────── • ❀</div>
+                                <div class="paper-divider"></div>
                                 <div class="ps-box" id="paper-ps-box">
                                     <span class="ps-title">P.S.</span><br>
                                     <span class="ps-content" id="paper-ps-content"></span>
@@ -541,8 +536,6 @@ try {
             document.getElementById('paper-title').innerText = activeLetter.title;
             document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
             document.getElementById('paper-signature').innerHTML = activeLetter.closing || "Love,";
-            document.getElementById('d-tl').innerText = activeLetter.decorTop || "🌸";
-            document.getElementById('d-br').innerText = activeLetter.decorBot || "❀";
             
             const memory = document.getElementById('memory-pin');
             if(activeLetter.memory) {
@@ -568,7 +561,7 @@ try {
             if (activeLetter.interactive === "crying") {
                 footer.style.display = 'none';
                 interactive.innerHTML = `
-                    <div style="text-align:center; font-family:'Quicksand'; font-weight:bold; color:#5D4E75; margin:30px 0;">Do you want to talk about it?</div>
+                    <div style="text-align:center; font-family:'Caveat'; font-size: 26px; font-weight:bold; color:#4a2e1b; margin:30px 0;">Do you want to talk about it?</div>
                     <div style="display:flex; flex-direction:column; gap:15px; align-items:center;">
                         <button class="letter-btn" onclick="window.revealInteractive('crying', 'yes')">Yes.</button>
                         <button class="letter-btn" onclick="window.revealInteractive('crying', 'later')">Not yet.</button>
@@ -642,10 +635,10 @@ try {
             
         } else if (type === 'hungry') {
             if (response === 'ate') {
-                interactive.innerHTML = `<div style="font-family:'Caveat', cursive; font-weight:700; color:#5D4E75; font-size:32px; text-align:center; margin-top:30px; opacity:0; animation: fadeIn 1s forwards;">Good. I'm proud of you. See? That wasn't so hard. 🤍</div>`;
+                interactive.innerHTML = `<div style="font-family:'Caveat', cursive; font-weight:700; color:#2b1b12; font-size:32px; text-align:center; margin-top:30px; opacity:0; animation: fadeIn 1s forwards;">Good. I'm proud of you. See? That wasn't so hard. 🤍</div>`;
                 footer.style.display = 'block';
             } else {
-                interactive.innerHTML = `<div style="font-family:'Quicksand', sans-serif; font-weight:700; color:#FF8BA7; font-size:1.1rem; border: 2px dashed #FF8BA7; padding: 20px; border-radius: 15px; text-align:center; margin-top:30px; opacity:0; animation: fadeIn 1s forwards;">Access denied. Reason: Hungry gremlin detected. Go eat first. 😡</div>`;
+                interactive.innerHTML = `<div style="font-family:'Caveat', cursive; font-weight:700; color:#FF8BA7; font-size:26px; border: 2px dashed #FF8BA7; padding: 20px; border-radius: 15px; text-align:center; margin-top:30px; opacity:0; animation: fadeIn 1s forwards;">Access denied. Reason: Hungry gremlin detected. Go eat first. 😡</div>`;
             }
         }
     };
