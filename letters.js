@@ -17,7 +17,7 @@ try {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(245, 240, 235, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; flex-direction: column; align-items: center; z-index: 2000;
-            opacity: 0; transition: opacity 1.2s ease; overflow-y: auto; padding-bottom: 80px;
+            opacity: 0; transition: opacity 1.2s ease; overflow-y: auto; padding-bottom: 100px;
             scroll-behavior: smooth;
         }
 
@@ -32,7 +32,7 @@ try {
 
         #envelope-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 50px; width: 90%; max-width: 1100px;
+            gap: 60px 40px; width: 90%; max-width: 1100px;
         }
 
         /* --- The Envelopes --- */
@@ -50,7 +50,6 @@ try {
             align-items: flex-end; padding-bottom: 25px; box-sizing: border-box;
             text-align: center; border: 1px solid rgba(255,255,255,0.4); z-index: 3;
             transition: all 0.5s ease;
-            overflow: hidden;
         }
         
         .envelope-label {
@@ -58,12 +57,23 @@ try {
             padding: 0 15px; line-height: 1.2; z-index: 4; font-weight: 600;
         }
 
+        /* The Flap that opens */
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 140px solid transparent; border-right: 140px solid transparent;
+            border-top: 110px solid; /* Color injected inline */
             z-index: 5; transform-origin: top; 
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
+        }
+
+        /* The Paper peeking out */
+        .envelope-paper-preview {
+            position: absolute; top: 10px; left: 15px; width: 250px; height: 150px;
+            background: linear-gradient(180deg, #fffdf9, #fdf7ef);
+            border-radius: 8px; z-index: 2;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .wax-seal {
@@ -78,35 +88,26 @@ try {
         .envelope-container:hover { transform: translateY(-12px); filter: drop-shadow(0 20px 30px rgba(90, 74, 120, 0.2)); }
         .envelope-container:hover .envelope-flap { transform: rotateX(170deg); z-index: 1; }
         .envelope-container:hover .wax-seal { opacity: 0; transform: scale(0.5); }
-        .envelope-container:hover .preview-card { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+        .envelope-container:hover .envelope-paper-preview { transform: translateY(-40px); } /* Paper Peeks Out */
 
-        /* The Poetic Preview Card (At bottom of screen) */
-        #preview-zone {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; z-index: 2500; pointer-events: none;
-            display: flex; justify-content: center;
-        }
-
-        .preview-card {
-            background: #FFFDF9; border-radius: 20px; padding: 25px 35px;
-            box-shadow: 0 15px 40px rgba(50,30,80,0.15);
-            text-align: center; border: 2px solid white;
-            position: absolute; bottom: 0; 
-            opacity: 0; transform: translate(-50%, 20px); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            width: 100%;
-        }
-
-        .preview-line {
-            font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #5D4E75;
-            margin: 8px 0; opacity: 0; transform: translateY(10px);
-            transition: all 0.6s ease; font-style: italic;
-        }
-        .preview-card.show .preview-line { opacity: 1; transform: translateY(0); }
-
+        /* Opening Animation */
         .envelope-opening { pointer-events: none; }
         .envelope-opening .envelope-flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-opening .wax-seal { opacity: 0; }
+        .envelope-opening .envelope-paper-preview { transform: translateY(-150px) scale(1.5); opacity: 1; transition: transform 1.2s ease; }
         .envelope-opening .envelope-body { filter: brightness(1.2); transform: scale(1.05); opacity: 0; transition: all 1.5s ease; }
+
+        /* --- Dashboard-style Hover Toast for Previews --- */
+        #drawer-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); 
+            padding: 15px 30px; border-radius: 30px;
+            background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
+            color: #5D4E75; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem;
+            z-index: 2500; opacity: 0; pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid white; white-space: nowrap;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        #drawer-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* --- The Reading Room (The Cinematic Letter) --- */
         #letter-room {
@@ -149,9 +150,9 @@ try {
 
         .paper-content-wrapper { position: relative; z-index: 1; }
         
-        /* Dynamic Decorations */
-        .decor-top-left { position: absolute; top: 10px; left: 10px; font-size: 1.8rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .decor-bottom-right { position: absolute; bottom: 10px; right: 10px; font-size: 1.8rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        /* Dynamic Decorations (PUSHED INTO MARGINS TO AVOID TEXT OVERLAP) */
+        .decor-top-left { position: absolute; top: -40px; left: -30px; font-size: 2.2rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .decor-bottom-right { position: absolute; bottom: -50px; right: -20px; font-size: 2.2rem; opacity: 0.8; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .memory-pin { position: absolute; top: -30px; right: 20px; font-family: 'Caveat', cursive; font-size: 1.2rem; color: #8B6F97; transform: rotate(5deg); opacity: 0.7; }
 
         .paper-header { font-family: 'DM Serif Display', serif; font-size: 38px; color: #4A3B5C; text-align: center; margin-bottom: 40px; }
@@ -173,7 +174,7 @@ try {
         .ps-title { font-family: 'Caveat', cursive; font-size: 22px; color: #6D5E85; font-weight: 700; }
         .ps-content { font-family: 'Caveat', cursive; font-size: 20px; color: #6D5E85; line-height: 1.6; }
 
-        .signature-text { font-family: 'Caveat', cursive; font-size: 30px; color: #4A3B5C; text-align: right; line-height: 1.4; font-weight: 700; margin-top: 40px; }
+        .signature-text { font-family: 'Caveat', cursive; font-size: 30px; color: #4A3B5C; text-align: right; line-height: 1.4; font-weight: 700; margin-top: 40px; margin-right: 20px; }
         
         .you-exist { display: block; font-family: 'Caveat', cursive; color: #8B6F97; font-size: 1.3rem; margin: 30px 0; text-align: center; opacity: 0.7; }
 
@@ -193,7 +194,7 @@ try {
             id: "insecure", title: "When You're Feeling Insecure", theme: "warm", 
             envColor: "#FFF8E7", flapColor: "#F5E6CC", sealColor: "#FFFDF9", sealIcon: "✨", 
             decorTop: "🌸", decorBot: "✨", 
-            previewLines: ["For the moments", "your own mind forgets", "how wonderful you are."],
+            preview: "Borrow my eyes for a minute.",
             openTime: 1200,
             greeting: "Hey, pretty girl.", closing: "Always rooting for you,<br>Muzna", 
             ps: "If your brain keeps saying mean things about you, send it to me. I'd like to have a word with it.", 
@@ -203,7 +204,7 @@ try {
             id: "reassurance", title: "When You Need Reassurance", theme: "warm", 
             envColor: "#FFF5F5", flapColor: "#FCE8E8", sealColor: "#FFFFFF", sealIcon: "🤍",
             decorTop: "🧸", decorBot: "🤍", 
-            previewLines: ["For the moments", "you need someone", "to remind you", "you're not doing this alone."],
+            preview: "You don't have to carry this alone.",
             openTime: 1500,
             greeting: "Hey, love.", closing: "Until next time,<br>Muzna", 
             ps: "You don't have to ask if I'm free. Just call. We'll figure the rest out later. ❤️", 
@@ -213,7 +214,7 @@ try {
             id: "nosleep", title: "When You Can't Sleep", theme: "night", 
             envColor: "#1A2639", flapColor: "#111A28", sealColor: "#C0C0D0", sealIcon: "🌙",
             decorTop: "🌙", decorBot: "⭐", memory: "📍 Wish we could stay up talking.",
-            previewLines: ["For the nights", "when the whole world", "has gone quiet...", "except your thoughts."],
+            preview: "It's very late, isn't it?",
             openTime: 2300,
             greeting: "Hey, sleepyhead.", closing: "Go to sleep.<br>I'll know if you don't. ♡", 
             ps: "Sleep. That's an order. (A very loving one.)", 
@@ -223,7 +224,7 @@ try {
             id: "smile", title: "When You Need A Smile", theme: "happy", 
             envColor: "#FFEFE5", flapColor: "#FFE4D6", sealColor: "#FFD166", sealIcon: "😊",
             decorTop: "☀", decorBot: "🌼", 
-            previewLines: ["Emergency smile", "inspection.", "I'm here to fix", "that little frown."],
+            preview: "Smile inspection.",
             openTime: 700,
             greeting: "Well... look who showed up.", closing: "Now go smile,<br>Muzna", 
             ps: "If you're still refusing to smile, I'm going to assume you're just being stubborn.", 
@@ -233,7 +234,7 @@ try {
             id: "down", title: "When You're Feeling Down", theme: "sad", 
             envColor: "#E8E2F2", flapColor: "#D6CCE6", sealColor: "#B09ECA", sealIcon: "🌧",
             decorTop: "☁", decorBot: "🫧", memory: "🌧 It rained today. Thought of you.",
-            previewLines: ["For the days", "the world feels", "a little heavier.", "Stay here for a while."],
+            preview: "I know today probably wasn't your favorite.",
             openTime: 1800,
             greeting: "Hi, sunshine.", closing: "Your favorite person 🤍", 
             ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life. Those are two very different things.", 
@@ -243,7 +244,7 @@ try {
             id: "miss", title: "When You Miss Me", theme: "warm", 
             envColor: "#F5ECE1", flapColor: "#E8DAC6", sealColor: "#C9A680", sealIcon: "🧸",
             decorTop: "📸", decorBot: "🍂", 
-            previewLines: ["Hmm...", "Someone must've", "been thinking about me.", "Interesting."],
+            preview: "Hmm... someone misses me.",
             openTime: 1000,
             greeting: "Oh! It's you again.", closing: "Waiting for you,<br>Muzna", 
             ps: "Stop reading this and come find me already. I think I've waited long enough.", 
@@ -253,7 +254,7 @@ try {
             id: "exam", title: "Before An Exam", theme: "happy", 
             envColor: "#EDF2E6", flapColor: "#DCE6D2", sealColor: "#A3B899", sealIcon: "✏️",
             decorTop: "📚", decorBot: "☕", 
-            previewLines: ["Breathe.", "You've already done", "the hard part.", "Now trust yourself."],
+            preview: "Breathe first.",
             openTime: 800,
             greeting: "Hello, trouble.", closing: "You've got this,<br>Muzna", 
             ps: "If you finish the exam and immediately start overthinking every answer, I'm legally obligated to tell you to stop. You can't change the answers anymore, so go celebrate surviving instead.", 
@@ -263,7 +264,7 @@ try {
             id: "overthinking", title: "When You're Overthinking", theme: "night", 
             envColor: "#25243B", flapColor: "#1A1A2E", sealColor: "#79728A", sealIcon: "🌌",
             decorTop: "☾", decorBot: "✨", 
-            previewLines: ["For the nights", "your brain decides", "to write stories", "that aren't true."],
+            preview: "Your brain is doing it again.",
             openTime: 2000,
             greeting: "Hey. Yeah, you.", closing: "Take a breath,<br>Muzna", 
             ps: "Your brain is grounded for the rest of the day. It has officially lost overthinking privileges.", 
@@ -273,7 +274,7 @@ try {
             id: "longday", title: "After A Long Day", theme: "warm", 
             envColor: "#F4EAE1", flapColor: "#EBDAC8", sealColor: "#BA8C63", sealIcon: "🍂",
             decorTop: "☕", decorBot: "🍂", 
-            previewLines: ["Welcome home.", "You can finally", "put today down."],
+            preview: "Welcome home.",
             openTime: 1600,
             greeting: "There you are. I've been waiting for you.", closing: "Rest now,<br>Muzna", 
             ps: "Your only assignment tonight is to rest. Yes, this assignment is graded. Yes, I'll know if you don't do it.", 
@@ -283,7 +284,7 @@ try {
             id: "lonely", title: "When You're Feeling Lonely", theme: "sad", 
             envColor: "#DFE5E8", flapColor: "#C5D0D6", sealColor: "#8FA3AD", sealIcon: "☂",
             decorTop: "☁", decorBot: "🌧", 
-            previewLines: ["For the moments", "the silence", "starts feeling", "a little too loud."],
+            preview: "You're not as alone as you think.",
             openTime: 1900,
             greeting: "Hi, my favorite person.", closing: "Always here,<br>Muzna", 
             ps: "Just because we're not in the same place doesn't mean you're by yourself.", 
@@ -293,7 +294,7 @@ try {
             id: "stressed", title: "When You're Stressed", theme: "sick", 
             envColor: "#EBF2EB", flapColor: "#DCE6DB", sealColor: "#93B391", sealIcon: "🍵",
             decorTop: "🍃", decorBot: "🍵", 
-            previewLines: ["Pause.", "Nothing is asking you", "to carry everything", "all at once."],
+            preview: "Pause for a second.",
             openTime: 1700,
             greeting: "Okay, let's take a timeout.", closing: "Relax,<br>Muzna", 
             ps: "Go unclench your jaw. I know you're doing it.", 
@@ -303,7 +304,7 @@ try {
             id: "motivation", title: "When You Need Motivation", theme: "happy", 
             envColor: "#FFF2E6", flapColor: "#FFE3CC", sealColor: "#FFA366", sealIcon: "🌅",
             decorTop: "☀", decorBot: "✨", 
-            previewLines: ["You don't have to", "climb the whole mountain.", "Just take", "the next step."],
+            preview: "One step is enough.",
             openTime: 1000,
             greeting: "Hey, you.", closing: "So proud of you,<br>Muzna", 
             ps: "One step is still progress. Don't underestimate how far tiny steps can take you.", 
@@ -313,7 +314,7 @@ try {
             id: "angry", title: "When You're Angry", theme: "sad", 
             envColor: "#E0DBE5", flapColor: "#CBC3D6", sealColor: "#7A6894", sealIcon: "🌩",
             decorTop: "🌩", decorBot: "🕯", 
-            previewLines: ["Someone", "clearly tested", "your patience today.", "Let's talk first."],
+            preview: "Okay... who annoyed you?",
             openTime: 600,
             greeting: "Well... someone's grumpy.", closing: "Still love you,<br>Muzna", 
             ps: "Before you start plotting someone's downfall... maybe have a snack first. You'd be surprised how often that helps. ❤️", 
@@ -323,7 +324,7 @@ try {
             id: "happy", title: "When You're Happy", theme: "happy", 
             envColor: "#FFFDF0", flapColor: "#FFF6D6", sealColor: "#FFC233", sealIcon: "☀",
             decorTop: "☀", decorBot: "🌼", memory: "📍 You looked really pretty that day. Just saying.",
-            previewLines: ["The universe", "finally remembered", "how lucky it is", "to have you smiling."],
+            preview: "I had a feeling today was kinder to you.",
             openTime: 600,
             greeting: "Heyyy!!", closing: "Keep smiling,<br>Muzna", 
             ps: "I hope today keeps surprising you in the best ways. And if something even better happens... I expect to hear about it. ❤️", 
@@ -333,7 +334,7 @@ try {
             id: "goodnews", title: "After Good News", theme: "happy", 
             envColor: "#FEF7E6", flapColor: "#FDEBCC", sealColor: "#FCA832", sealIcon: "🎉",
             decorTop: "🎉", decorBot: "✨", 
-            previewLines: ["Wait.", "You have something", "to celebrate...", "and you opened", "this before telling me?"],
+            preview: "WAIT... you have news?",
             openTime: 500,
             greeting: "WAIT.", closing: "Celebrating with you,<br>Muzna", 
             ps: "I reserve the right to celebrate your wins even more than you do.", 
@@ -343,7 +344,7 @@ try {
             id: "proud", title: "When You're Proud of Yourself", theme: "warm", 
             envColor: "#FCF5F5", flapColor: "#F7E6E6", sealColor: "#E09C9C", sealIcon: "✨",
             decorTop: "🤍", decorBot: "✨", 
-            previewLines: ["Stay here", "for just a second.", "You're allowed", "to be proud."],
+            preview: "I'm proud of you too.",
             openTime: 1000,
             greeting: "Hey, pretty girl.", closing: "Endlessly proud,<br>Muzna", 
             ps: "Please don't follow this achievement with, 'It wasn't that hard.' We both know that's not true.", 
@@ -353,7 +354,7 @@ try {
             id: "hug", title: "When You Need A Hug", theme: "warm", 
             envColor: "#FCEFF2", flapColor: "#F7DBE1", sealColor: "#D18698", sealIcon: "🫂",
             decorTop: "🤍", decorBot: "🧸", 
-            previewLines: ["Come here.", "No explanations.", "No pretending.", "Just... come here."],
+            preview: "Come here for a second.",
             openTime: 2000,
             greeting: "Come here for a second.", closing: "Squeezing you tight,<br>Muzna", 
             ps: "Don't forget to drink water. Yes, I'm reminding you again. And no, this reminder isn't optional. 😌💜", 
@@ -363,7 +364,7 @@ try {
             id: "sick", title: "When You're Sick", theme: "sick", 
             envColor: "#E8F5EE", flapColor: "#D0EBD9", sealColor: "#7AA387", sealIcon: "🤒",
             decorTop: "🍵", decorBot: "🧣", 
-            previewLines: ["Well...", "Looks like someone", "needs taking care of."],
+            preview: "How's my sick baby doing?",
             openTime: 1800,
             greeting: "Excuse me.", closing: "Get better soon,<br>Muzna", 
             ps: "Your mission is simple: drink your water, take your medicine, eat something, and get better. Failure to comply may result in me showing up and taking over your recovery myself. ❤️", 
@@ -373,7 +374,7 @@ try {
             id: "crying", title: "When You Feel Like Crying", theme: "sad", 
             envColor: "#F0F4F8", flapColor: "#DFE8EE", sealColor: "#93A8B8", sealIcon: "💧",
             decorTop: "☁", decorBot: "💧", interactive: "crying",
-            previewLines: ["You don't have to", "be strong", "for the next", "few minutes.", "I'm here."],
+            preview: "You don't have to pretend.",
             openTime: 2200,
             greeting: "Hey, love.", closing: "Sleep well, pretty girl.<br>Muzna", 
             ps: "I hope one day you see yourself through my eyes. I think you'd finally understand why you're so easy to love. 🤍" 
@@ -382,7 +383,7 @@ try {
             id: "hungry", title: "When You're Hungry", theme: "warm", 
             envColor: "#FFF6ED", flapColor: "#FFEAD4", sealColor: "#D19B71", sealIcon: "🍜",
             decorTop: "🥟", decorBot: "🍵", interactive: "hungry",
-            previewLines: ["Before we continue...", "Tell me honestly.", "Have you eaten?"],
+            preview: "Have you eaten?",
             openTime: 900,
             greeting: "Ahem.", closing: "Go eat,<br>Muzna", 
             ps: "This letter is now judging you until you've eaten. 🍜❤️" 
@@ -392,7 +393,6 @@ try {
     const cryingText = `If you opened this letter...\nI'm guessing today has been one of those days where you need a little reminder.\nSo let me remind you.\nYou are loved.\nNot because of what you achieve.\nNot because you're always cheerful.\nNot because you're doing everything perfectly.\nYou're loved because you're you.\nI wish you could see yourself the way I see you.\nYou'd notice the little things you never give yourself credit for.\nThe way you always remember the tiny details about people.\nThe way you make others feel comfortable without even trying.\nThe way your smile somehow makes everything around it feel a little lighter.\nThe way your laugh is so contagious that I can't help but smile too.\nYou're so busy worrying about whether you're enough that you forget something important.\nYou've been enough all along.\nYou don't have to earn love.\nYou don't have to compete for it.\nYou don't have to prove that you're worthy of it.\nYou already are.\nAnd I hope you never think you have to become someone else just to deserve being loved.\nBecause if I'm being honest...\nI wouldn't change a thing about you.\nNot your random little habits.\nNot the way you get excited over the smallest things.\nNot your stubbornness.\nNot your overthinking.\nNot even the moments when you doubt yourself.\nThose are all parts of the person I've come to care about so much.\nSo whenever life convinces you that you're difficult to love...\nRead this again.\nBecause I'll keep disagreeing with that thought every single time.\nYou are loved.\nCompletely.\nExactly as you are.\nAnd if one day you forget that...\nCome back here.\nI'll remind you as many times as you need.\nBefore you close this letter...\nI want you to do one thing for me.\nPut your hand over your heart for just a second.\nFeel that?\nThat's proof that you've made it through every hard day you've ever had.\nAnd somewhere out there...\nThere's someone who's incredibly grateful that heart belongs to you.\nI'll remind you again tomorrow if I have to.`;
 
     const hungryText = `Before you continue reading...\nI have one very important question.\nHave.\nYou.\nEaten?\nNo, "I'll eat later" is not an acceptable answer.\nNeither is "I forgot."\nAnd absolutely not "I just had coffee."\nThat is not food.\nI know you.\nYou'll keep saying,\n"I'll eat in five minutes."\nAnd somehow five minutes turns into three hours.\nWe're not doing that today.\nSo here's the deal.\nPause whatever you're doing.\nGo find something to eat.\nI genuinely don't care if it's a full meal, leftovers from yesterday, instant noodles, a sandwich, or breakfast at 4 p.m.\nJust eat something.\nYour body has been working hard for you all day.\nThe least you can do is give it some fuel.\nAnd before you say,\n"I'm not that hungry."\nYou probably are.\nYou've just ignored it long enough that your stomach gave up trying to convince you.\nAlso...\nIf you're sitting there thinking,\n"I don't really have anything to eat."\nTell me.\nSeriously.\nI'll order you food.\nNo arguments.\nNo "it's okay."\nNo "you don't have to."\nI know exactly what you're about to say, and the answer is still no.\nLet me.\nBesides...\nYes, I will make sure you eat.\nYes, I'm absolutely threatening you with food.\nAnd yes, it's because I know you'll somehow convince yourself you can survive on absolutely nothing all day.\nYou might get away with fooling everyone else.\nYou're not fooling me.\nNow...\nClose this letter.\nGo eat.\nThen you can come back and tell me what you had.\nAnd if your answer is,\n"Nothing."\nI'm going to pretend to be very disappointed in you.\n(Okay... not pretend. I actually will be.)\nSo go.\nShoo.\nYour food is waiting.`;
-
 
     // --- 4. The HTML Injection Function ---
     window.injectLettersEngine = function() {
@@ -406,11 +406,7 @@ try {
                     <div id="envelope-grid"></div>
                     <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
                     
-                    <div id="preview-zone">
-                        <div class="preview-card" id="preview-card">
-                            <!-- Lines injected here dynamically -->
-                        </div>
-                    </div>
+                    <div id="drawer-toast"></div>
                 </div>
 
                 <div id="letter-room">
@@ -451,7 +447,6 @@ try {
 
     // --- 5. Logic & Animation ---
     let activeLetter = null;
-    let previewTimers = [];
 
     // Open the Drawer
     window.openLetters = function() {
@@ -472,6 +467,7 @@ try {
                      onmouseleave="window.hidePreview()"
                      onclick="window.openEnvelope('${letter.id}', this)">
                     <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
+                    <div class="envelope-paper-preview"></div>
                     <div class="envelope-body" style="background: ${letter.envColor};">
                         <div class="envelope-label">${letter.title}</div>
                     </div>
@@ -492,40 +488,19 @@ try {
         setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 1000);
     };
 
-    // The Poetic Preview
+    // The Dashboard-Style Hover Preview
     window.showPreview = function(id) {
         const letter = window.lettersData.find(l => l.id === id);
-        if(!letter || !letter.previewLines) return;
+        if(!letter || !letter.preview) return;
 
-        const card = document.getElementById('preview-card');
-        card.innerHTML = '';
-        
-        letter.previewLines.forEach((line, index) => {
-            const div = document.createElement('div');
-            div.className = 'preview-line';
-            div.innerText = line;
-            card.appendChild(div);
-        });
-
-        card.classList.add('show');
-        
-        // Staggered reveal
-        previewTimers.forEach(t => clearTimeout(t));
-        previewTimers = [];
-        
-        const lines = card.querySelectorAll('.preview-line');
-        lines.forEach((line, index) => {
-            const timer = setTimeout(() => {
-                line.classList.add('visible');
-            }, index * 600); // 0.6s per line
-            previewTimers.push(timer);
-        });
+        const toast = document.getElementById('drawer-toast');
+        toast.innerText = letter.preview;
+        toast.classList.add('show');
     };
 
     window.hidePreview = function() {
-        previewTimers.forEach(t => clearTimeout(t));
-        const card = document.getElementById('preview-card');
-        card.classList.remove('show');
+        const toast = document.getElementById('drawer-toast');
+        toast.classList.remove('show');
     };
 
     // Envelope Opening Sequence
@@ -534,13 +509,23 @@ try {
         window.hidePreview();
         element.classList.add('envelope-opening');
         
-        // Drop music to 20%
-        const dashMusic = document.getElementById('bg-dashboard');
-        if (dashMusic && dashMusic.volume > 0) {
-            dashMusic.dataset.oldVol = dashMusic.volume;
-            let fade = setInterval(() => {
-                if (dashMusic.volume > 0.05) dashMusic.volume -= 0.01;
-                else clearInterval(fade);
+        // --- WHISPER MUSIC & RAIN OVERLAY FOR LETTERS ---
+        let track = window.currentTrack || document.getElementById('bg-dashboard');
+        if (track && !track.paused) {
+            track.dataset.oldVol = track.volume;
+            let fadeDown = setInterval(() => {
+                if (track.volume > 0.04) track.volume -= 0.01;
+                else clearInterval(fadeDown);
+            }, 100);
+        }
+        
+        const rainMusic = document.getElementById('sfx-rain');
+        if(rainMusic && (typeof window.isPlaying === 'undefined' || window.isPlaying)) {
+            rainMusic.volume = 0;
+            rainMusic.play().catch(e=>{});
+            let rainFadeIn = setInterval(() => {
+                if(rainMusic.volume < 0.1) rainMusic.volume += 0.01;
+                else clearInterval(rainFadeIn);
             }, 100);
         }
 
@@ -719,14 +704,23 @@ try {
         document.getElementById('letter-controls').style.opacity = '0';
         room.style.opacity = '0';
         
-        // Restore music volume
-        const dashMusic = document.getElementById('bg-dashboard');
-        if (dashMusic && dashMusic.dataset.oldVol) {
-            let fade = setInterval(() => {
-                if (dashMusic.volume < parseFloat(dashMusic.dataset.oldVol)) dashMusic.volume += 0.01;
-                else clearInterval(fade);
+        // --- RESTORE MUSIC & STOP RAIN ---
+        const rainMusic = document.getElementById('sfx-rain');
+        if(rainMusic) {
+            let rainFadeOut = setInterval(() => {
+                if(rainMusic.volume > 0.02) rainMusic.volume -= 0.02;
+                else { rainMusic.pause(); clearInterval(rainFadeOut); }
             }, 100);
         }
+
+        let track = window.currentTrack || document.getElementById('bg-dashboard');
+        if (track && track.dataset.oldVol && (typeof window.isPlaying === 'undefined' || window.isPlaying)) {
+            let fadeUp = setInterval(() => {
+                if (track.volume < parseFloat(track.dataset.oldVol)) track.volume += 0.01;
+                else clearInterval(fadeUp);
+            }, 100);
+        }
+        // ---------------------------------
 
         setTimeout(() => { 
             room.style.display = 'none'; 
@@ -744,6 +738,24 @@ try {
         document.getElementById('letter-controls').style.opacity = '0';
         room.style.opacity = '0';
         
+        // --- RESTORE MUSIC & STOP RAIN ---
+        const rainMusic = document.getElementById('sfx-rain');
+        if(rainMusic) {
+            let rainFadeOut = setInterval(() => {
+                if(rainMusic.volume > 0.02) rainMusic.volume -= 0.02;
+                else { rainMusic.pause(); clearInterval(rainFadeOut); }
+            }, 100);
+        }
+
+        let track = window.currentTrack || document.getElementById('bg-dashboard');
+        if (track && track.dataset.oldVol && (typeof window.isPlaying === 'undefined' || window.isPlaying)) {
+            let fadeUp = setInterval(() => {
+                if (track.volume < parseFloat(track.dataset.oldVol)) track.volume += 0.01;
+                else clearInterval(fadeUp);
+            }, 100);
+        }
+        // ---------------------------------
+
         setTimeout(() => { 
             room.style.display = 'none'; 
             overlay.style.display = 'flex';
