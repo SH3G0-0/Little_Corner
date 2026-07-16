@@ -4,9 +4,8 @@
 
 /* 💡 TIP FOR CUSTOM PICTURES:
    If you want to use your own downloaded transparent pictures of dried flowers 
-   instead of the default ones, just scroll down to the "themeGraphicsMap" variable (around line 200) 
-   and replace the "https://images.unsplash.com/..." links with the name of your file 
-   (for example: "dried-rose.png").
+   instead of the default ones, just scroll down to the "themeGraphicsMap" variable
+   and replace the "https://images.unsplash.com/..." links with the name of your file.
 */
 
 try {
@@ -35,16 +34,6 @@ try {
 
         .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
         
-        /* THE FIXED TOOLTIP: Attached directly to the envelope */
-        .envelope-container::after {
-            content: attr(data-preview); position: absolute; bottom: -55px; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
-            color: #5A4A78; padding: 12px 24px; border-radius: 25px;
-            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid white; z-index: 20; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .envelope-container:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
-
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
             box-shadow: 0 15px 35px rgba(90, 74, 120, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
@@ -58,7 +47,7 @@ try {
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 140px solid transparent; border-right: 140px solid transparent;
-            border-top-width: 110px; border-top-style: solid; /* Color injected inline */
+            border-top-width: 110px; border-top-style: solid; 
             z-index: 5; transform-origin: top; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
         }
@@ -89,7 +78,7 @@ try {
         .envelope-opening .envelope-paper-preview { transform: translateY(-150px) scale(1.5) rotate(5deg); opacity: 0; transition: all 1.2s ease; }
         .envelope-opening .envelope-body { filter: brightness(1.2); transform: scale(1.05); opacity: 0; transition: all 1.5s ease; }
 
-        /* --- DYNAMIC Hover Toast for Previews (Fixed Position Issue) --- */
+        /* --- DYNAMIC Hover Toast for Previews --- */
         #drawer-toast {
             position: fixed; transform: translateX(-50%) translateY(10px); 
             padding: 15px 30px; border-radius: 30px;
@@ -101,18 +90,24 @@ try {
         }
         #drawer-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* --- The Reading Room --- */
+        /* --- The Reading Room (With Pastel Dashboard Backgrounds) --- */
         #letter-room {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 3000;
             opacity: 0; transition: opacity 1.5s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
+            overflow: hidden;
         }
 
-        .bg-sad { background: linear-gradient(135deg, #1f2229, #353a47); }
-        .bg-happy { background: linear-gradient(135deg, #FFF0B3, #FFDCEB); }
-        .bg-night { background: linear-gradient(135deg, #0b0b17, #131b2e); }
-        .bg-sick { background: linear-gradient(135deg, #D4E6D2, #E8F2E6); }
-        .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
-        .bg-motivation { background: linear-gradient(135deg, #FFE4B5, #FFDAB9); }
+        .bg-warm { background: linear-gradient(135deg, #F2ECFF 0%, #FFDCEB 50%, #DDEEFF 100%); }
+        .bg-happy { background: linear-gradient(135deg, #FFF6CC 0%, #FFDCEB 50%, #F2ECFF 100%); }
+        .bg-sad { background: linear-gradient(135deg, #E0E8FF, #C9D6FF, #EAE5FF); }
+        .bg-night { background: linear-gradient(135deg, #2D2B4A 0%, #1A1A2E 100%); }
+        .bg-sick { background: linear-gradient(135deg, #E8F2E6 0%, #DDEEFF 100%); }
+        .bg-motivation { background: linear-gradient(135deg, #FFF6CC 0%, #FFE4B5 100%); }
+
+        /* Dashboard-style decor for the room background */
+        .room-decor-bg { position: absolute; width: 100%; height: 100%; top:0; left:0; pointer-events: none; z-index: 1; }
+        .room-decor-bg .cloud { position: absolute; animation: drift-r linear infinite; opacity: 0.6; font-size: 3rem; }
+        .room-decor-bg .star { position: absolute; font-size: 1.5rem; opacity: 0.6; }
 
         /* --- 1. DIFFERENT PAPER FOR EVERY EMOTION --- */
         .paper-happy { background-color: #fffaf0; color: #4B4453; }
@@ -124,60 +119,56 @@ try {
         .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
 
         .letter-paper-full {
-            width: 90%; max-width: 750px; height: 85vh; padding: 0; 
-            border-radius: 2px 5px 3px 6px; /* Deckled torn edge */
-            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.4), 0 20px 50px rgba(60, 20, 0, 0.3); /* Warm Vignette */
-            transform: translateY(120px) scale(0.6) rotate(-5deg); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
-            overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
+            width: 90%; max-width: 650px; height: 85vh; padding: 0; 
+            border-radius: 2px 5px 3px 6px; 
+            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.2), 0 20px 50px rgba(60, 20, 0, 0.3); 
+            transform: rotate(3deg) translateY(60px); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth; z-index: 10;
         }
         
-        /* 6. GENTLE SWAY ANIMATION */
         @keyframes sway { 0% { transform: rotate(1deg) translateY(0); } 50% { transform: rotate(0.6deg) translateY(-2px); } 100% { transform: rotate(1deg) translateY(0); } }
         .paper-ready { transform: rotate(0deg) translateY(0) scale(1); opacity: 1; animation: sway 12s ease-in-out infinite; }
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
-        /* The inner wrapper that actually holds the content and flashlight */
+        /* INNER WRAPPER: Top padding 140px so it's safely away from the browser bar */
         .paper-content-wrapper { 
             position: relative; z-index: 5; padding: 140px 60px 80px 60px; min-height: 100%; box-sizing: border-box;
             background-image: 
                 url("https://www.transparenttextures.com/patterns/aged-paper.png"),
                 linear-gradient(to bottom, transparent 33%, rgba(0,0,0,0.04) 33%, rgba(255,255,255,0.04) 34%, transparent 34%),
                 linear-gradient(to bottom, transparent 66%, rgba(0,0,0,0.04) 66%, rgba(255,255,255,0.04) 67%, transparent 67%);
-            background-color: #d8b898;
             background-blend-mode: multiply;
         }
         
-        /* 18. LIGHT FOLLOWS MOUSE (FIXED BOUNDS) */
+        /* 18. LIGHT FOLLOWS MOUSE */
         .paper-content-wrapper::after {
             content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
             background: radial-gradient(circle 450px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.18), transparent);
             pointer-events: none; z-index: 10;
         }
         
-        /* 4. PAPER SMELLS (Vintage Dried Flowers) */
+        /* FIXED GRAPHICS (Anchored to top so they never slide down during typing) */
         .real-pressed-flower {
             position: absolute; z-index: 4; pointer-events: none; background-size: cover; background-position: center;
-            mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); /* Faded look */
-            mask-image: radial-gradient(circle, black 40%, transparent 70%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+            mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); 
+            mask-image: radial-gradient(circle, black 30%, transparent 65%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 65%);
         }
 
-        /* 2. FLOATING DECORATIONS */
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
-        .floating-decor.d-tl { top: 40px; left: 40px; }
-        .floating-decor.d-br { bottom: 80px; right: 40px; animation-delay: 2s; } /* Sits right next to signature */
+        
+        /* FIXED: Moved top emoji to the RIGHT so it doesn't overlap the text */
+        .floating-decor.d-tr { top: 40px; right: 40px; }
 
-        /* 12. COFFEE STAIN */
-        .coffee-stain { position:absolute; top:15%; right:10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
-
-        /* 13. MARGIN NOTES */
+        .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
+        
+        /* Lowered the margin note slightly to avoid the right-side emoji */
         .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; }
-
-        /* Sweet Notes (Top corner) */
+        
         .sweet-note-top { position: absolute; top: 40px; left: 40px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: inherit; opacity: 0.5; font-style: italic; z-index: 5; font-weight: 700;}
 
-        /* --- 5. DIFFERENT HANDWRITING FOR EMOTIONS --- */
+        /* Fonts */
         .font-happy { font-family: 'Caveat', cursive; font-size: 26px; }
         .font-sad { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 24px; }
         .font-night { font-family: 'Marck Script', cursive; font-size: 28px; }
@@ -186,24 +177,25 @@ try {
         .font-warm { font-family: 'Caveat', cursive; font-size: 26px; }
         .font-angry { font-family: 'Patrick Hand', cursive; font-size: 24px; }
         
-        /* 3. TINY INK IMPERFECTIONS */
         .ink-text { text-shadow: 0 0 1px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.05); line-height: 2.1; white-space: pre-wrap; font-weight: 500; position: relative; z-index: 6;}
-        .paper-night .ink-text { text-shadow: 0 0 2px rgba(255,255,255,0.15); } /* Glow for dark paper */
+        .paper-night .ink-text { text-shadow: 0 0 2px rgba(255,255,255,0.15); } 
 
         .paper-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; font-weight: 700; font-size: 1.3em;}
         .paper-greeting { margin-bottom: 30px; font-weight: 700; font-size: 1.2em;}
         
         .paper-divider { border-bottom: 2px dashed rgba(0,0,0,0.1); width: 40%; margin: 40px auto; }
         .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
-        .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 80px; font-size: 1.4em;} /* Shifted slightly left to accommodate the icon */
+        
+        /* Signature Area & Embedded Emoji */
+        .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; font-size: 1.4em;}
+        .signature-icon { display: inline-block; font-size: 1.4rem; margin-left: 10px; animation: drift 6s ease-in-out infinite; vertical-align: middle; }
+        
         .you-exist { display: block; margin: 30px 0; text-align: center; opacity: 0.6; font-weight: 700; font-style: italic;}
 
-        /* BUTTONS (Moved Inside the Letter Wrapper) */
         .letter-controls { display: flex; justify-content: center; gap: 20px; margin-top: 60px; opacity: 0; transition: opacity 1s ease; position: relative; z-index: 20; }
         .letter-btn { background: rgba(255,255,255,0.85); border: 1px solid rgba(200, 180, 220, 0.5); color: #5D4E75; padding: 12px 25px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
         .letter-btn:hover { background: #FFFDF9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-        /* Ambient Particles */
         #room-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; overflow: hidden; }
         .ambient-p { position: absolute; transition: all linear; opacity: 0; }
     `;
@@ -220,31 +212,31 @@ try {
     ];
     const doodles = ["🌸", "☁️", "♡", "⭐", "🐇"];
 
-    // --- Dynamic Theme Graphics Engine ---
+    // --- Dynamic Theme Graphics Engine (Anchored to TOP so they never move) ---
     const themeGraphicsMap = {
         'warm': [
-            { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'bottom: 5%; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
-            { url: 'https://images.unsplash.com/photo-1596785236251-71fa49ac5760?auto=format&fit=crop&w=300&q=80', css: 'top: 15%; left: -20px; width: 180px; height: 180px; transform: rotate(25deg);' }
+            { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'top: 650px; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
+            { url: 'https://images.unsplash.com/photo-1596785236251-71fa49ac5760?auto=format&fit=crop&w=300&q=80', css: 'top: 150px; left: -20px; width: 180px; height: 180px; transform: rotate(25deg);' }
         ],
         'happy': [
-            { url: 'https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=300&q=80', css: 'bottom: 10%; right: -20px; width: 240px; height: 240px; transform: rotate(10deg); filter: sepia(0.5) contrast(1) opacity(0.3);' },
-            { url: 'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=300&q=80', css: 'top: 10%; left: -10px; width: 150px; height: 150px; transform: rotate(15deg);' }
+            { url: 'https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=300&q=80', css: 'top: 700px; right: -20px; width: 240px; height: 240px; transform: rotate(10deg); filter: sepia(0.5) contrast(1) opacity(0.3);' },
+            { url: 'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=300&q=80', css: 'top: 100px; left: -10px; width: 150px; height: 150px; transform: rotate(15deg);' }
         ],
         'sad': [
-            { url: 'https://images.unsplash.com/photo-1502481851512-e9e2529bfbf9?auto=format&fit=crop&w=300&q=80', css: 'bottom: 0; left: -10px; width: 250px; height: 250px; filter: grayscale(1) opacity(0.15); transform: rotate(5deg);' },
-            { url: 'https://images.unsplash.com/photo-1518063319808-1f8cb1250cbc?auto=format&fit=crop&w=300&q=80', css: 'top: 20%; right: -20px; width: 200px; height: 200px; filter: grayscale(1) opacity(0.15);' }
+            { url: 'https://images.unsplash.com/photo-1502481851512-e9e2529bfbf9?auto=format&fit=crop&w=300&q=80', css: 'top: 800px; left: -10px; width: 250px; height: 250px; filter: grayscale(1) opacity(0.15); transform: rotate(5deg);' },
+            { url: 'https://images.unsplash.com/photo-1518063319808-1f8cb1250cbc?auto=format&fit=crop&w=300&q=80', css: 'top: 250px; right: -20px; width: 200px; height: 200px; filter: grayscale(1) opacity(0.15);' }
         ],
         'night': [
-            { url: 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&w=300&q=80', css: 'top: 10%; right: -10px; width: 180px; height: 180px; filter: grayscale(1) opacity(0.25);' },
-            { url: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=300&q=80', css: 'bottom: 10%; left: -20px; width: 220px; height: 220px; filter: grayscale(1) opacity(0.2); transform: rotate(45deg);' }
+            { url: 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&w=300&q=80', css: 'top: 120px; right: -10px; width: 180px; height: 180px; filter: grayscale(1) opacity(0.25);' },
+            { url: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=300&q=80', css: 'top: 750px; left: -20px; width: 220px; height: 220px; filter: grayscale(1) opacity(0.2); transform: rotate(45deg);' }
         ],
         'sick': [
-            { url: 'https://images.unsplash.com/photo-1576092762791-dd9e222064af?auto=format&fit=crop&w=300&q=80', css: 'bottom: 10%; right: -10px; width: 200px; height: 200px; transform: rotate(-20deg);' },
-            { url: 'https://images.unsplash.com/photo-1596435035541-114400a9ec6f?auto=format&fit=crop&w=300&q=80', css: 'top: 15%; left: -10px; width: 160px; height: 160px; transform: rotate(15deg);' }
+            { url: 'https://images.unsplash.com/photo-1576092762791-dd9e222064af?auto=format&fit=crop&w=300&q=80', css: 'top: 700px; right: -10px; width: 200px; height: 200px; transform: rotate(-20deg);' },
+            { url: 'https://images.unsplash.com/photo-1596435035541-114400a9ec6f?auto=format&fit=crop&w=300&q=80', css: 'top: 180px; left: -10px; width: 160px; height: 160px; transform: rotate(15deg);' }
         ],
         'motivation': [
-            { url: 'https://images.unsplash.com/photo-1529144415895-6aaf8be872fb?auto=format&fit=crop&w=300&q=80', css: 'bottom: 5%; right: -15px; width: 200px; height: 200px; transform: rotate(-10deg); filter: sepia(1) contrast(1.2) opacity(0.3);' },
-            { url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=300&q=80', css: 'top: 10%; left: -10px; width: 170px; height: 170px; transform: rotate(20deg); filter: sepia(1) contrast(1.2) opacity(0.3);' }
+            { url: 'https://images.unsplash.com/photo-1529144415895-6aaf8be872fb?auto=format&fit=crop&w=300&q=80', css: 'top: 750px; right: -15px; width: 200px; height: 200px; transform: rotate(-10deg); filter: sepia(1) contrast(1.2) opacity(0.3);' },
+            { url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=300&q=80', css: 'top: 150px; left: -10px; width: 170px; height: 170px; transform: rotate(20deg); filter: sepia(1) contrast(1.2) opacity(0.3);' }
         ]
     };
 
@@ -267,7 +259,7 @@ try {
         { 
             id: "nosleep", title: "When You Can't Sleep", theme: "night", font: "font-night", paper: "paper-night",
             envColor: "#1A2235", flapColor: "#111826", sealColor: "#C0C0D0", sealIcon: "🌙",
-            preview: "It's very late, isn't it?", greeting: "Hey, sleepyhead.", 
+            memory: "📍 Wish we could stay up talking.", preview: "It's very late, isn't it?", greeting: "Hey, sleepyhead.", 
             ps: "Sleep. That's an order. (A very loving one.)", 
             content: `You're awake again, aren't you?\nI knew it.\nInstead of sleeping like a normal person, you're reading letters on a website.\nHonestly... that's kind of cute.\n\nI know why you're awake.\nThe house gets quiet, the distractions stop, and suddenly your brain decides it's the perfect time to review everything that happened since 2014.\nEvery awkward moment.\nEvery unresolved worry.\nEvery thing you have to do tomorrow.\n\nIf I was sitting beside you right now, I'd probably pull the phone out of your hands.\nI'd hand you a warm mug of tea and pretend I wasn't worried about you.\nWe'd talk until your eyes couldn't stay open anymore.\n\nBut since I can't do that...\nI need you to do it for yourself.\nTake a slow breath.\nRelease the tension in your jaw.\nDrop your shoulders.\n\nYou don't have to solve tomorrow tonight.\nTomorrow's problems belong to tomorrow's version of you.\nTonight's version of you only has one job: to rest.\n\nClose your eyes.\nI'll meet you in tomorrow.` 
         },
@@ -281,7 +273,7 @@ try {
         { 
             id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad",
             envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧",
-            preview: "I know today probably wasn't your favorite.", greeting: "Hi, sunshine.", 
+            memory: "🌧 It rained today. Thought of you.", preview: "I know today probably wasn't your favorite.", greeting: "Hi, sunshine.", 
             ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", 
             content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` 
         },
@@ -344,7 +336,7 @@ try {
         { 
             id: "happy", title: "When You're Happy", theme: "happy", font: "font-happy", paper: "paper-happy",
             envColor: "#FFFDF0", flapColor: "#FFF6D6", sealColor: "#FFC233", sealIcon: "☀",
-            preview: "I had a feeling today was kinder to you.", greeting: "Heyyy!!", 
+            memory: "📍 You looked really pretty that day. Just saying.", preview: "I had a feeling today was kinder to you.", greeting: "Heyyy!!", 
             ps: "I hope today keeps surprising you in the best ways. And if something even better happens... I expect to hear about it. ❤️", 
             content: `Look at you!!\nYou're happy!!\nFinally, the universe decided to do its job for once.\nI love that.\nHonestly, I think the world is a much better place when it's being kind to you.\nYou deserve days that make you smile for absolutely no reason.\nYou deserve moments where you're laughing so hard your stomach hurts.\nYou deserve days that end with you thinking,\n"Today was actually really nice."\nIf something wonderful happened today...\nI hope you celebrated it.\nEven if it's something tiny.\nMaybe you finished something you've been working on.\nMaybe someone complimented you.\nMaybe you got good news.\nMaybe today just felt... lighter.\nWhatever it was...\nI'm so happy it happened to you.\nSometimes we're so busy waiting for the next big thing that we forget to enjoy the little victories.\nSo don't do that today.\nBe proud of yourself.\nSmile a little longer.\nReplay the happy moment in your head as many times as you want.\nThose moments deserve to stay with you.\nAnd selfishly...\nI wish I was there to see you smiling.\nBecause I think your smile is one of my favorite things in the world.\nSo keep it around for a while, okay?\nYou look really, really pretty wearing it.\nNow go enjoy your day.\nYou've earned it.\nNow stop reading this.\nGo enjoy your happy moment.\nThe letter will still be here tomorrow, but today won't.\nGo make another memory.\nAnd don't forget to tell me all about it later. ❤️` 
         },
@@ -406,25 +398,38 @@ try {
                     <div id="envelope-grid"></div>
                     <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
                     
+                    <!-- THE HOVER TOOLTIP -->
                     <div id="drawer-toast"></div>
                 </div>
 
                 <div id="letter-room">
-                    <div id="room-particles"></div>
+                    
+                    <!-- Animated Dashboard-Style Background Decor -->
+                    <div class="room-decor-bg">
+                        <div class="cloud" style="top: 20%; left: -10%; animation-duration: 60s;">☁️</div>
+                        <div class="cloud" style="top: 60%; left: -10%; animation-duration: 90s;">☁️</div>
+                        <div class="star" style="top: 15%; right: 10%;">⭐</div>
+                        <div class="star" style="top: 80%; left: 10%;">⭐</div>
+                    </div>
+
                     <div class="letter-paper-full" id="active-paper">
                         
                         <div class="paper-content-wrapper" id="paper-wrapper">
                             
+                            <!-- DYNAMIC GRAPHICS CONTAINER -->
                             <div id="dynamic-graphics"></div>
 
+                            <!-- COFFEE STAIN -->
                             <div id="paper-coffee" class="coffee-stain"></div>
                             
-                            <div id="paper-margin-note" class="margin-note" style="top: 20px; right: 40px;"></div>
+                            <!-- MARGIN NOTE -->
+                            <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
 
+                            <!-- SWEET NOTE (TOP LEFT) -->
                             <div id="paper-top-note" class="sweet-note-top"></div>
 
-                            <div id="d-tl" class="floating-decor d-tl">🌸</div>
-                            <div id="d-br" class="floating-decor d-br">❀</div>
+                            <!-- FIXED FLOATING DECORATIONS (MOVED EMOJI TO TOP RIGHT TO AVOID TEXT OVERLAP) -->
+                            <div id="d-tr" class="floating-decor d-tr">🌸</div>
                             
                             <div class="paper-header ink-text" id="paper-title"></div>
                             <div class="paper-greeting ink-text" id="paper-greeting"></div>
@@ -437,9 +442,11 @@ try {
                                     <span class="ps-title ink-text">P.S.</span><br>
                                     <span class="ps-content ink-text" id="paper-ps-content"></span>
                                 </div>
+                                <!-- SIGNATURE WITH EMBEDDED EMOJI -->
                                 <div class="signature-text ink-text" id="paper-signature"></div>
                             </div>
                             
+                            <!-- MOVED BUTTONS TO BOTTOM OF PAPER -->
                             <div class="letter-controls" id="letter-controls">
                                 <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
                                 <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
@@ -580,14 +587,12 @@ try {
             });
             
             // Random Dynamics
-            document.getElementById('d-tl').innerText = doodles[Math.floor(Math.random()*doodles.length)];
-            document.getElementById('d-br').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+            document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
             document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
             document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
             
             // Sweet Note Top 
             let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
-            // Don't repeat the signature in the top note
             while (randomTopNote.includes("always")) {
                randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
             }
@@ -596,7 +601,10 @@ try {
             // Setup text
             document.getElementById('paper-title').innerText = activeLetter.title;
             document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
-            document.getElementById('paper-signature').innerHTML = sigs[Math.floor(Math.random()*sigs.length)] + "<br>Muzna";
+            
+            // EMOJI EMBEDDED IN SIGNATURE SO IT DOESN'T MOVE
+            const randomDoodle = doodles[Math.floor(Math.random()*doodles.length)];
+            document.getElementById('paper-signature').innerHTML = `${sigs[Math.floor(Math.random()*sigs.length)]}<br>Muzna <span class="signature-icon">${randomDoodle}</span>`;
             
             if(activeLetter.ps) {
                 document.getElementById('paper-ps-box').style.display = 'block';
@@ -689,11 +697,11 @@ try {
                 for(let j=0; j<lineStr.length; j++) {
                     if(!window.isTyping) { span.innerHTML = lineStr; break; }
                     span.innerHTML += lineStr[j];
-                    await new Promise(r => setTimeout(r, 40)); // 40ms per char (slower, deliberate)
+                    await new Promise(r => setTimeout(r, 35)); // 35ms per char (slower, deliberate)
                 }
             }
             container.appendChild(document.createElement('br'));
-            await new Promise(r => setTimeout(r, 450)); // Pause between lines
+            await new Promise(r => setTimeout(r, 400)); // Pause between lines
         }
         
         if (window.isTyping) {
