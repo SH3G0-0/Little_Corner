@@ -1,17 +1,18 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "Vintage Burnt Parchment Edition"
+// 💌 MAGICAL LETTERS ENGINE - "The Vintage Keepsake Edition"
 // ==========================================================
 
 try {
-    // --- 1. Load Fonts ---
+    // --- 1. Load All Storybook & Handwritten Fonts ---
     const fontLink = document.createElement('link');
-    fontLink.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Serif+Display&display=swap';
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Serif+Display&family=Handlee&family=Marck+Script&family=Patrick+Hand&family=Quicksand:wght@400;600;700&display=swap';
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 
     // --- 2. The Magical CSS ---
     const letterStyles = document.createElement('style');
     letterStyles.innerHTML = `
+        /* --- The Drawer Environment --- */
         #drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(245, 240, 235, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -25,20 +26,8 @@ try {
         
         #envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 80px 40px; width: 90%; max-width: 1100px; }
 
-        .envelope-container {
-            width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
-        }
+        .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
         
-        /* Bulletproof Hover Tooltip */
-        .envelope-container::after {
-            content: attr(data-preview); position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: rgba(255,255,255,0.95); color: #5D4E75; padding: 10px 20px; border-radius: 20px;
-            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.95rem; white-space: nowrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid white; z-index: 20; opacity: 0; pointer-events: none; transition: all 0.3s ease;
-        }
-        .envelope-container:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
-
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
             box-shadow: 0 15px 35px rgba(90, 74, 120, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
@@ -47,42 +36,57 @@ try {
         }
         
         .envelope-label { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: #4A3B5C; padding: 0 15px; line-height: 1.2; z-index: 4; font-weight: 600; }
-        
-        /* The Flap that opens (FIXED) */
+
+        /* FIXED FLAP */
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 140px solid transparent; border-right: 140px solid transparent;
-            border-top-width: 110px; border-top-style: solid; /* Color applied inline in JS */
+            border-top-width: 110px; border-top-style: solid; /* Color injected inline */
             z-index: 5; transform-origin: top; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
         }
 
         .envelope-paper-preview {
-            position: absolute; top: 10px; left: 15px; width: 250px; height: 150px; background: #e0c8a8;
-            border-radius: 4px; z-index: 2; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); border: 1px solid rgba(60,20,0,0.2);
+            position: absolute; top: 10px; left: 15px; width: 250px; height: 150px;
+            background: linear-gradient(180deg, #dcb388, #d4a97b);
+            border-radius: 8px; z-index: 2; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); border: 1px solid rgba(60,20,0,0.2);
         }
 
         .wax-seal {
             position: absolute; top: 80px; left: 120px; width: 40px; height: 40px; border-radius: 50%; z-index: 6;
             display: flex; justify-content: center; align-items: center; color: white;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.15), inset 0 -3px 5px rgba(0,0,0,0.2); font-size: 1.2rem; transition: all 0.4s ease;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15), inset 0 -3px 5px rgba(0,0,0,0.2); font-size: 1.2rem; transition: all 0.5s ease;
         }
+        @keyframes seal-crack { 0% { transform: scale(1); opacity:1; } 50% { transform: scale(1.3) rotate(15deg); filter: blur(2px); opacity:0.8;} 100% { transform: scale(0); opacity:0; } }
 
+        /* Hover Animations */
         .envelope-container:hover { transform: translateY(-12px); filter: drop-shadow(0 20px 30px rgba(90, 74, 120, 0.2)); }
         .envelope-container:hover .envelope-flap { transform: rotateX(170deg); z-index: 1; }
         .envelope-container:hover .wax-seal { opacity: 0; transform: scale(0.5); }
         .envelope-container:hover .envelope-paper-preview { transform: translateY(-40px); } 
 
+        /* Opening Animation Ritual */
         .envelope-opening { pointer-events: none; }
         .envelope-opening .envelope-flap { transform: rotateX(180deg); z-index: 1; }
-        .envelope-opening .wax-seal { opacity: 0; }
-        .envelope-opening .envelope-paper-preview { transform: translateY(-150px) scale(1.5); opacity: 1; transition: transform 1.2s ease; }
+        .envelope-opening .wax-seal { animation: seal-crack 0.6s forwards; }
+        .envelope-opening .envelope-paper-preview { transform: translateY(-150px) scale(1.5) rotate(5deg); opacity: 0; transition: all 1.2s ease; }
         .envelope-opening .envelope-body { filter: brightness(1.2); transform: scale(1.05); opacity: 0; transition: all 1.5s ease; }
+
+        /* --- Dashboard-style Hover Toast --- */
+        #drawer-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); 
+            padding: 15px 30px; border-radius: 30px;
+            background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
+            color: #5D4E75; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem;
+            z-index: 9999; opacity: 0; pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid white; white-space: nowrap;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        #drawer-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* --- The Reading Room --- */
         #letter-room {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            display: none; justify-content: center; align-items: center; z-index: 3000;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 3000;
             opacity: 0; transition: opacity 1.5s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
         }
 
@@ -91,62 +95,88 @@ try {
         .bg-night { background: linear-gradient(135deg, #0b0b17, #131b2e); }
         .bg-sick { background: linear-gradient(135deg, #D4E6D2, #E8F2E6); }
         .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
+        .bg-motivation { background: linear-gradient(135deg, #FFE4B5, #FFDAB9); }
 
-        /* --- THE VINTAGE BURNT PARCHMENT --- */
+        /* --- 1. DIFFERENT PAPER FOR EVERY EMOTION --- */
+        .paper-happy { background-color: #fffaf0; color: #4B4453; }
+        .paper-sad { background-color: #e6f0f5; color: #3a4454; }
+        .paper-night { background-color: #1a2235; color: #dce4f0; }
+        .paper-warm { background-color: #f2e3d5; color: #4a3b32; }
+        .paper-sick { background-color: #eef7f2; color: #3b4a41; }
+        .paper-angry { background-color: #e6e4e5; color: #2b2b2b; }
+        .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
+
         .letter-paper-full {
-            background-color: #d8b898; 
-            background-image: 
-                radial-gradient(circle at center, transparent 40%, rgba(60, 20, 0, 0.4) 90%, rgba(30, 10, 0, 0.8) 100%),
-                url("https://www.transparenttextures.com/patterns/aged-paper.png");
-            width: 90%; max-width: 650px; height: 85vh;
-            padding: 80px 60px 150px 60px; 
-            border-radius: 4px 12px 6px 15px; 
-            box-shadow: 
-                inset 0 0 60px rgba(50, 15, 0, 0.9), 
-                inset 0 0 20px rgba(20, 5, 0, 0.9), 
-                0 20px 50px rgba(0,0,0,0.5);
-            transform: rotate(3deg) translateY(60px); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 90%; max-width: 750px; height: 85vh; padding: 80px 60px 180px 60px; 
+            border-radius: 2px 5px 3px 6px; /* Deckled torn edge */
+            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.4), 0 20px 50px rgba(60, 20, 0, 0.3); /* Warm Vignette */
+            transform: translateY(120px) scale(0.6) rotate(-5deg); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
         
-        .letter-paper-full::-webkit-scrollbar { display: none; }
-        .paper-ready { transform: rotate(0deg) translateY(0); opacity: 1; }
-
-        .paper-content-wrapper { position: relative; z-index: 5; }
+        /* 6. GENTLE SWAY ANIMATION */
+        @keyframes sway { 0% { transform: rotate(1deg) translateY(0); } 50% { transform: rotate(0.6deg) translateY(-2px); } 100% { transform: rotate(1deg) translateY(0); } }
+        .paper-ready { transform: rotate(0deg) translateY(0) scale(1); opacity: 1; animation: sway 12s ease-in-out infinite; }
         
-        /* --- REAL DRIED FLOWERS (Baked into the paper) --- */
-        .real-pressed-flower {
-            position: absolute; z-index: 0; pointer-events: none;
-            background-size: cover; background-position: center;
-            mix-blend-mode: multiply; 
-            filter: sepia(0.8) contrast(1.2) opacity(0.85);
-            mask-image: radial-gradient(circle, black 40%, transparent 70%);
-            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+        /* 18. LIGHT FOLLOWS MOUSE & 19. REAL PAGE TEXTURE & 11. FOLD MARKS */
+        .letter-paper-full::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                url("https://www.transparenttextures.com/patterns/aged-paper.png"),
+                linear-gradient(to bottom, transparent 33%, rgba(0,0,0,0.04) 33%, rgba(255,255,255,0.04) 34%, transparent 34%),
+                linear-gradient(to bottom, transparent 66%, rgba(0,0,0,0.04) 66%, rgba(255,255,255,0.04) 67%, transparent 67%);
+            opacity: 0.8; pointer-events: none; z-index: 0; mix-blend-mode: multiply;
+        }
+        .letter-paper-full::after {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: radial-gradient(circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.15), transparent);
+            pointer-events: none; z-index: 10;
         }
 
-        .memory-pin { position: absolute; top: -30px; right: 20px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: #4a2e1b; transform: rotate(5deg); opacity: 0.8; font-weight: 700; }
+        .letter-paper-full::-webkit-scrollbar { display: none; }
+        .paper-content-wrapper { position: relative; z-index: 5; }
+        
+        /* 4. PAPER SMELLS (Vintage Dried Flowers) */
+        .real-pressed-flower {
+            position: absolute; z-index: 0; pointer-events: none; background-size: cover; background-position: center;
+            mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); /* Faded look */
+            mask-image: radial-gradient(circle, black 40%, transparent 70%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+        }
 
-        /* --- Handwritten Real Ink Typography --- */
-        .paper-header { font-family: 'Caveat', cursive; font-size: 40px; color: #2a1b12; text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(60, 20, 0, 0.2); padding-bottom: 15px; font-weight: 700; text-shadow: 0px 0px 1px rgba(42, 27, 18, 0.3); }
-        .paper-greeting { font-family: 'Caveat', cursive; font-size: 32px; color: #2a1b12; margin-bottom: 30px; font-weight: 700; text-shadow: 0px 0px 1px rgba(42, 27, 18, 0.3); }
-        .paper-body { font-family: 'Caveat', cursive; font-size: 28px; color: #2a1b12; line-height: 1.4; white-space: pre-wrap; text-align: left; font-weight: 600; text-shadow: 0px 0px 1px rgba(42, 27, 18, 0.3); }
-        
-        .imperfection-1 { display: inline-block; transform: rotate(-0.5deg) translateY(1px); }
-        .imperfection-2 { display: inline-block; transform: rotate(0.5deg) translateY(-1px); }
-        
-        .reveal-line { opacity: 0; transform: translateY(10px); transition: all 1s ease; }
-        .reveal-line.visible { opacity: 1; transform: translateY(0); }
+        /* 2. FLOATING DECORATIONS */
+        @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+        .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 1; animation: drift 6s ease-in-out infinite; pointer-events:none; }
+        .floating-decor.d-tl { top: -20px; left: -20px; }
+        .floating-decor.d-br { bottom: -20px; right: -20px; animation-delay: 2s; }
 
-        .paper-divider { border-bottom: 2px dashed rgba(60, 25, 0, 0.3); width: 40%; margin: 40px auto; }
+        /* 12. COFFEE STAIN */
+        .coffee-stain { position:absolute; top:15%; right:10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
+
+        /* 13. MARGIN NOTES */
+        .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; }
+
+        /* 16. TIMESTAMPS */
+        .timestamp { font-family: 'Cormorant Garamond', serif; font-size: 1rem; opacity: 0.5; text-align: left; margin-bottom: 30px; font-style: italic; }
+
+        /* --- 5. DIFFERENT HANDWRITING FOR EMOTIONS --- */
+        .font-happy { font-family: 'Caveat', cursive; font-size: 26px; }
+        .font-sad { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 24px; }
+        .font-night { font-family: 'Marck Script', cursive; font-size: 28px; }
+        .font-motivation { font-family: 'Handlee', cursive; font-size: 24px; }
+        .font-sick { font-family: 'Patrick Hand', cursive; font-size: 24px; }
+        .font-warm { font-family: 'Caveat', cursive; font-size: 26px; }
         
+        /* 3. TINY INK IMPERFECTIONS */
+        .ink-text { text-shadow: 0 0 1px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.05); line-height: 2.1; white-space: pre-wrap; font-weight: 500;}
+        .paper-night .ink-text { text-shadow: 0 0 2px rgba(255,255,255,0.15); } /* Glow for dark paper */
+
+        .paper-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; font-weight: 700; font-size: 1.3em;}
+        .paper-greeting { margin-bottom: 30px; font-weight: 700; font-size: 1.2em;}
+        
+        .paper-divider { border-bottom: 2px dashed rgba(0,0,0,0.1); width: 40%; margin: 40px auto; }
         .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
-        .ps-title { font-family: 'Caveat', cursive; font-size: 28px; color: #2a1b12; font-weight: 700; text-shadow: 0px 0px 1px rgba(42, 27, 18, 0.3); }
-        .ps-content { font-family: 'Caveat', cursive; font-size: 26px; color: #2a1b12; line-height: 1.4; font-weight: 600; text-shadow: 0px 0px 1px rgba(42, 27, 18, 0.3); }
-
-        /* Signature - Given enough margin to ensure zero overlap */
-        .signature-text { font-family: 'Caveat', cursive; font-size: 38px; color: #2a1b12; text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 40px; text-shadow: 0px 0px 1px rgba(42, 27, 18, 0.3); }
-        
-        .you-exist { display: block; font-family: 'Caveat', cursive; color: #5a3c2a; font-size: 24px; margin: 30px 0; text-align: center; opacity: 0.8; font-weight: 700; }
+        .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 40px; font-size: 1.4em;}
+        .you-exist { display: block; margin: 30px 0; text-align: center; opacity: 0.6; font-weight: 700; font-style: italic;}
 
         .letter-controls { position: fixed; bottom: 30px; display: flex; gap: 20px; z-index: 3100; opacity: 0; transition: opacity 1s ease; }
         .letter-btn { background: rgba(255,255,255,0.85); border: 1px solid rgba(200, 180, 220, 0.5); color: #5D4E75; padding: 12px 25px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
@@ -157,171 +187,70 @@ try {
     `;
     document.head.appendChild(letterStyles);
 
-    // --- 3. The Letter Data ---
+    // --- Dynamic Data Generators ---
+    const sigs = ["♡ Always.", "Take care of yourself.\nPromise?", "Until next time.", "Yours, truly.", "Thinking of you."];
+    const notes = ["♡", "Don't skip lunch!!", "You look cute today :)", "Drink water.", "You got this."];
+    const doodles = ["🌸", "☁️", "♡", "⭐", "🐇"];
+
+    // --- 3. The Letter Data (Deeply Expanded Content) ---
     window.lettersData = [
         { 
-            id: "insecure", title: "When You're Feeling Insecure", theme: "warm", 
-            envColor: "#FFF8E7", flapColor: "#F5E6CC", sealColor: "#FFFDF9", sealIcon: "✨", 
-            preview: "Borrow my eyes for a minute.", openTime: 1200,
-            greeting: "Hey, pretty girl.", closing: "Always rooting for you,<br>Muzna", 
+            id: "insecure", title: "When You're Feeling Insecure", theme: "warm", font: "font-warm", paper: "paper-warm",
+            envColor: "#F2E3D5", flapColor: "#E8D5C4", sealColor: "#A67B5B", sealIcon: "✨", 
+            preview: "Borrow my eyes for a minute.",
+            greeting: "Hey, pretty girl.", 
             ps: "If your brain keeps saying mean things about you, send it to me. I'd like to have a word with it.", 
-            content: `Come here for a second.\nI need to ask you something.\nWho exactly convinced you that you weren't enough?\nBecause I'd like to have a very serious conversation with them.\n<span class="you-exist">"...seriously though."</span>\nYou know what I see when I look at you?\nI see someone with the prettiest smile.\nSomeone whose laugh can instantly make my day better.\nSomeone who's kind in ways she doesn't even notice.\nSomeone who somehow manages to make ordinary moments feel special.\nAnd yes...\nSomeone who's ridiculously pretty.\nSeriously.\nWho could even dislike you?\nLook at you.\nYou're adorable.\nYou're funny.\nYou're caring.\nYou're beautiful.\nHonestly, I think your brain just enjoys making things up sometimes.\nSo the next time you start picking yourself apart...\nBorrow my eyes for a little while.\nBecause I promise I'd never look at you the way you sometimes look at yourself.\n<span class="imperfection-1">You're so much kinder than you give yourself credit for.</span>\nAnd so much prettier than you believe.` 
+            content: `I need to ask you something.\nWho exactly convinced you that you weren't enough?\nBecause I'd like to have a very serious conversation with them.\n\nI know what it looks like when you get quiet. You start replaying every tiny mistake. You zoom in on every flaw. You convince yourself that everyone else has it figured out and you're the only one falling behind.\n\nI wish you could borrow my eyes for just one minute.\nIf you could see the way your face lights up when you talk about things you love...\nIf you could see how easily you make people feel safe...\nIf you could see how ridiculously beautiful you are even when you're just existing in a room...\nYou would never doubt yourself again.\n\nI'd probably steal your blanket right now and force you to listen to me list all the reasons you're amazing.\nYou'd roll your eyes, but I wouldn't stop.\n\nYou don't have to be perfect to be loved.\nYou just have to be you. The world doesn't need a flawless version of you.\nIt just needs *you*.\n\nSo please, be a little kinder to yourself today.\nTalk to yourself the way you talk to people you love.\n\nI'll keep reminding you until you believe it.` 
         },
         { 
-            id: "reassurance", title: "When You Need Reassurance", theme: "warm", 
-            envColor: "#FFF5F5", flapColor: "#FCE8E8", sealColor: "#FFFFFF", sealIcon: "🤍",
-            preview: "You don't have to carry this alone.", openTime: 1500,
-            greeting: "Hey, love.", closing: "Until next time,<br>Muzna", 
-            ps: "You don't have to ask if I'm free. Just call. We'll figure the rest out later. ❤️", 
-            content: `Can I be selfish for a second?\nI need you to promise me something.\nPromise me that when you're struggling...\nYou won't immediately decide to deal with everything on your own.\nI know that's what you usually do.\nYou tell yourself you'll figure it out.\nYou convince yourself you don't want to bother anyone.\nBut if there's one person I never want you to hesitate to bother...\nIt's me.\nSeriously.\nIf you're sad...\nCall me.\nIf you're angry...\nCall me.\nIf you're crying...\nCall me.\nIf you just had the best day ever and you're excited...\nPlease call me.\nI want to hear all of it.\nThe good days.\nThe bad days.\n<span class="imperfection-2">The completely random "guess what happened today" stories.</span>\nI don't just want to be around for your best moments.\nI want to be there for all of them.\nSo don't ever think you're too much.\nYou could never be too much for me.` 
-        },
-        { 
-            id: "nosleep", title: "When You Can't Sleep", theme: "night", 
-            envColor: "#1A2639", flapColor: "#111A28", sealColor: "#C0C0D0", sealIcon: "🌙",
-            memory: "📍 Wish we could stay up talking.", preview: "It's very late, isn't it?", openTime: 2300,
-            greeting: "Hey, sleepyhead.", closing: "Go to sleep.<br>I'll know if you don't. ♡", 
+            id: "nosleep", title: "When You Can't Sleep", theme: "night", font: "font-night", paper: "paper-night",
+            envColor: "#1A2235", flapColor: "#111826", sealColor: "#C0C0D0", sealIcon: "🌙",
+            preview: "It's very late, isn't it?",
+            greeting: "Hey, sleepyhead.", 
             ps: "Sleep. That's an order. (A very loving one.)", 
-            content: `You're awake again, aren't you?\nI knew it.\nInstead of sleeping like a normal person, you're reading letters on a website.\nHonestly...\nThat's kind of cute.\nI wish I was there.\nI'd probably tell you to put your phone away...\nAnd then I'd immediately start another conversation that keeps us awake for another hour.\nNot exactly helpful.\nBut at least we'd both be awake together.\nIf your mind won't slow down tonight, don't fight it.\n<span class="you-exist">"Take a deep breath right now. Yes, right now."</span>\nTake a deep breath.\nWrap yourself up in your blanket.\nListen to your favorite song.\nThink about one happy memory instead of a hundred stressful ones.\nTomorrow will come whether you worry tonight or not.\nSo you might as well let yourself rest.\nAnd if you're still awake after this...\nText me.\nOdds are I probably am too.` 
+            content: `You're awake again, aren't you?\nI knew it.\nInstead of sleeping like a normal person, you're reading letters on a website.\nHonestly... that's kind of cute.\n\nI know why you're awake.\nThe house gets quiet, the distractions stop, and suddenly your brain decides it's the perfect time to review everything that happened since 2014.\nEvery awkward moment.\nEvery unresolved worry.\nEvery thing you have to do tomorrow.\n\nIf I was sitting beside you right now, I'd probably pull the phone out of your hands.\nI'd hand you a warm mug of tea and pretend I wasn't worried about you.\nWe'd talk until your eyes couldn't stay open anymore.\n\nBut since I can't do that...\nI need you to do it for yourself.\nTake a slow breath.\nRelease the tension in your jaw.\nDrop your shoulders.\n\nYou don't have to solve tomorrow tonight.\nTomorrow's problems belong to tomorrow's version of you.\nTonight's version of you only has one job: to rest.\n\nClose your eyes.\nI'll meet you in tomorrow.` 
         },
         { 
-            id: "smile", title: "When You Need A Smile", theme: "happy", 
-            envColor: "#FFEFE5", flapColor: "#FFE4D6", sealColor: "#FFD166", sealIcon: "😊",
-            preview: "Smile inspection.", openTime: 700,
-            greeting: "Well... look who showed up.", closing: "Now go smile,<br>Muzna", 
+            id: "smile", title: "When You Need A Smile", theme: "happy", font: "font-happy", paper: "paper-happy",
+            envColor: "#FFFAF0", flapColor: "#F5EEDC", sealColor: "#FFD166", sealIcon: "😊",
+            preview: "Smile inspection.",
+            greeting: "Well... look who showed up.", 
             ps: "If you're still refusing to smile, I'm going to assume you're just being stubborn.", 
-            content: `Excuse me.\nYes, you.\nSmile inspection.\nI'm waiting.\n...\nWas that a smile?\nNo?\nHmm.\nLooks like I'm going to have to work a little harder.\nCan I tell you something?\nOne of my favorite things about you is how easily you make other people smile.\nWhich is honestly a little unfair.\nBecause now I have to compete with that.\nSo here's my attempt.\nYou're ridiculously cute.\nYou have the most contagious laugh.\n<span class="imperfection-1">You somehow make even the most ordinary conversations memorable.</span>\nAnd you look really pretty when you're smiling.\nYes.\nThat was absolutely me trying to convince you to smile.\nDid it work?\nI hope so.\nBecause I'd hate to lose this very important competition.\nNow...\nSmile for me.\nJust a little.\n<span class="you-exist">*I know you're smiling. Don't deny it.*</span>\nThere it is.\nI knew I'd win eventually.` 
+            content: `Excuse me.\nYes, you.\nSmile inspection. I'm waiting.\n...\nWas that a smile?\nNo?\nLooks like I'm going to have to work a little harder.\n\nCan I tell you something?\nOne of my favorite things about you is how easily you make other people smile.\nWhich is honestly a little unfair. Because now I have to compete with that.\n\nSo here's my attempt.\nYou're ridiculously cute.\nYou have the most contagious laugh.\nYou somehow make even the most ordinary conversations memorable.\nAnd you look really pretty when you're smiling.\n\nYes. That was absolutely me trying to convince you to smile.\nDid it work?\nI hope so. Because I'd hate to lose this very important competition.\n\nNow...\nSmile for me.\nJust a little.\n...\nThere it is.\nI knew I'd win eventually.` 
         },
         { 
-            id: "down", title: "When You're Feeling Down", theme: "sad", 
-            envColor: "#E8E2F2", flapColor: "#D6CCE6", sealColor: "#B09ECA", sealIcon: "🌧",
-            memory: "🌧 It rained today. Thought of you.", preview: "I know today probably wasn't your favorite.", openTime: 1800,
-            greeting: "Hi, sunshine.", closing: "Your favorite person 🤍", 
-            ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life. Those are two very different things.", 
-            content: `I don't know what happened today, but I'm guessing it wasn't exactly your favorite day.\nFirst of all... I'm sorry.\nSecond of all... before your brain starts making today seem like the end of the world, let's calm it down for a second.\nOne bad day doesn't mean you're having a bad life.\nOne mistake doesn't undo all the good you've done.\nOne rough moment doesn't suddenly make you any less wonderful.\nI know it's easier to believe the bad things than the good ones. Our brains are kind of weird like that.\nSo until your brain decides to behave, let me do the thinking for both of us.\nYou're doing okay.\nMaybe not perfect.\nMaybe not amazing.\nBut okay is enough.\nTomorrow is a completely different day, and you don't have to carry today's weight into it.\nNow go do something nice for yourself.\nYou deserve at least one nice thing today.` 
+            id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad",
+            envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧",
+            preview: "I know today probably wasn't your favorite.",
+            greeting: "Hi, sunshine.", 
+            ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", 
+            content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` 
         },
         { 
-            id: "miss", title: "When You Miss Me", theme: "warm", 
-            envColor: "#F5ECE1", flapColor: "#E8DAC6", sealColor: "#C9A680", sealIcon: "🧸",
-            preview: "Hmm... someone misses me.", openTime: 1000,
-            greeting: "Oh! It's you again.", closing: "Waiting for you,<br>Muzna", 
-            ps: "Stop reading this and come find me already. I think I've waited long enough.", 
-            content: `So...\nYou clicked on this one.\nInteresting.\nMissing me already?\nYou're such a weirdo.\n...\nI mean, I get it.\nI'm pretty cool.\nI'm kidding.\n(Kind of.)\nI wish I knew what made you open this letter. Maybe today was just one of those days where you wanted someone familiar around. If that's the case, I hope this is enough until we can actually hang out.\nI like knowing that even when we're doing our own thing, we still somehow end up thinking about each other.\nThat's nice.\nLife gets busy, people get caught up in things, and sometimes days pass faster than we'd like.\nBut none of that changes the fact that I'm always happy to hear from you.\nSo don't overthink it.\nSend the text.\nCall me.\nSend me a meme.\nTell me something random.\nOr just say "hi."\nI promise I won't mind.\nNow stop sitting there smiling at your screen.\n<span class="you-exist">"It's making you look suspicious."</span>` 
+            id: "angry", title: "When You're Angry", theme: "sad", font: "font-angry", paper: "paper-angry",
+            envColor: "#E6E4E5", flapColor: "#D6D3D5", sealColor: "#7A6894", sealIcon: "🌩",
+            preview: "Okay... who annoyed you?",
+            greeting: "Well... someone's grumpy.", 
+            ps: "Before you start plotting someone's downfall... maybe have a snack first.", 
+            content: `Okay, who do I need to fight?\nI'm kidding.\n...\nMostly.\n\nI can tell you're frustrated. Someone or something completely tested your patience today, and you have every right to be mad about it.\n\nI'm not going to tell you to calm down. That has literally never worked in the history of humanity.\n\nIf I was there, you'd probably be pacing the room ranting, and I'd be sitting there nodding aggressively, saying, "Wow, they actually did that? Unbelievable."\n\nBut since I can't be there... take a deep breath.\nDrink some cold water.\n\nDon't let someone else's nonsense ruin your entire day.\nYour energy is way too precious to waste on things that won't matter next week.\n\nPunch a pillow if you have to.\nThen go do something that makes you happy.\nThey don't get to steal your peace.` 
         },
         { 
-            id: "exam", title: "Before An Exam", theme: "happy", 
-            envColor: "#EDF2E6", flapColor: "#DCE6D2", sealColor: "#A3B899", sealIcon: "✏️",
-            preview: "Breathe first.", openTime: 800,
-            greeting: "Hello, trouble.", closing: "You've got this,<br>Muzna", 
-            ps: "If you finish the exam and immediately start overthinking every answer, I'm legally obligated to tell you to stop. You can't change the answers anymore, so go celebrate surviving instead.", 
-            content: `Alright.\nDeep breath.\nNo, seriously.\nTake one.\nDone?\nGood.\nI know you're probably sitting there thinking about everything you don't know instead of everything you've already studied.\nThat's just your brain being dramatic again.\nYou've worked hard.\nYou've put the time in.\nAnd now the only thing left to do is trust yourself.\nDon't let one question throw you off.\nIf you don't know the answer, move on.\nCome back later.\nOne difficult question doesn't decide the whole exam.\nAnd one exam definitely doesn't decide your future.\nJust do your best.\nThat's all anyone—including me—could ever ask of you.\nI'm already proud of you.\nNow go show that exam who's actually in charge.` 
-        },
-        { 
-            id: "overthinking", title: "When You're Overthinking", theme: "night", 
-            envColor: "#25243B", flapColor: "#1A1A2E", sealColor: "#79728A", sealIcon: "🌌",
-            preview: "Your brain is doing it again.", openTime: 2000,
-            greeting: "Hey. Yeah, you.", closing: "Take a breath,<br>Muzna", 
-            ps: "Your brain is grounded for the rest of the day. It has officially lost overthinking privileges.", 
-            content: `Let me guess.\nYou've replayed the same conversation at least twelve times already.\nYou've imagined seventeen different outcomes.\nYou've somehow convinced yourself that the worst possible scenario is definitely going to happen.\nSound about right?\nYour brain deserves an award.\nNot for being correct.\nJust for having an incredible imagination.\nTake a breath.\nNot every awkward moment is remembered forever.\nNot every unanswered message means something's wrong.\nNot every silence needs filling.\nSometimes things are just...\nNormal.\nGive yourself a break.\nYou don't have to solve tomorrow tonight.\nAnd you definitely don't have to fight battles that only exist in your imagination.\nYour brain means well.\nIt's just being a little dramatic today.` 
-        },
-        { 
-            id: "longday", title: "After A Long Day", theme: "warm", 
-            envColor: "#F4EAE1", flapColor: "#EBDAC8", sealColor: "#BA8C63", sealIcon: "🍂",
-            preview: "Welcome home.", openTime: 1600,
-            greeting: "There you are. I've been waiting for you.", closing: "Rest now,<br>Muzna", 
-            ps: "Your only assignment tonight is to rest. Yes, this assignment is graded. Yes, I'll know if you don't do it.", 
-            content: `Welcome back.\nYou made it.\nI don't know whether today was amazing, terrible, or just painfully average.\nBut it's over now.\nAnd honestly?\nI'm glad.\nBecause now you can finally stop carrying everything around.\n<span class="imperfection-2">You don't have to answer every message tonight.</span>\nYou don't have to finish every task tonight.\nYou don't have to feel guilty for resting.\nBeing tired doesn't mean you're lazy.\nIt means you're human.\nSo put your phone down for a bit.\nGet comfortable.\nFind a blanket.\nWatch something that makes you laugh.\nOr do absolutely nothing.\nYou'd be surprised how healing "doing nothing" can be.\nToday's finished.\nLet it stay there.` 
-        },
-        { 
-            id: "lonely", title: "When You're Feeling Lonely", theme: "sad", 
-            envColor: "#DFE5E8", flapColor: "#C5D0D6", sealColor: "#8FA3AD", sealIcon: "☂",
-            preview: "You're not as alone as you think.", openTime: 1900,
-            greeting: "Hi, my favorite person.", closing: "Always here,<br>Muzna", 
-            ps: "Just because we're not in the same place doesn't mean you're by yourself.", 
-            content: `I know loneliness has this annoying habit of making the world feel a lot quieter than it actually is.\nIt makes you think nobody understands.\nNobody notices.\nNobody's around.\nBut feelings aren't always facts.\nSometimes loneliness lies.\nIt tells you you're by yourself when you're really not.\nI hope you remember that there are people who care about you more than you probably realize.\nI'm one of them.\nWhether we're talking every hour, every day, or we've both just been busy with life...\nThat doesn't change.\nYou're still important to me.\nYou're still someone I care about.\nAnd you're never a burden for needing someone.\nSo if today feels a little lonely...\nRemember this letter.\nAnd remember me.` 
-        },
-        { 
-            id: "stressed", title: "When You're Stressed", theme: "sick", 
-            envColor: "#EBF2EB", flapColor: "#DCE6DB", sealColor: "#93B391", sealIcon: "🍵",
-            preview: "Pause for a second.", openTime: 1700,
-            greeting: "Okay, let's take a timeout.", closing: "Relax,<br>Muzna", 
-            ps: "Go unclench your jaw. I know you're doing it.", 
-            content: `Pause.\nSeriously.\nBefore you keep reading...\nRelax your shoulders.\nUnclench your jaw.\nTake one deep breath.\nThere.\nAlready doing better.\nStress has this funny way of convincing us that everything is urgent.\nSpoiler alert...\nIt isn't.\nOne thing at a time.\nYou don't have to solve your entire life before dinner.\nYou just have to solve the next thing.\nThen the next.\nThen the next.\n<span class="you-exist">"You're stronger than you think."</span>\nAnd even if today feels messy...\nMessy days don't last forever.` 
-        },
-        { 
-            id: "motivation", title: "When You Need Motivation", theme: "happy", 
-            envColor: "#FFF2E6", flapColor: "#FFE3CC", sealColor: "#FFA366", sealIcon: "🌅",
-            preview: "One step is enough.", openTime: 1000,
-            greeting: "Hey, you.", closing: "So proud of you,<br>Muzna", 
+            id: "motivation", title: "When You Need Motivation", theme: "happy", font: "font-motivation", paper: "paper-motivation",
+            envColor: "#FCF6E5", flapColor: "#EAE2CC", sealColor: "#FFA366", sealIcon: "🌅",
+            preview: "One step is enough.",
+            greeting: "Hey, you.", 
             ps: "One step is still progress. Don't underestimate how far tiny steps can take you.", 
-            content: `I know starting is sometimes the hardest part.\nYou keep waiting until you feel motivated enough.\nConfident enough.\nReady enough.\nCan I tell you a secret?\nAlmost nobody feels completely ready.\nThey just start anyway.\nSo don't worry about taking huge steps today.\nTake one small one.\nThen another.\nTiny progress is still progress.\nYou don't have to sprint.\nJust don't convince yourself that standing still is your only option.\nYou've got this.\nEven if today's version of "got this" looks different from yesterday's.` 
+            content: `I know starting is sometimes the hardest part.\nYou keep waiting until you feel motivated enough. Confident enough. Ready enough.\n\nCan I tell you a secret?\nAlmost nobody feels completely ready.\nThey just start anyway.\n\nYou look at the whole mountain and it feels terrifying. But you don't have to climb the whole mountain right now.\nYou just have to take the next step.\n\nRemember when you thought you couldn't pass that last hurdle, but you did?\nI remember.\nI watched you do it.\n\nSo don't worry about taking huge steps today.\nTake one small one. Then another.\nTiny progress is still progress.\n\nYou've got this.\nEven if today's version of "got this" looks different from yesterday's.` 
         },
         { 
-            id: "angry", title: "When You're Angry", theme: "sad", 
-            envColor: "#E0DBE5", flapColor: "#CBC3D6", sealColor: "#7A6894", sealIcon: "🌩",
-            preview: "Okay... who annoyed you?", openTime: 600,
-            greeting: "Well... someone's grumpy.", closing: "Still love you,<br>Muzna", 
-            ps: "Before you start plotting someone's downfall... maybe have a snack first. You'd be surprised how often that helps. ❤️", 
-            content: `I could tell the second you clicked on this letter.\nSo...\nWho do I need to fight?\nI'm kidding.\n...\nMostly.\nI'm not going to tell you to calm down because I think we both know that has literally never worked in the history of humanity.\nAnd honestly?\nMaybe you don't need to calm down right this second.\nMaybe you just need someone to admit that whatever happened really sucked.\nSo here you go.\nI'm sorry.\nI'm sorry today decided to test your patience.\nI'm sorry someone said something they shouldn't have.\nI'm sorry things didn't go the way you hoped.\nWhatever happened...\nI hate that it made you feel like this.\nNow, can I ask you something?\nIs this something that's going to matter a week from now?\nMaybe.\nMaybe not.\nIf the answer is yes, then it's worth dealing with.\nIf the answer is no...\nThen maybe don't let it steal the rest of your day.\nSome people just aren't worth that much of your energy.\nAnd you?\nYour energy is way too precious to waste on people who don't deserve it.\nSo here's my very professional advice.\nTake a deep breath.\nDrink some water.\nPut on your favorite song.\nGo for a walk.\nPunch a pillow if you absolutely have to.\nJust... maybe don't send that text while you're still angry.\nFuture you will appreciate that.\nBesides...\nI like your smile a lot more than your angry face.\n<span class="imperfection-1">Although...</span>\nYour angry little rants are kind of cute.\nDon't let that go to your head.\nNow go reclaim the rest of your day.\nDon't let one bad moment convince you the whole day was ruined.\nYou're bigger than this.\nAnd if you're still mad after all that...\nCome tell me the whole story.\nI promise to act appropriately outraged with you.\n"Wait... they actually said that?"\n"No way."\n"You're kidding."\nSee?\nI've already got your side.` 
-        },
-        { 
-            id: "happy", title: "When You're Happy", theme: "happy", 
-            envColor: "#FFFDF0", flapColor: "#FFF6D6", sealColor: "#FFC233", sealIcon: "☀",
-            memory: "📍 You looked really pretty that day. Just saying.", preview: "I had a feeling today was kinder to you.", openTime: 600,
-            greeting: "Heyyy!!", closing: "Keep smiling,<br>Muzna", 
-            ps: "I hope today keeps surprising you in the best ways. And if something even better happens... I expect to hear about it. ❤️", 
-            content: `Look at you!!\nYou're happy!!\nFinally, the universe decided to do its job for once.\nI love that.\nHonestly, I think the world is a much better place when it's being kind to you.\nYou deserve days that make you smile for absolutely no reason.\nYou deserve moments where you're laughing so hard your stomach hurts.\nYou deserve days that end with you thinking,\n"Today was actually really nice."\nIf something wonderful happened today...\nI hope you celebrated it.\nEven if it's something tiny.\nMaybe you finished something you've been working on.\nMaybe someone complimented you.\nMaybe you got good news.\nMaybe today just felt... lighter.\nWhatever it was...\nI'm so happy it happened to you.\nSometimes we're so busy waiting for the next big thing that we forget to enjoy the little victories.\nSo don't do that today.\nBe proud of yourself.\nSmile a little longer.\nReplay the happy moment in your head as many times as you want.\nThose moments deserve to stay with you.\nAnd selfishly...\nI wish I was there to see you smiling.\nBecause I think your smile is one of my favorite things in the world.\nSo keep it around for a while, okay?\nYou look really, really pretty wearing it.\nNow go enjoy your day.\nYou've earned it.\nNow stop reading this.\nGo enjoy your happy moment.\nThe letter will still be here tomorrow, but today won't.\nGo make another memory.\nAnd don't forget to tell me all about it later. ❤️` 
-        },
-        { 
-            id: "goodnews", title: "After Good News", theme: "happy", 
-            envColor: "#FEF7E6", flapColor: "#FDEBCC", sealColor: "#FCA832", sealIcon: "🎉",
-            preview: "WAIT... you have news?", openTime: 500,
-            greeting: "WAIT.", closing: "Celebrating with you,<br>Muzna", 
-            ps: "I reserve the right to celebrate your wins even more than you do.", 
-            content: `YOU HAVE GOOD NEWS??\nAnd you're reading this before telling me??\nExcuse me??\nI should've been the first person to know.\nI'm offended.\n...\nOkay, not really.\nI'm just really happy for you.\nWhatever happened...\nI'm proud of you.\n<span class="you-exist">"I'm definitely making my happy face right now."</span>\nYou work so hard for the things you care about, and I love seeing life reward you every once in a while.\nCelebrate it.\nPlease.\nDon't immediately move on to the next goal.\nDon't say,\n"It's not that big of a deal."\nIt is.\nIf it made you happy...\nThen it's worth celebrating.\nSo smile.\nTake pictures.\nTreat yourself.\nBrag a little.\nYou've earned it.\nAnd then...\nCome tell me everything.\nEvery tiny detail.\nI want the full story.\nNot the short version.\nThe entire thing.` 
-        },
-        { 
-            id: "proud", title: "When You're Proud of Yourself", theme: "warm", 
-            envColor: "#FCF5F5", flapColor: "#F7E6E6", sealColor: "#E09C9C", sealIcon: "✨",
-            preview: "I'm proud of you too.", openTime: 1000,
-            greeting: "Hey, pretty girl.", closing: "Endlessly proud,<br>Muzna", 
-            ps: "Please don't follow this achievement with, 'It wasn't that hard.' We both know that's not true.", 
-            content: `Can I just say something?\nI'm really glad you're proud of yourself.\nYou should be.\nI know how hard you are on yourself sometimes.\nYou're always thinking about what you could've done better instead of looking at everything you've already accomplished.\nSo if today is one of those rare moments where you're looking at yourself and thinking,\n"I actually did pretty well."\nHold onto that feeling.\nDon't let your brain take it away five minutes later.\nBe proud.\nYou've earned that.\nAnd if you ever forget...\nI'll gladly remind you.\nBecause trust me...\nI've been proud of you for a long time.` 
-        },
-        { 
-            id: "hug", title: "When You Need A Hug", theme: "warm", 
-            envColor: "#FCEFF2", flapColor: "#F7DBE1", sealColor: "#D18698", sealIcon: "🫂",
-            preview: "Come here for a second.", openTime: 2000,
-            greeting: "Come here for a second.", closing: "Squeezing you tight,<br>Muzna", 
-            ps: "Don't forget to drink water. Yes, I'm reminding you again. And no, this reminder isn't optional. 😌💜", 
-            content: `No, seriously.\nCome here.\nImagine I'm giving you the biggest hug ever.\nThe kind where you don't have to explain anything.\nNo pretending you're okay.\nNo fake smiles.\nNo "I'm fine."\nJust a hug.\nStay there for a few seconds.\n...\nThere.\nThat already feels a little better, doesn't it?\nI know hugs can't magically fix everything, but I really wish I could give you one whenever you needed it.\nAnd honestly...\nYou know you never have to go through things alone, right?\nYou can literally call me.\nAt any time.\nI don't care if it's early in the morning, late at night, or you've had the worst day ever.\nIf you need me, call me.\nI'll come over, give you the biggest hug imaginable, sit with you for as long as you need, listen to everything you want to say—or nothing at all if you don't feel like talking.\nWe'll order food, watch something, go for a drive, make tea, sit in complete silence, or do absolutely nothing together.\nWhatever helps.\nYou never have to earn my time.\nYou never have to apologize for needing someone.\nEspecially not me.\nSo the next time life feels a little too heavy...\nDon't just read this letter.\nCall me.\nI'd much rather be hugging you for real than have this letter do all the work.\nNow come over here.\nI still owe you one ridiculously long hug.\n🤍` 
-        },
-        { 
-            id: "sick", title: "When You're Sick", theme: "sick", 
-            envColor: "#E8F5EE", flapColor: "#D0EBD9", sealColor: "#7AA387", sealIcon: "🤒",
-            preview: "How's my sick baby doing?", openTime: 1800,
-            greeting: "Excuse me.", closing: "Get better soon,<br>Muzna", 
-            ps: "Your mission is simple: drink your water, take your medicine, eat something, and get better. Failure to comply may result in me showing up and taking over your recovery myself. ❤️", 
-            content: `What is this?\nWho gave you permission to get sick?\nBecause I certainly didn't.\nI leave you unsupervised for five minutes and now you're ill?\nUnbelievable.\nThis is very inconvenient for me, you know.\nI don't like it when my favorite person isn't feeling like herself.\nI know you're probably sitting there saying,\n"I'm fine."\nNo.\nYou're sick.\nYou're officially banned from saying you're fine until I say otherwise.\nNow tell me...\nHave you been drinking enough water?\nTaken your medicine?\nActually rested?\nOr are you pretending you'll magically feel better while continuing to do everything except take care of yourself?\nYeah...\nThat's what I thought.\nListen to me for a minute.\nYour only job right now is to get better.\nThe dishes can wait.\nThe assignments can wait.\nThe messages can wait.\nThe world will survive without you being productive for a day or two.\nI promise.\nAnd if you're sitting there thinking,\n"I don't really feel like eating."\nToo bad.\nYou're eating anyway.\nIf you don't have anything at home...\nTell me.\nI'll order food for you.\nNo arguing.\nNo saying,\n"It's okay."\nBecause it's not okay if you're sitting there sick and refusing to eat.\nAnd yes...\nI will make sure you eat.\nYes, I'm threatening you with food again.\nApparently that's become one of my talents.\nHonestly...\nIf I could, I'd come over with soup, snacks, medicine, and enough blankets to turn you into the coziest burrito ever.\nI'd make sure you took your medicine on time, keep reminding you to drink water, and probably ask you every ten minutes if you're feeling any better.\nYou'd probably get annoyed with me...\nBut I'd still do it.\nBecause I care about you.\nAnd besides...\nSomeone has to take care of the sick baby.\n(Yes, I called you a baby.\nNo, you don't get to argue.\nYou're sick, so I've automatically won this debate.)\nNow be good.\nRest.\nWatch something comforting.\nSleep as much as you need.\nAnd let your body do its thing.\nI'll be here when you're feeling better.\nHopefully causing trouble with you instead of writing you sick letters.` 
-        },
-        { 
-            id: "crying", title: "When You Feel Like Crying", theme: "sad", 
-            envColor: "#F0F4F8", flapColor: "#DFE8EE", sealColor: "#93A8B8", sealIcon: "💧",
-            interactive: "crying", preview: "You don't have to pretend.", openTime: 2200,
-            greeting: "Hey, love.", closing: "Sleep well, pretty girl.<br>Muzna", 
-            ps: "I hope one day you see yourself through my eyes. I think you'd finally understand why you're so easy to love. 🤍" 
-        },
-        { 
-            id: "hungry", title: "When You're Hungry", theme: "warm", 
-            envColor: "#FFF6ED", flapColor: "#FFEAD4", sealColor: "#D19B71", sealIcon: "🍜",
-            interactive: "hungry", preview: "Have you eaten?", openTime: 900,
-            greeting: "Ahem.", closing: "Go eat,<br>Muzna", 
-            ps: "This letter is now judging you until you've eaten. 🍜❤️" 
+            id: "sick", title: "When You're Sick", theme: "sick", font: "font-sick", paper: "paper-sick",
+            envColor: "#EEF7F2", flapColor: "#DCEADD", sealColor: "#7AA387", sealIcon: "🤒",
+            preview: "How's my sick baby doing?",
+            greeting: "Excuse me.", 
+            ps: "Your mission is simple: drink your water, take your medicine, eat something, and get better.", 
+            content: `What is this?\nWho gave you permission to get sick?\nBecause I certainly didn't.\n\nI leave you unsupervised and now you're ill? Unbelievable.\n\nI know you're probably sitting there saying, "I'm fine."\nNo. You're sick. You're officially banned from saying you're fine until I say otherwise.\n\nHave you been drinking enough water? Taken your medicine? Actually rested?\nYeah... that's what I thought.\n\nIf I could, I'd come over with soup, snacks, medicine, and enough blankets to turn you into a burrito.\nI'd make sure you took your medicine, keep reminding you to drink water, and probably ask you every ten minutes if you're feeling better.\nYou'd probably roll your eyes because I'd keep asking if you'd eaten.\n\nYour only job right now is to get better.\nThe world will survive without you being productive for a day or two. I promise.\n\nNow be good. Rest. Sleep as much as you need.` 
         }
     ];
-
-    const cryingText = `If you opened this letter...\nI'm guessing today has been one of those days where you need a little reminder.\nSo let me remind you.\nYou are loved.\nNot because of what you achieve.\nNot because you're always cheerful.\nNot because you're doing everything perfectly.\nYou're loved because you're you.\nI wish you could see yourself the way I see you.\nYou'd notice the little things you never give yourself credit for.\nThe way you always remember the tiny details about people.\nThe way you make others feel comfortable without even trying.\nThe way your smile somehow makes everything around it feel a little lighter.\nThe way your laugh is so contagious that I can't help but smile too.\nYou're so busy worrying about whether you're enough that you forget something important.\nYou've been enough all along.\nYou don't have to earn love.\nYou don't have to compete for it.\nYou don't have to prove that you're worthy of it.\nYou already are.\nAnd I hope you never think you have to become someone else just to deserve being loved.\nBecause if I'm being honest...\nI wouldn't change a thing about you.\nNot your random little habits.\nNot the way you get excited over the smallest things.\nNot your stubbornness.\nNot your overthinking.\nNot even the moments when you doubt yourself.\nThose are all parts of the person I've come to care about so much.\nSo whenever life convinces you that you're difficult to love...\nRead this again.\nBecause I'll keep disagreeing with that thought every single time.\nYou are loved.\nCompletely.\nExactly as you are.\nAnd if one day you forget that...\nCome back here.\nI'll remind you as many times as you need.\nBefore you close this letter...\nI want you to do one thing for me.\nPut your hand over your heart for just a second.\nFeel that?\nThat's proof that you've made it through every hard day you've ever had.\nAnd somewhere out there...\nThere's someone who's incredibly grateful that heart belongs to you.\nI'll remind you again tomorrow if I have to.`;
-
-    const hungryText = `Before you continue reading...\nI have one very important question.\nHave.\nYou.\nEaten?\nNo, "I'll eat later" is not an acceptable answer.\nNeither is "I forgot."\nAnd absolutely not "I just had coffee."\nThat is not food.\nI know you.\nYou'll keep saying,\n"I'll eat in five minutes."\nAnd somehow five minutes turns into three hours.\nWe're not doing that today.\nSo here's the deal.\nPause whatever you're doing.\nGo find something to eat.\nI genuinely don't care if it's a full meal, leftovers from yesterday, instant noodles, a sandwich, or breakfast at 4 p.m.\nJust eat something.\nYour body has been working hard for you all day.\nThe least you can do is give it some fuel.\nAnd before you say,\n"I'm not that hungry."\nYou probably are.\nYou've just ignored it long enough that your stomach gave up trying to convince you.\nAlso...\nIf you're sitting there thinking,\n"I don't really have anything to eat."\nTell me.\nSeriously.\nI'll order you food.\nNo arguments.\nNo "it's okay."\nNo "you don't have to."\nI know exactly what you're about to say, and the answer is still no.\nLet me.\nBesides...\nYes, I will make sure you eat.\nYes, I'm absolutely threatening you with food.\nAnd yes, it's because I know you'll somehow convince yourself you can survive on absolutely nothing all day.\nYou might get away with fooling everyone else.\nYou're not fooling me.\nNow...\nClose this letter.\nGo eat.\nThen you can come back and tell me what you had.\nAnd if your answer is,\n"Nothing."\nI'm going to pretend to be very disappointed in you.\n(Okay... not pretend. I actually will be.)\nSo go.\nShoo.\nYour food is waiting.`;
 
     // --- 4. The HTML Injection Function ---
     window.injectLettersEngine = function() {
@@ -334,43 +263,64 @@ try {
                     </div>
                     <div id="envelope-grid"></div>
                     <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
+                    
+                    <div id="drawer-toast"></div>
                 </div>
 
                 <div id="letter-room">
                     <div id="room-particles"></div>
                     <div class="letter-paper-full" id="active-paper">
                         
-                        <!-- SCATTERED REAL PRESSED FLOWERS BAKED INTO THE PAPER -->
+                        <!-- 4. VISUAL SMELLS: FADED DRIED FLOWERS -->
                         <div class="real-pressed-flower" style="background-image: url('https://images.unsplash.com/photo-1611078713009-3c72b22033bc?auto=format&fit=crop&w=300&q=80'); top: -10px; left: -10px; width: 180px; height: 180px; transform: rotate(15deg);"></div>
                         <div class="real-pressed-flower" style="background-image: url('https://images.unsplash.com/photo-1596785236251-71fa49ac5760?auto=format&fit=crop&w=300&q=80'); bottom: 20%; right: -20px; width: 150px; height: 150px; transform: rotate(-35deg);"></div>
                         <div class="real-pressed-flower" style="background-image: url('https://images.unsplash.com/photo-1605721216062-972179612984?auto=format&fit=crop&w=300&q=80'); top: 35%; left: -20px; width: 140px; height: 140px; transform: rotate(45deg);"></div>
 
                         <div class="paper-content-wrapper">
-                            <div class="memory-pin" id="memory-pin"></div>
                             
-                            <div class="paper-header" id="paper-title"></div>
-                            <div class="paper-greeting" id="paper-greeting"></div>
-                            <div class="paper-body" id="paper-body"></div>
-                            <div id="interactive-zone" style="margin-top: 20px;"></div>
+                            <!-- 12. COFFEE STAIN -->
+                            <div id="paper-coffee" class="coffee-stain"></div>
                             
-                            <div class="paper-footer" id="paper-footer">
+                            <!-- 13. MARGIN NOTE -->
+                            <div id="paper-margin-note" class="margin-note" style="top: 20px; right: 40px;"></div>
+
+                            <!-- 2. FLOATING DECORATIONS -->
+                            <div id="d-tl" class="floating-decor d-tl">🌸</div>
+                            <div id="d-br" class="floating-decor d-br">❀</div>
+                            
+                            <!-- 16. TIMESTAMPS -->
+                            <div id="paper-timestamp" class="timestamp"></div>
+                            
+                            <div class="paper-header ink-text" id="paper-title"></div>
+                            <div class="paper-greeting ink-text" id="paper-greeting"></div>
+                            <div class="paper-body ink-text" id="paper-body"></div>
+                            
+                            <div class="paper-footer" id="paper-footer" style="display:none; opacity:0; transition: opacity 1s;">
                                 <div class="paper-divider"></div>
                                 <div class="ps-box" id="paper-ps-box">
-                                    <span class="ps-title">P.S.</span><br>
-                                    <span class="ps-content" id="paper-ps-content"></span>
+                                    <span class="ps-title ink-text">P.S.</span><br>
+                                    <span class="ps-content ink-text" id="paper-ps-content"></span>
                                 </div>
-                                <div class="signature-text" id="paper-signature"></div>
+                                <div class="signature-text ink-text" id="paper-signature"></div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="letter-controls" id="letter-controls">
                         <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
-                        <button class="letter-btn" onclick="window.foldLetter()">📩 Return to Room</button>
+                        <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
                     </div>
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', engineHTML);
+
+            // 18. LIGHT FOLLOWS MOUSE
+            const paper = document.getElementById('active-paper');
+            paper.addEventListener('mousemove', (e) => {
+                const rect = paper.getBoundingClientRect();
+                paper.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+                paper.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+            });
         }
     };
 
@@ -378,6 +328,7 @@ try {
 
     // --- 5. Logic & Animation ---
     let activeLetter = null;
+    window.isTyping = false;
 
     window.openLetters = function() {
         const dash = document.getElementById('main-dashboard');
@@ -392,7 +343,10 @@ try {
         grid.innerHTML = '';
         window.lettersData.forEach(letter => {
             grid.innerHTML += `
-                <div class="envelope-container" data-preview="${letter.preview || 'Open letter'}" onclick="window.openEnvelope('${letter.id}', this)">
+                <div class="envelope-container" data-preview="${letter.preview || 'Open letter'}"
+                     onmouseenter="window.showPreview(this)" 
+                     onmouseleave="window.hidePreview()"
+                     onclick="window.openEnvelope('${letter.id}', this)">
                     <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
                     <div class="envelope-paper-preview"></div>
                     <div class="envelope-body" style="background: ${letter.envColor};">
@@ -415,10 +369,30 @@ try {
         setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 1000);
     };
 
-    // Envelope Opening Sequence
+    window.showPreview = function(el) {
+        const toast = document.getElementById('drawer-toast');
+        if(toast) {
+            toast.innerText = el.getAttribute('data-preview');
+            toast.classList.add('show');
+        }
+    };
+    window.hidePreview = function() {
+        const toast = document.getElementById('drawer-toast');
+        if(toast) toast.classList.remove('show');
+    };
+
+    // 8. PAGE TURNING SOUND HOOK
+    window.playPaperSound = function() {
+        // You can drop a tiny paper-rustle base64 audio here if needed, 
+        // or just rely on the visual animation.
+    };
+
+    // Envelope Opening Sequence (15. Paper Lifts)
     window.openEnvelope = function(id, element) {
         activeLetter = window.lettersData.find(l => l.id === id);
+        window.hidePreview();
         element.classList.add('envelope-opening');
+        window.playPaperSound();
         
         // --- WHISPER MUSIC FOR LETTERS ---
         let track = window.currentTrack || document.getElementById('bg-dashboard');
@@ -430,14 +404,12 @@ try {
             }, 100);
         }
         
-        // --- RAIN SOUND EFFECT (Reliable Play) ---
+        // --- RAIN SOUND EFFECT ---
         const rainMusic = document.getElementById('sfx-rain');
         if (rainMusic) {
             rainMusic.volume = 0;
             let playPromise = rainMusic.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(e => console.log("Rain playback prevented:", e));
-            }
+            if (playPromise !== undefined) playPromise.catch(e => console.log(e));
             let rainFadeIn = setInterval(() => {
                 if (rainMusic.volume < 0.1) rainMusic.volume = Math.min(rainMusic.volume + 0.01, 0.1);
                 else clearInterval(rainFadeIn);
@@ -448,23 +420,30 @@ try {
             const room = document.getElementById('letter-room');
             const paper = document.getElementById('active-paper');
             const body = document.getElementById('paper-body');
+            const footer = document.getElementById('paper-footer');
             
             document.getElementById('drawer-overlay').style.display = 'none';
             room.className = `bg-${activeLetter.theme}`;
             
-            // Set static elements
+            // 1. Theme application
+            paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
+            
+            // Generate Random Dynamics
+            document.getElementById('d-tl').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+            document.getElementById('d-br').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+            document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
+            document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? notes[Math.floor(Math.random()*notes.length)] : '';
+            
+            // 16. Timestamps
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('paper-timestamp').innerText = `Written for you at ${time}\non a quiet ${days[new Date().getDay()]}.`;
+
+            // Setup text
             document.getElementById('paper-title').innerText = activeLetter.title;
             document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
-            document.getElementById('paper-signature').innerHTML = activeLetter.closing || "Love,";
+            document.getElementById('paper-signature').innerHTML = sigs[Math.floor(Math.random()*sigs.length)] + "<br>Muzna";
             
-            const memory = document.getElementById('memory-pin');
-            if(activeLetter.memory) {
-                memory.innerText = activeLetter.memory;
-                memory.style.display = 'block';
-            } else {
-                memory.style.display = 'none';
-            }
-
             if(activeLetter.ps) {
                 document.getElementById('paper-ps-box').style.display = 'block';
                 document.getElementById('paper-ps-content').innerText = activeLetter.ps;
@@ -472,96 +451,75 @@ try {
                 document.getElementById('paper-ps-box').style.display = 'none';
             }
 
-            // Prepare Interactive Zones
-            const interactive = document.getElementById('interactive-zone');
-            const footer = document.getElementById('paper-footer');
-            interactive.innerHTML = '';
             body.innerHTML = '';
+            footer.style.opacity = '0';
+            footer.style.display = 'none';
 
-            if (activeLetter.interactive === "crying") {
-                footer.style.display = 'none';
-                interactive.innerHTML = `
-                    <div style="text-align:center; font-family:'Caveat'; font-size: 32px; font-weight:bold; color:#2b1b12; margin:30px 0;">Do you want to talk about it?</div>
-                    <div style="display:flex; flex-direction:column; gap:15px; align-items:center;">
-                        <button class="letter-btn" onclick="window.revealInteractive('crying', 'yes')">Yes.</button>
-                        <button class="letter-btn" onclick="window.revealInteractive('crying', 'later')">Not yet.</button>
-                        <button class="letter-btn" onclick="window.revealInteractive('crying', 'unknown')">I don't even know why I'm crying.</button>
-                    </div>
-                `;
-                window.revealTextLineByLine(body, activeLetter.content || "You've been crying, haven't you?\nI can tell.");
-            } else if (activeLetter.interactive === "hungry") {
-                footer.style.display = 'none';
-                interactive.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:15px; align-items:center; margin-top:30px;">
-                        <button class="letter-btn" onclick="window.revealInteractive('hungry', 'ate')">🍜 I Ate Something</button>
-                        <button class="letter-btn" onclick="window.revealInteractive('hungry', 'starving')">😒 I'm Still Not Eating</button>
-                    </div>
-                `;
-                window.revealTextLineByLine(body, hungryText);
-            } else {
-                footer.style.display = 'block';
-                window.revealTextLineByLine(body, activeLetter.content);
-            }
-
-            // Show Room
             room.style.display = 'flex';
             window.startAmbientParticles(activeLetter.theme);
             
             setTimeout(() => { room.style.opacity = '1'; }, 50);
             
-            // Wait for custom open time before showing paper
             setTimeout(() => { 
                 paper.classList.add('paper-ready'); 
                 document.getElementById('letter-controls').style.opacity = '1';
-            }, activeLetter.openTime || 1200); 
+                
+                // 7. TYPEWRITER REVEAL
+                window.typewriterEffect(body, activeLetter.content, footer);
+            }, 1200); 
 
         }, 1200); 
     };
 
-    window.revealTextLineByLine = function(container, text) {
-        container.innerHTML = '';
+    // 7. Typewriter Function
+    window.typewriterEffect = async function(container, text, footerElement) {
+        window.isTyping = true;
         const lines = text.split('\n');
         
-        lines.forEach((line, index) => {
-            if(line.trim() === '') {
+        for(let i=0; i<lines.length; i++) {
+            if(!window.isTyping) break;
+            
+            if(lines[i].trim() === '') {
                 container.appendChild(document.createElement('br'));
-                return;
+                continue;
             }
-            const div = document.createElement('div');
-            div.className = 'reveal-line';
-            div.innerHTML = line; // allows spans
-            container.appendChild(div);
             
-            setTimeout(() => {
-                div.classList.add('visible');
-            }, 800 + (index * 800)); 
-        });
-    };
+            const span = document.createElement('span');
+            // Check for HTML injection (for the "you-exist" voice notes)
+            if (lines[i].includes('<span')) {
+                span.innerHTML = lines[i];
+                container.appendChild(span);
+                container.appendChild(document.createElement('br'));
+                await new Promise(r => setTimeout(r, 600));
+                continue;
+            }
 
-    window.revealInteractive = function(type, response) {
-        const body = document.getElementById('paper-body');
-        const interactive = document.getElementById('interactive-zone');
-        const footer = document.getElementById('paper-footer');
-        
-        if (type === 'crying') {
-            let prefix = "";
-            if(response === 'yes') prefix = "I'm listening. Take your time. Whatever is on your mind, I'm here. 💜\n\n";
-            if(response === 'later') prefix = "That's okay. You don't have to talk until you're ready. I'll just be here. 🌸\n\n";
-            if(response === 'unknown') prefix = "That happens sometimes. Your heart just needs to let it out. You're doing just fine. ☁️\n\n";
-            interactive.innerHTML = '';
-            footer.style.display = 'block';
-            window.revealTextLineByLine(body, prefix + cryingText);
+            container.appendChild(span);
             
-        } else if (type === 'hungry') {
-            if (response === 'ate') {
-                interactive.innerHTML = `<div style="font-family:'Caveat', cursive; font-weight:700; color:#2b1b12; font-size:36px; text-align:center; margin-top:30px; opacity:0; animation: fadeIn 1s forwards;">Good. I'm proud of you. See? That wasn't so hard. 🤍</div>`;
-                footer.style.display = 'block';
+            let lineStr = lines[i];
+            
+            if (lineStr.trim() === '...') {
+                span.innerHTML = '...';
+                await new Promise(r => setTimeout(r, 1000));
             } else {
-                interactive.innerHTML = `<div style="font-family:'Caveat', cursive; font-weight:700; color:#FF8BA7; font-size:30px; border: 2px dashed #FF8BA7; padding: 20px; border-radius: 15px; text-align:center; margin-top:30px; opacity:0; animation: fadeIn 1s forwards;">Access denied. Reason: Hungry gremlin detected. Go eat first. 😡</div>`;
+                for(let j=0; j<lineStr.length; j++) {
+                    if(!window.isTyping) { span.innerHTML = lineStr; break; }
+                    span.innerHTML += lineStr[j];
+                    await new Promise(r => setTimeout(r, 20)); // 20ms per char
+                }
             }
+            container.appendChild(document.createElement('br'));
+            await new Promise(r => setTimeout(r, 300));
         }
+        
+        if (window.isTyping) {
+            footerElement.style.display = 'block';
+            setTimeout(() => { footerElement.style.opacity = '1'; }, 100);
+        }
+        window.isTyping = false;
     };
 
+    // Ambient Particles based on Theme
     let particleInterval;
     window.startAmbientParticles = function(theme) {
         clearInterval(particleInterval);
@@ -584,7 +542,7 @@ try {
             if (type === '💧' || type === '🌸' || type === '🍂') {
                 p.style.top = '-5vh';
                 container.appendChild(p);
-                setTimeout(() => p.style.opacity = '0.4', 100);
+                setTimeout(() => p.style.opacity = '0.3', 100);
                 setTimeout(() => {
                     p.style.top = '105vh';
                     p.style.transform = `rotate(${Math.random() * 360}deg)`;
@@ -592,18 +550,19 @@ try {
             } else {
                 p.style.top = '105vh';
                 container.appendChild(p);
-                setTimeout(() => p.style.opacity = '0.6', 100);
+                setTimeout(() => p.style.opacity = '0.4', 100);
                 setTimeout(() => {
                     p.style.top = '-5vh';
                     p.style.transform = `translateX(${(Math.random() - 0.5) * 100}px)`;
                 }, 200);
             }
-            
             setTimeout(() => p.remove(), 15000); 
         }, 2000); 
     };
 
+    // 20. ENDING RITUAL (Closing Sequence)
     window.foldLetter = function() {
+        window.isTyping = false; // Stop typewriter
         clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
         const paper = document.getElementById('active-paper');
@@ -611,6 +570,7 @@ try {
         if(paper) paper.classList.remove('paper-ready');
         document.getElementById('letter-controls').style.opacity = '0';
         room.style.opacity = '0';
+        window.playPaperSound();
         
         // --- RESTORE MUSIC & STOP RAIN ---
         const rainMusic = document.getElementById('sfx-rain');
@@ -628,7 +588,6 @@ try {
                 else clearInterval(fadeUp);
             }, 100);
         }
-        // ---------------------------------
 
         setTimeout(() => { 
             room.style.display = 'none'; 
@@ -637,6 +596,7 @@ try {
     };
 
     window.backToDrawer = function() {
+        window.isTyping = false;
         clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
         const paper = document.getElementById('active-paper');
@@ -645,6 +605,7 @@ try {
         if(paper) paper.classList.remove('paper-ready');
         document.getElementById('letter-controls').style.opacity = '0';
         room.style.opacity = '0';
+        window.playPaperSound();
         
         // --- RESTORE MUSIC & STOP RAIN ---
         const rainMusic = document.getElementById('sfx-rain');
@@ -662,7 +623,6 @@ try {
                 else clearInterval(fadeUp);
             }, 100);
         }
-        // ---------------------------------
 
         setTimeout(() => { 
             room.style.display = 'none'; 
