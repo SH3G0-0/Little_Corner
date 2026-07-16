@@ -5,193 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wajeeha's Happy Place</title>
     <style>
-        /* Storybook Fonts */
+        /* Storybook & UI Fonts */
         @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Quicksand:wght@400;600;700&display=swap');
 
-        /* Cozy World Palette */
+        /* Cozy Game Palette */
         :root {
-            --sky-top: #8FD4FF;
-            --sky-bottom: #FFF8F0;
-            --grass-light: #8BCB74;
-            --grass-dark: #5A8D58;
-            --wood: #8A6240;
-            --paper: #F4E9DA;
+            --sky-top: #79C9FF;
+            --sky-bottom: #DFF4FF;
+            --grass-light: #86C86B;
+            --grass-dark: #5FAF52;
+            --wood: #7C5A3C;
+            --stone: #B7B7B0;
+            --sunlight: #FFE69B;
             --text-color: #5A4A78;
         }
 
-        /* --- Global Reset & Cursor --- */
         * {
-            margin: 0; padding: 0; box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box; user-select: none;
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>") 12 12, auto !important;
-            user-select: none;
         }
+
+        ::-webkit-scrollbar { display: none; }
+        html, body { -ms-overflow-style: none; scrollbar-width: none; overflow: hidden; }
 
         body {
             background-color: var(--sky-top);
             font-family: 'Quicksand', sans-serif;
-            overflow: hidden; /* No scrolling in the game world */
             color: var(--text-color);
         }
 
-        /* --- THE WORLD ENGINE (Parallax Container) --- */
+        /* --- THE WORLD ENGINE --- */
         #world {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-bottom) 60%);
-        }
-
-        /* --- Layer 1: Sky & Lighting --- */
-        .sun-glow {
             position: absolute;
-            top: 10%; right: 20%;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(255,255,210,0.6) 0%, transparent 70%);
-            z-index: 1; pointer-events: none;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(circle at 70% 30%, var(--sunlight) 0%, var(--sky-top) 30%, #2B6DE5 100%);
+            transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1), filter 1s ease;
+            transform-origin: center bottom;
         }
 
-        #cloud-layer {
-            position: absolute; width: 100%; height: 100%; z-index: 2; pointer-events: none;
-        }
+        /* Cinematic Zoom Classes */
+        .zoom-mailbox { transform: scale(1.3) translate(15vw, 10vh); filter: blur(1px) brightness(0.8); }
+        .zoom-sign { transform: scale(1.3) translate(0vw, 15vh); filter: blur(1px) brightness(0.8); }
+        .zoom-jar { transform: scale(1.3) translate(-15vw, 10vh); filter: blur(1px) brightness(0.8); }
 
-        .cloud {
-            position: absolute; font-size: 5rem; opacity: 0.8; filter: blur(1px);
-            animation: float-clouds linear infinite;
-        }
-        @keyframes float-clouds { from { transform: translateX(-20vw); } to { transform: translateX(110vw); } }
-
-        /* --- Layer 2: Distant Mountains --- */
-        #mountain-layer {
-            position: absolute; bottom: 25%; width: 100%; height: 40%; z-index: 3;
-            display: flex; justify-content: space-around; align-items: flex-end; opacity: 0.4;
-            filter: blur(2px) drop-shadow(0 -10px 20px rgba(143, 212, 255, 0.5));
+        /* Generic Layer Setup */
+        .layer {
+            position: absolute; top: 0; left: -5vw; width: 110vw; height: 100vh;
             pointer-events: none; will-change: transform;
         }
-        .mountain { font-size: 25rem; line-height: 1; margin: 0 -50px; }
 
-        /* --- Layer 3: Forest --- */
-        #forest-layer {
-            position: absolute; bottom: 20%; width: 100%; height: 30%; z-index: 4;
-            display: flex; justify-content: space-between; align-items: flex-end; opacity: 0.7;
-            filter: blur(1px); pointer-events: none; will-change: transform;
+        /* --- LAYER 1: SKY & SUNLIGHT --- */
+        #layer-sky { z-index: 1; }
+        .sun-glow {
+            position: absolute; top: 10%; right: 20%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,230,155,0.4) 0%, transparent 60%);
+            mix-blend-mode: screen;
         }
-        .bg-tree { font-size: 12rem; line-height: 1; }
+        .god-rays {
+            position: absolute; top: -10%; right: 0; width: 80vw; height: 120vh;
+            background: repeating-linear-gradient(45deg, rgba(255, 230, 155, 0.05) 0%, rgba(255, 230, 155, 0.05) 2%, transparent 2%, transparent 4%);
+            mix-blend-mode: overlay; opacity: 0.6; transform: rotate(-15deg);
+        }
+        .cloud { position: absolute; filter: blur(1px); animation: drift linear infinite; opacity: 0.8; }
+        @keyframes drift { 0% { transform: translateX(-10vw); } 100% { transform: translateX(110vw); } }
 
-        /* --- Layer 4: The Ground / Terrain --- */
-        #ground-layer {
-            position: absolute; bottom: -5%; left: -5%; width: 110%; height: 35%; z-index: 5;
+        /* --- LAYER 2: MOUNTAINS & FAR BACKGROUND --- */
+        #layer-mountains { z-index: 2; display: flex; align-items: flex-end; justify-content: space-around; opacity: 0.5; filter: blur(2px); bottom: 25%; height: 50%; }
+        .mountain-silhouette { font-size: 35rem; line-height: 1; color: #89D6FF; text-shadow: 0 0 20px #89D6FF; }
+
+        /* --- LAYER 3: MIDGROUND FOREST --- */
+        #layer-forest { z-index: 3; bottom: 20%; height: 40%; display: flex; align-items: flex-end; opacity: 0.85; filter: blur(1px); }
+        .bg-tree { font-size: 15rem; line-height: 1; margin: 0 -2vw; }
+
+        /* --- LAYER 4: TERRAIN / GRASS --- */
+        #layer-ground { z-index: 4; }
+        .terrain-base {
+            position: absolute; bottom: -5vh; left: -5vw; width: 110vw; height: 35vh;
             background: linear-gradient(180deg, var(--grass-light) 0%, var(--grass-dark) 100%);
-            border-radius: 50% 50% 0 0;
-            box-shadow: inset 0 20px 50px rgba(255,255,255,0.2), 0 -10px 30px rgba(90, 141, 88, 0.3);
-            will-change: transform; pointer-events: none;
+            border-radius: 50% 50% 0 0 / 20% 20% 0 0;
+            box-shadow: inset 0 20px 40px rgba(255,255,255,0.2), 0 -10px 20px rgba(0,0,0,0.1);
         }
 
-        /* --- Layer 5: The House & Objects --- */
-        #object-layer {
-            position: absolute; bottom: 15%; width: 100%; height: 50%; z-index: 6;
-            will-change: transform; pointer-events: none; /* Let clicks pass through empty space */
-        }
-
-        /* Ambient swaying for natural objects */
-        @keyframes sway { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
-
-        .world-object {
-            position: absolute; transform-origin: bottom center; line-height: 1;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)) drop-shadow(0 5px 10px rgba(0,0,0,0.1));
-        }
-
-        .cottage { font-size: 22rem; bottom: 5%; left: 15%; pointer-events: auto; }
-        .path { font-size: 8rem; bottom: -20%; left: 28%; transform: rotate(15deg) scaleY(0.5); filter: brightness(0.9); }
-
-        /* INTERACTIVE OBJECTS (The "Buttons") */
-        .interactive {
-            pointer-events: auto; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: absolute; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
-        }
+        /* --- LAYER 5: ENVIRONMENT SCENERY (The User's Assets) --- */
+        #layer-scenery { z-index: 5; }
         
-        .interactive:hover {
-            transform: scale(1.1) translateY(-10px) rotate(-3deg) !important;
-            filter: drop-shadow(0 25px 35px rgba(0,0,0,0.3)) drop-shadow(0 0 15px rgba(255,255,255,0.6));
+        /* The giant tree & bridge asset */
+        .main-tree-bridge {
+            position: absolute; bottom: 15vh; right: 5vw; width: 600px; max-width: 45vw; height: auto;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
         }
 
-        /* Mailbox (Letters) */
-        #mailbox { font-size: 8rem; bottom: 5%; left: 45%; }
+        /* Cottage (Fallback using emojis but styled like an object) */
+        .cottage-container {
+            position: absolute; bottom: 22vh; left: 12vw; font-size: 16rem; line-height: 1;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
+        }
+
+        /* Scattered environmental mushrooms */
+        .env-shroom { position: absolute; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+        .shroom1 { bottom: 12vh; left: 35vw; width: 60px; }
+        .shroom2 { bottom: 8vh; left: 8vw; width: 80px; transform: scaleX(-1); }
+        .shroom3 { bottom: 15vh; right: 40vw; width: 50px; }
+
+        /* --- LAYER 6: INTERACTIVE OBJECTS (The Menu) --- */
+        #layer-objects { z-index: 6; pointer-events: none; }
         
-        /* Table & Jar (Happy Jar) */
-        .stump { position: absolute; font-size: 6rem; bottom: 2%; left: 60%; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2)); }
-        #jar { font-size: 5rem; bottom: 18%; left: 61.5%; z-index: 2; }
-
-        /* Basket (Smile Box) */
-        #basket { font-size: 7rem; bottom: -5%; left: 35%; }
-
-        /* Gramophone / Radio (Music) */
-        #gramophone { font-size: 6rem; bottom: 10%; left: 75%; }
-        #gramophone.playing { animation: bounce-play 1s infinite alternate; }
-        @keyframes bounce-play { 0% { transform: scale(1) translateY(0); } 100% { transform: scale(1.05) translateY(-5px); } }
-
-        /* Trees to flesh out the midground */
-        .tree-mid { font-size: 14rem; bottom: 10%; right: 5%; animation: sway 6s ease-in-out infinite alternate; pointer-events: none;}
-        .tree-mid-2 { font-size: 18rem; bottom: 15%; left: -2%; animation: sway 7s ease-in-out infinite alternate; pointer-events: none;}
-
-        /* --- Layer 6: Foreground (Depth of Field) --- */
-        #foreground-layer {
-            position: absolute; bottom: -10%; width: 110%; left: -5%; height: 25%; z-index: 7;
-            display: flex; justify-content: space-around; align-items: flex-end;
-            filter: blur(3px) drop-shadow(0 20px 30px rgba(0,0,0,0.4));
-            pointer-events: none; will-change: transform;
+        .interactive-prop {
+            position: absolute; pointer-events: auto; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.3)); transform-origin: bottom center;
         }
-        .fg-grass { font-size: 15rem; line-height: 0.5; margin: 0 -20px; animation: sway 4s ease-in-out infinite alternate; transform-origin: bottom; }
-        .fg-flower { font-size: 10rem; line-height: 0.5; animation: sway 5s ease-in-out infinite alternate; transform-origin: bottom; }
+        .interactive-prop:hover {
+            transform: scale(1.1) translateY(-8px) rotate(-2deg);
+            filter: drop-shadow(0 25px 30px rgba(0,0,0,0.4)) drop-shadow(0 0 15px rgba(255, 230, 155, 0.6));
+        }
 
-        /* --- Layer 7: Particles & VFX --- */
-        #particles {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 8; pointer-events: none;
+        /* 1. Mailbox (Letters) */
+        .prop-mailbox { bottom: 18vh; left: 28vw; font-size: 8rem; line-height: 1; }
+        
+        /* 2. Wooden Sign (Smile Box) */
+        .prop-sign { bottom: 12vh; left: 45vw; width: 180px; }
+        
+        /* 3. Glass Jar (Happy Jar) */
+        .prop-jar { bottom: 15vh; right: 38vw; font-size: 6rem; line-height: 1; z-index: 2; }
+        .stump { position: absolute; bottom: 8vh; right: 37vw; font-size: 7rem; line-height: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); pointer-events: none; }
+
+        /* 4. Gramophone (Music) */
+        .prop-gramophone { bottom: 20vh; left: 5vw; font-size: 6rem; line-height: 1; }
+        .prop-gramophone.playing { animation: wobble 2s infinite alternate; filter: drop-shadow(0 0 20px var(--sunlight)); }
+        @keyframes wobble { 0% { transform: rotate(-3deg); } 100% { transform: rotate(3deg); } }
+
+        /* --- LAYER 7: FOREGROUND FRAMING (Depth Blur) --- */
+        #layer-foreground { z-index: 7; filter: blur(3px) drop-shadow(0 30px 40px rgba(0,0,0,0.5)); pointer-events: none; }
+        
+        .fg-sakura-left { position: absolute; top: -5vh; left: -5vw; width: 400px; transform: rotate(15deg); }
+        .fg-sakura-right { position: absolute; top: -10vh; right: -10vw; width: 500px; transform: rotate(-10deg); }
+        .fg-floral-bottom { position: absolute; bottom: -5vh; right: -5vw; width: 350px; }
+        .fg-sakura-bottom { position: absolute; bottom: -10vh; left: -10vw; width: 300px; transform: rotate(20deg); }
+
+        /* --- LAYER 8: PARTICLES & EFFECTS --- */
+        #layer-particles { z-index: 8; pointer-events: none; }
+        .petal {
+            position: absolute; width: 25px; height: 25px; opacity: 0.8;
+            background-image: url('image_f3ad05.png'); background-size: cover;
+            animation: fall linear forwards; filter: drop-shadow(0 5px 5px rgba(246, 165, 201, 0.4));
         }
-        .leaf {
-            position: absolute; font-size: 1.5rem; opacity: 0.6; filter: hue-rotate(40deg);
-            animation: falling-leaf linear forwards;
-        }
-        @keyframes falling-leaf {
+        @keyframes fall {
             0% { transform: translate(0, -10vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translate(-20vw, 110vh) rotate(360deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translate(-30vw, 110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* --- Game UI: Hover Toast --- */
-        #hover-toast {
-            position: fixed; padding: 10px 20px; border-radius: 20px;
-            background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
-            color: var(--wood); font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem;
-            z-index: 1000; pointer-events: none; opacity: 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid var(--paper);
-            transition: opacity 0.2s ease, transform 0.1s linear; transform: translate(-50%, -150%);
+        /* --- UI: Game Tooltip --- */
+        #game-tooltip {
+            position: fixed; padding: 8px 18px; border-radius: 8px;
+            background: rgba(124, 90, 60, 0.9); color: var(--paper);
+            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
+            z-index: 9999; pointer-events: none; opacity: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 2px solid #5A3A20;
+            transition: opacity 0.2s ease; transform: translate(-50%, -150%);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
-        /* --- Loading / Storybook Cover --- */
+        /* --- Loading Screen / Entrance --- */
         #storybook-cover {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient);
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--sky-top);
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            z-index: 2000; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
+            z-index: 10000; transition: opacity 2s ease, transform 2s ease; cursor: pointer; 
         }
-        .storybook-text {
-            max-width: 500px; padding: 40px; background: rgba(255, 255, 255, 0.4); border-radius: 30px;
-            backdrop-filter: blur(10px); border: 2px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: gentleFloat 4s ease-in-out infinite;
+        .enter-btn {
+            padding: 15px 40px; background: var(--wood); color: var(--paper); border-radius: 8px;
+            font-size: 1.5rem; font-weight: bold; border: 3px solid #5A3A20;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); animation: pulse 2s infinite alternate;
         }
-        .storybook-text h1 { font-size: 2.8rem; margin: 10px 0; color: var(--text-color); font-family: 'DM Serif Display', serif; }
-        .storybook-text p { font-size: 1.2rem; line-height: 1.8; margin: 20px 0; }
-        .storybook-text .hint { font-size: 0.9rem; opacity: 0.6; margin-top: 30px; font-style: italic; }
-        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
-        /* Camera Zoom Effect */
-        .zoom-in { transform: scale(1.4) translateY(10%); transition: transform 2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
 
     </style>
 </head>
 <body>
 
-    <!-- Audio Assets -->
+    <!-- Audio Atmosphere -->
     <audio id="bg-dashboard" loop src="first-snow.mp3"></audio>
     <audio id="bg-smilebox" loop src="smilebox-ambient.mp3"></audio>
     <audio id="bg-happy" loop src="zenzenzense-piano.mp3"></audio>
@@ -199,166 +193,183 @@
     <audio id="bg-katawaredoki" loop src="katawaredoki.mp3"></audio>
     <audio id="sfx-rain" loop src="soft-rain.mp3"></audio>
 
-    <!-- Game UI Toast -->
-    <div id="hover-toast"></div>
+    <!-- UI Tooltip -->
+    <div id="game-tooltip"></div>
 
     <!-- Entrance -->
     <div id="storybook-cover" onclick="enterWorld()">
-        <div class="storybook-text">
-            <div style="font-size: 2rem;">🌸</div>
-            <h1>Welcome to Your Happy Place</h1>
-            <p>A little corner of the world made just for you.<br>It'll always be here whenever you need to visit.</p>
-            <div class="hint">( Click anywhere to enter )</div>
-        </div>
+        <div class="enter-btn">Enter World</div>
     </div>
 
-    <!-- THE LIVING WORLD -->
+    <!-- ========================================== -->
+    <!-- THE LIVING WORLD ENGINE (Scene Graph)      -->
+    <!-- ========================================== -->
     <div id="world">
         
-        <!-- Layer 1 -->
-        <div class="sun-glow"></div>
-        <div id="cloud-layer">
-            <div class="cloud" style="top: 10%; animation-duration: 90s; font-size: 6rem;">☁️</div>
-            <div class="cloud" style="top: 25%; animation-duration: 120s; font-size: 4rem; animation-delay: -30s; filter:blur(2px); opacity:0.5;">☁️</div>
-            <div class="cloud" style="top: 15%; animation-duration: 75s; font-size: 8rem; animation-delay: -60s;">☁️</div>
+        <!-- Layer 1: Sky & Atmosphere -->
+        <div class="layer" id="layer-sky">
+            <div class="sun-glow"></div>
+            <div class="god-rays"></div>
+            <div class="cloud" style="top: 15%; font-size: 12rem; animation-duration: 120s;">☁️</div>
+            <div class="cloud" style="top: 30%; font-size: 8rem; animation-duration: 80s; animation-delay: -40s; opacity: 0.5;">☁️</div>
         </div>
 
-        <!-- Layer 2 -->
-        <div id="mountain-layer">
-            <div class="mountain">⛰️</div>
-            <div class="mountain" style="font-size: 35rem;">⛰️</div>
-            <div class="mountain">⛰️</div>
+        <!-- Layer 2: Distant Mountains -->
+        <div class="layer" id="layer-mountains">
+            <div class="mountain-silhouette">⛰️</div>
+            <div class="mountain-silhouette" style="font-size: 45rem; margin-bottom: -10vh;">⛰️</div>
+            <div class="mountain-silhouette">⛰️</div>
         </div>
 
-        <!-- Layer 3 -->
-        <div id="forest-layer">
-            <div class="bg-tree" style="margin-left: -50px;">🌲</div>
-            <div class="bg-tree">🌳</div>
-            <div class="bg-tree" style="font-size: 15rem; margin-bottom: 20px;">🌲</div>
-            <div class="bg-tree">🌳</div>
-            <div class="bg-tree" style="margin-right: -50px;">🌲</div>
+        <!-- Layer 3: Midground Forest -->
+        <div class="layer" id="layer-forest">
+            <div class="bg-tree">🌲</div><div class="bg-tree">🌳</div><div class="bg-tree">🌲</div>
+            <div class="bg-tree">🌳</div><div class="bg-tree">🌲</div><div class="bg-tree">🌳</div>
         </div>
 
-        <!-- Layer 4 -->
-        <div id="ground-layer"></div>
+        <!-- Layer 4: Terrain / Ground -->
+        <div class="layer" id="layer-ground">
+            <div class="terrain-base"></div>
+        </div>
 
-        <!-- Layer 5: Interactive Environment -->
-        <!-- 💡 CSS is designed so you can replace the innerHTML (emojis) with <img src="assets/..."> later -->
-        <div id="object-layer">
+        <!-- Layer 5: Scenery & Architecture -->
+        <div class="layer" id="layer-scenery">
+            <!-- Provided Assets -->
+            <img src="image_f3adc0.png" class="main-tree-bridge" alt="Bridge Tree">
+            <img src="image_f3b181.png" class="env-shroom shroom1" alt="Mushroom">
+            <img src="image_f3b1a2.png" class="env-shroom shroom2" alt="Mushroom">
+            <img src="image_f3b181.png" class="env-shroom shroom3" alt="Mushroom">
             
-            <div class="world-object tree-mid-2">🌳</div>
-            <div class="world-object path">🪨</div>
-            <div class="world-object cottage">🏡</div>
-            <div class="world-object tree-mid">🌸</div>
+            <!-- Cottage -->
+            <div class="cottage-container">🏡</div>
+        </div>
 
-            <!-- The Mailbox (Letters) -->
-            <div id="mailbox" class="interactive" onclick="openLettersWorld()" onmousemove="moveToast(event, '📮 Check the Mail')" onmouseleave="hideToast()">
-                📮
-            </div>
+        <!-- Layer 6: Interactive Objects (The "Menu") -->
+        <div class="layer" id="layer-objects">
+            
+            <!-- 1. Music Player -->
+            <div id="gramophone" class="interactive-prop prop-gramophone" onclick="toggleWorldMusic()" onmousemove="moveToast(event, '📻 Play Ambience')" onmouseleave="hideToast()">📻</div>
 
-            <!-- The Flower Basket (Smile Box) -->
-            <div id="basket" class="interactive" onclick="startSmileBoxWorld()" onmousemove="moveToast(event, '🌸 Open the Smile Box')" onmouseleave="hideToast()">
-                🧺
-            </div>
+            <!-- 2. Letters Mailbox -->
+            <div id="mailbox" class="interactive-prop prop-mailbox" onclick="openGameMenu('letters')" onmousemove="moveToast(event, '📮 Check the Mail')" onmouseleave="hideToast()">📮</div>
 
-            <!-- The Stump and Jar (Happy Jar) -->
-            <div class="world-object stump">🪵</div>
-            <div id="jar" class="interactive" onclick="alert('The Happy Jar opens...')" onmousemove="moveToast(event, '🍯 Pick a Happy Note')" onmouseleave="hideToast()">
-                🫙
-            </div>
+            <!-- 3. Smile Box Sign (Provided Asset) -->
+            <img src="image_f3b483.png" id="sign" class="interactive-prop prop-sign" onclick="openGameMenu('smilebox')" onmousemove="moveToast(event, '🪵 Open Smile Box')" onmouseleave="hideToast()" alt="Wooden Sign">
 
-            <!-- The Gramophone (Music) -->
-            <div id="gramophone" class="interactive" onclick="toggleWorldMusic()" onmousemove="moveToast(event, '📻 Play a Song')" onmouseleave="hideToast()">
-                📻
-            </div>
+            <!-- 4. Happy Jar & Stump -->
+            <div class="stump">🪵</div>
+            <div id="jar" class="interactive-prop prop-jar" onclick="openGameMenu('jar')" onmousemove="moveToast(event, '🍯 Pick a Happy Note')" onmouseleave="hideToast()">🫙</div>
 
         </div>
 
-        <!-- Layer 6: Depth of Field Foreground -->
-        <div id="foreground-layer">
-            <div class="fg-grass">🌿</div>
-            <div class="fg-flower">🌷</div>
-            <div class="fg-grass" style="font-size: 20rem; margin-bottom: -50px;">🌿</div>
-            <div class="fg-flower">🌼</div>
-            <div class="fg-grass">🌿</div>
+        <!-- Layer 7: Foreground Framing -->
+        <div class="layer" id="layer-foreground">
+            <!-- Provided Assets -->
+            <img src="image_f3ad47.png" class="fg-sakura-left" alt="Sakura">
+            <img src="image_f3b128.png" class="fg-sakura-right" alt="Sakura">
+            <img src="image_f3b103.png" class="fg-floral-bottom" alt="Flowers">
+            <img src="image_f3b0cb.png" class="fg-sakura-bottom" alt="Sakura Cluster">
         </div>
 
-        <!-- Layer 7: Particles -->
-        <div id="particles"></div>
+        <!-- Layer 8: Particles -->
+        <div class="layer" id="layer-particles"></div>
 
     </div>
 
-    <!-- Scripts -->
+    <!-- Linked External Logic -->
     <script src="smilebox.js"></script>
     <script src="letters.js"></script>
 
     <script>
-        // --- GAME UI: TOAST FOLLOWING MOUSE ---
-        const toast = document.getElementById('hover-toast');
-        
+        // --- GAME UI: TOOLTIP ---
+        const tooltip = document.getElementById('game-tooltip');
         function moveToast(e, text) {
-            toast.innerText = text;
-            toast.style.opacity = '1';
-            toast.style.left = e.clientX + 'px';
-            toast.style.top = e.clientY + 'px';
+            tooltip.innerText = text;
+            tooltip.style.opacity = '1';
+            tooltip.style.left = e.clientX + 'px';
+            tooltip.style.top = (e.clientY - 20) + 'px';
         }
-        function hideToast() {
-            toast.style.opacity = '0';
-        }
+        function hideToast() { tooltip.style.opacity = '0'; }
 
         // --- PARALLAX ENGINE ---
-        const layers = {
-            mountains: document.getElementById('mountain-layer'),
-            forest: document.getElementById('forest-layer'),
-            ground: document.getElementById('ground-layer'),
-            objects: document.getElementById('object-layer'),
-            foreground: document.getElementById('foreground-layer')
-        };
+        // Layer speeds (Foreground moves fastest, mountains move slowest)
+        const sceneLayers = [
+            { el: document.getElementById('layer-mountains'), speed: 5 },
+            { el: document.getElementById('layer-forest'), speed: 10 },
+            { el: document.getElementById('layer-ground'), speed: 20 },
+            { el: document.getElementById('layer-scenery'), speed: 20 },
+            { el: document.getElementById('layer-objects'), speed: 25 },
+            { el: document.getElementById('layer-foreground'), speed: 60 }
+        ];
 
         window.addEventListener('mousemove', (e) => {
-            // Calculate mouse position relative to center of screen (-0.5 to 0.5)
             const x = (e.clientX / window.innerWidth - 0.5);
             const y = (e.clientY / window.innerHeight - 0.5);
 
-            // Apply different translation speeds to simulate 3D depth
-            layers.mountains.style.transform = `translate(${x * 15}px, ${y * 10}px)`;
-            layers.forest.style.transform = `translate(${x * 30}px, ${y * 15}px)`;
-            layers.ground.style.transform = `translate(${x * 50}px, ${y * 20}px)`;
-            layers.objects.style.transform = `translate(${x * 50}px, ${y * 20}px)`; // Matches ground
-            layers.foreground.style.transform = `translate(${x * 120}px, ${y * 60}px)`; // Moves fastest
+            sceneLayers.forEach(layer => {
+                if(layer.el) {
+                    layer.el.style.transform = `translate(${x * layer.speed}vw, ${y * layer.speed}vh)`;
+                }
+            });
         });
 
-        // --- PARTICLE ENGINE (Falling Leaves) ---
-        function spawnLeaf() {
-            const particleLayer = document.getElementById('particles');
-            const leaf = document.createElement('div');
-            leaf.className = 'leaf';
-            leaf.innerText = '🍃';
-            leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (8 + Math.random() * 10) + 's'; // 8-18 seconds
+        // --- PARTICLE ENGINE (Falling Petals) ---
+        function spawnPetal() {
+            const particleLayer = document.getElementById('layer-particles');
+            const petal = document.createElement('div');
+            petal.className = 'petal';
             
-            particleLayer.appendChild(leaf);
-
-            // Remove leaf after animation completes
-            setTimeout(() => { leaf.remove(); }, 18000);
+            // Randomize starting position, size, and speed
+            petal.style.left = (Math.random() * 120 - 10) + 'vw';
+            petal.style.width = petal.style.height = (15 + Math.random() * 20) + 'px';
+            petal.style.animationDuration = (10 + Math.random() * 15) + 's'; 
+            
+            particleLayer.appendChild(petal);
+            setTimeout(() => { petal.remove(); }, 25000); // Cleanup
         }
-        // Spawn a leaf every 2 seconds
-        setInterval(spawnLeaf, 2000);
+        setInterval(spawnPetal, 800); // Spawn a petal every 800ms
 
         // --- WORLD ENTRY ---
         function enterWorld() {
             const cover = document.getElementById('storybook-cover');
             cover.style.opacity = '0';
-            cover.style.transform = 'scale(1.1)'; 
+            cover.style.transform = 'scale(1.2)'; 
             
-            toggleWorldMusic(true); // Auto-play music on entry
+            toggleWorldMusic(true); // Auto-play ambient music
             
-            setTimeout(() => {
-                cover.style.display = 'none';
-            }, 1500);
+            setTimeout(() => { cover.style.display = 'none'; }, 2000);
         }
 
-        // --- MUSIC ENGINE ---
+        // --- INTERACTION & CINEMATIC CAMERA ZOOM ---
+        const world = document.getElementById('world');
+
+        function openGameMenu(type) {
+            hideToast();
+            
+            // Apply specific camera zoom based on the object clicked
+            if (type === 'letters') {
+                world.className = 'zoom-mailbox';
+                setTimeout(() => { window.openLetters(); }, 1000);
+            } 
+            else if (type === 'smilebox') {
+                world.className = 'zoom-sign';
+                setTimeout(() => { window.startSmileBox(); }, 1000);
+            }
+            else if (type === 'jar') {
+                world.className = 'zoom-jar';
+                setTimeout(() => { alert("The Happy Jar opens... (Attach to jar logic)"); world.className = ''; }, 1000);
+            }
+        }
+
+        // Listen for standard UI closures to reset the camera
+        // (Assuming window.closeDrawer() exists in your letters.js/smilebox.js)
+        const originalCloseDrawer = window.closeDrawer;
+        window.closeDrawer = function() {
+            if(originalCloseDrawer) originalCloseDrawer();
+            world.className = ''; // Resets camera zoom back to normal
+        };
+
+        // --- AMBIENT AUDIO ENGINE ---
         let isPlaying = false;
         function toggleWorldMusic(forcePlay = false) {
             const playerUI = document.getElementById('gramophone');
@@ -366,9 +377,7 @@
 
             if (isPlaying && !forcePlay) {
                 if (window.stopAllMusic) { window.stopAllMusic(); } 
-                else {
-                    if(dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
-                }
+                else if (dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
                 playerUI.classList.remove('playing');
                 isPlaying = false;
             } else {
@@ -385,29 +394,6 @@
                     isPlaying = true;
                 }
             }
-        }
-
-        // --- INTERACTION HOOKS ---
-        const world = document.getElementById('world');
-
-        // Letters
-        function openLettersWorld() {
-            hideToast();
-            world.classList.add('zoom-in'); // Cinematic zoom
-            setTimeout(() => {
-                window.openLetters(); // Calls your letters.js function
-                world.classList.remove('zoom-in'); // Reset zoom for when drawer closes
-            }, 800);
-        }
-
-        // Smile Box
-        function startSmileBoxWorld() {
-            hideToast();
-            world.classList.add('zoom-in');
-            setTimeout(() => {
-                window.startSmileBox(); // Calls your smilebox.js function
-                world.classList.remove('zoom-in');
-            }, 800);
         }
 
     </script>
