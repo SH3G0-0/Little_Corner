@@ -22,6 +22,11 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>") 12 12, auto !important;
         }
 
+        /* --- Hidden Scrollbar Magic --- */
+        body::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -29,6 +34,8 @@
             font-family: 'Quicksand', sans-serif;
             overflow-x: hidden;
             color: var(--text-color);
+            -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+            scrollbar-width: none;  /* Hide scrollbar for Firefox */
         }
 
         h1, h2, h3, .nav-logo {
@@ -275,12 +282,10 @@
             border-radius: 30px 15px 35px 20px; 
         }
 
+        /* Color matching for the 3 remaining cards */
         .card:nth-child(1) { background-color: rgba(255, 220, 235, 0.6); } 
         .card:nth-child(2) { background-color: rgba(221, 238, 255, 0.6); } 
-        .card:nth-child(3) { background-color: rgba(255, 246, 204, 0.6); } 
-        .card:nth-child(4) { background-color: rgba(221, 248, 232, 0.6); } 
-        .card:nth-child(5) { background-color: rgba(255, 230, 215, 0.6); } 
-        .card:nth-child(6) { background-color: rgba(242, 236, 255, 0.6); } 
+        .card:nth-child(3) { background-color: rgba(242, 236, 255, 0.6); } 
 
         .footer {
             margin-top: 80px;
@@ -416,18 +421,6 @@
             <div class="card" onclick="window.openLetters()" onmouseover="showToast('🌸 Open whenever you need to hear from me.')" onmouseout="hideToast()">
                 <span>💌</span> Letters
             </div>
-            
-            <div class="card" onclick="alert('Happy Jar opening...')" onmouseover="showToast('🍯 Pick a note... you never know what you\'ll find.')" onmouseout="hideToast()">
-                <span>🍯</span> Happy Jar
-            </div>
-            
-            <div class="card" onclick="alert('Compliments opening...')" onmouseover="showToast('✨ A little reminder of how wonderful you are.')" onmouseout="hideToast()">
-                <span>🌈</span> Compliments
-            </div>
-            
-            <div class="card" onclick="alert('Cat Corner opening...')" onmouseover="showToast('🐱 Tiny paws. Big happiness.')" onmouseout="hideToast()">
-                <span>🐾</span> Cat Corner
-            </div>
 
             <div class="card" onclick="alert('Reasons opening...')" onmouseover="showToast('🌸 Just in case you ever forget.')" onmouseout="hideToast()">
                 <span>📖</span> Reasons I Think You're Amazing
@@ -439,8 +432,9 @@
         </div>
     </div>
 
- <script src="smilebox.js"></script>
- <script src="letters.js"></script>
+    <!-- No ?v tags needed for GitHub pages! -->
+    <script src="smilebox.js"></script>
+    <script src="letters.js"></script>
 
     <script>
         // --- Hover Toast Logic ---
