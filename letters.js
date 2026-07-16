@@ -34,6 +34,9 @@ try {
 
         .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
         
+        /* 🚨 KILL SWITCH FOR THE OLD CSS TOOLTIP 🚨 */
+        .envelope-container::after { display: none !important; content: none !important; opacity: 0 !important; }
+
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
             box-shadow: 0 15px 35px rgba(90, 74, 120, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
@@ -47,7 +50,7 @@ try {
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 140px solid transparent; border-right: 140px solid transparent;
-            border-top-width: 110px; border-top-style: solid; 
+            border-top-width: 110px; border-top-style: solid; /* Color injected inline */
             z-index: 5; transform-origin: top; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
         }
@@ -90,24 +93,18 @@ try {
         }
         #drawer-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* --- The Reading Room (With Pastel Dashboard Backgrounds) --- */
+        /* --- The Reading Room --- */
         #letter-room {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 3000;
             opacity: 0; transition: opacity 1.5s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
-            overflow: hidden;
         }
 
-        .bg-warm { background: linear-gradient(135deg, #F2ECFF 0%, #FFDCEB 50%, #DDEEFF 100%); }
-        .bg-happy { background: linear-gradient(135deg, #FFF6CC 0%, #FFDCEB 50%, #F2ECFF 100%); }
-        .bg-sad { background: linear-gradient(135deg, #E0E8FF, #C9D6FF, #EAE5FF); }
-        .bg-night { background: linear-gradient(135deg, #2D2B4A 0%, #1A1A2E 100%); }
-        .bg-sick { background: linear-gradient(135deg, #E8F2E6 0%, #DDEEFF 100%); }
-        .bg-motivation { background: linear-gradient(135deg, #FFF6CC 0%, #FFE4B5 100%); }
-
-        /* Dashboard-style decor for the room background */
-        .room-decor-bg { position: absolute; width: 100%; height: 100%; top:0; left:0; pointer-events: none; z-index: 1; }
-        .room-decor-bg .cloud { position: absolute; animation: drift-r linear infinite; opacity: 0.6; font-size: 3rem; }
-        .room-decor-bg .star { position: absolute; font-size: 1.5rem; opacity: 0.6; }
+        .bg-sad { background: linear-gradient(135deg, #1f2229, #353a47); }
+        .bg-happy { background: linear-gradient(135deg, #FFF0B3, #FFDCEB); }
+        .bg-night { background: linear-gradient(135deg, #0b0b17, #131b2e); }
+        .bg-sick { background: linear-gradient(135deg, #D4E6D2, #E8F2E6); }
+        .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
+        .bg-motivation { background: linear-gradient(135deg, #FFE4B5, #FFDAB9); }
 
         /* --- 1. DIFFERENT PAPER FOR EVERY EMOTION --- */
         .paper-happy { background-color: #fffaf0; color: #4B4453; }
@@ -119,11 +116,11 @@ try {
         .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
 
         .letter-paper-full {
-            width: 90%; max-width: 650px; height: 85vh; padding: 0; 
+            width: 90%; max-width: 750px; height: 85vh; padding: 0; 
             border-radius: 2px 5px 3px 6px; 
-            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.2), 0 20px 50px rgba(60, 20, 0, 0.3); 
-            transform: rotate(3deg) translateY(60px); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
-            overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth; z-index: 10;
+            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.4), 0 20px 50px rgba(60, 20, 0, 0.3); 
+            transform: translateY(120px) scale(0.6) rotate(-5deg); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
         
         @keyframes sway { 0% { transform: rotate(1deg) translateY(0); } 50% { transform: rotate(0.6deg) translateY(-2px); } 100% { transform: rotate(1deg) translateY(0); } }
@@ -131,13 +128,13 @@ try {
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
-        /* INNER WRAPPER: Top padding 140px so it's safely away from the browser bar */
         .paper-content-wrapper { 
             position: relative; z-index: 5; padding: 140px 60px 80px 60px; min-height: 100%; box-sizing: border-box;
             background-image: 
                 url("https://www.transparenttextures.com/patterns/aged-paper.png"),
                 linear-gradient(to bottom, transparent 33%, rgba(0,0,0,0.04) 33%, rgba(255,255,255,0.04) 34%, transparent 34%),
                 linear-gradient(to bottom, transparent 66%, rgba(0,0,0,0.04) 66%, rgba(255,255,255,0.04) 67%, transparent 67%);
+            background-color: #d8b898;
             background-blend-mode: multiply;
         }
         
@@ -148,24 +145,20 @@ try {
             pointer-events: none; z-index: 10;
         }
         
-        /* FIXED GRAPHICS (Anchored to top so they never slide down during typing) */
+        /* Dynamic Theme Faded Images */
         .real-pressed-flower {
             position: absolute; z-index: 4; pointer-events: none; background-size: cover; background-position: center;
             mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); 
             mask-image: radial-gradient(circle, black 30%, transparent 65%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 65%);
         }
 
+        /* FIXED FLOATING DECORATIONS (Pinned outside typing area) */
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
-        
-        /* FIXED: Moved top emoji to the RIGHT so it doesn't overlap the text */
-        .floating-decor.d-tr { top: 40px; right: 40px; }
+        .floating-decor.d-tl { top: 40px; left: 40px; }
 
         .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
-        
-        /* Lowered the margin note slightly to avoid the right-side emoji */
-        .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; }
-        
+        .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; top: 150px; right: 40px; }
         .sweet-note-top { position: absolute; top: 40px; left: 40px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: inherit; opacity: 0.5; font-style: italic; z-index: 5; font-weight: 700;}
 
         /* Fonts */
@@ -187,7 +180,7 @@ try {
         .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
         
         /* Signature Area & Embedded Emoji */
-        .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; font-size: 1.4em;}
+        .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 80px; font-size: 1.4em;}
         .signature-icon { display: inline-block; font-size: 1.4rem; margin-left: 10px; animation: drift 6s ease-in-out infinite; vertical-align: middle; }
         
         .you-exist { display: block; margin: 30px 0; text-align: center; opacity: 0.6; font-weight: 700; font-style: italic;}
@@ -212,7 +205,7 @@ try {
     ];
     const doodles = ["🌸", "☁️", "♡", "⭐", "🐇"];
 
-    // --- Dynamic Theme Graphics Engine (Anchored to TOP so they never move) ---
+    // --- Dynamic Theme Graphics Engine ---
     const themeGraphicsMap = {
         'warm': [
             { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'top: 650px; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
@@ -398,13 +391,11 @@ try {
                     <div id="envelope-grid"></div>
                     <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
                     
-                    <!-- THE HOVER TOOLTIP -->
                     <div id="drawer-toast"></div>
                 </div>
 
                 <div id="letter-room">
                     
-                    <!-- Animated Dashboard-Style Background Decor -->
                     <div class="room-decor-bg">
                         <div class="cloud" style="top: 20%; left: -10%; animation-duration: 60s;">☁️</div>
                         <div class="cloud" style="top: 60%; left: -10%; animation-duration: 90s;">☁️</div>
@@ -416,20 +407,15 @@ try {
                         
                         <div class="paper-content-wrapper" id="paper-wrapper">
                             
-                            <!-- DYNAMIC GRAPHICS CONTAINER -->
                             <div id="dynamic-graphics"></div>
 
-                            <!-- COFFEE STAIN -->
                             <div id="paper-coffee" class="coffee-stain"></div>
                             
-                            <!-- MARGIN NOTE -->
                             <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
 
-                            <!-- SWEET NOTE (TOP LEFT) -->
                             <div id="paper-top-note" class="sweet-note-top"></div>
 
-                            <!-- FIXED FLOATING DECORATIONS (MOVED EMOJI TO TOP RIGHT TO AVOID TEXT OVERLAP) -->
-                            <div id="d-tr" class="floating-decor d-tr">🌸</div>
+                            <div id="d-tl" class="floating-decor d-tl">🌸</div>
                             
                             <div class="paper-header ink-text" id="paper-title"></div>
                             <div class="paper-greeting ink-text" id="paper-greeting"></div>
@@ -442,11 +428,9 @@ try {
                                     <span class="ps-title ink-text">P.S.</span><br>
                                     <span class="ps-content ink-text" id="paper-ps-content"></span>
                                 </div>
-                                <!-- SIGNATURE WITH EMBEDDED EMOJI -->
                                 <div class="signature-text ink-text" id="paper-signature"></div>
                             </div>
                             
-                            <!-- MOVED BUTTONS TO BOTTOM OF PAPER -->
                             <div class="letter-controls" id="letter-controls">
                                 <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
                                 <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
@@ -514,7 +498,7 @@ try {
         setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 1000);
     };
 
-    // --- FIXED HOVER PREVIEW (Attaches to Envelope) ---
+    // --- FIXED HOVER PREVIEW ---
     window.showPreview = function(el) {
         const toast = document.getElementById('drawer-toast');
         if(toast) {
@@ -587,7 +571,7 @@ try {
             });
             
             // Random Dynamics
-            document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+            document.getElementById('d-tl').innerText = doodles[Math.floor(Math.random()*doodles.length)];
             document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
             document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
             
@@ -622,7 +606,6 @@ try {
             controls.style.opacity = '0'; // Hide buttons initially
 
             room.style.display = 'flex';
-            window.startAmbientParticles(activeLetter.theme);
             
             setTimeout(() => { room.style.opacity = '1'; }, 50);
             
@@ -740,51 +723,9 @@ try {
         }
     };
 
-    // Ambient Particles based on Theme
-    let particleInterval;
-    window.startAmbientParticles = function(theme) {
-        clearInterval(particleInterval);
-        const container = document.getElementById('room-particles');
-        container.innerHTML = '';
-        
-        let type = '✨';
-        if(theme === 'sad' || theme === 'sick') type = '💧';
-        if(theme === 'happy') type = '🌸';
-        if(theme === 'night') type = '⭐';
-        if(theme === 'warm') type = '🍂';
-
-        particleInterval = setInterval(() => {
-            if(container.childElementCount > 15) return;
-            const p = document.createElement('div');
-            p.className = 'ambient-p';
-            p.innerText = type;
-            p.style.left = Math.random() * 100 + 'vw';
-            
-            if (type === '💧' || type === '🌸' || type === '🍂') {
-                p.style.top = '-5vh';
-                container.appendChild(p);
-                setTimeout(() => p.style.opacity = '0.4', 100);
-                setTimeout(() => {
-                    p.style.top = '105vh';
-                    p.style.transform = `rotate(${Math.random() * 360}deg)`;
-                }, 200);
-            } else {
-                p.style.top = '105vh';
-                container.appendChild(p);
-                setTimeout(() => p.style.opacity = '0.6', 100);
-                setTimeout(() => {
-                    p.style.top = '-5vh';
-                    p.style.transform = `translateX(${(Math.random() - 0.5) * 100}px)`;
-                }, 200);
-            }
-            setTimeout(() => p.remove(), 15000); 
-        }, 2000); 
-    };
-
     // Closing Functions
     window.foldLetter = function() {
         window.isTyping = false; 
-        clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
         const paper = document.getElementById('active-paper');
         
@@ -818,7 +759,6 @@ try {
 
     window.backToDrawer = function() {
         window.isTyping = false;
-        clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
         const paper = document.getElementById('active-paper');
         const overlay = document.getElementById('drawer-overlay');
