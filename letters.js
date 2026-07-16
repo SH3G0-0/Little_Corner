@@ -33,9 +33,6 @@ try {
         #envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 90px 40px; width: 90%; max-width: 1100px; margin-top: 20px; }
 
         .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
-        
-        /* 🚨 KILL SWITCH FOR THE OLD CSS TOOLTIP 🚨 */
-        .envelope-container::after { display: none !important; content: none !important; opacity: 0 !important; }
 
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
@@ -472,8 +469,8 @@ try {
         grid.innerHTML = '';
         window.lettersData.forEach(letter => {
             grid.innerHTML += `
-                <div class="envelope-container" data-preview="${letter.preview || 'Open letter'}"
-                     onmouseenter="window.showPreview(this)" 
+                <div class="envelope-container" 
+                     onmouseenter="window.showPreview('${letter.id}', this)" 
                      onmouseleave="window.hidePreview()"
                      onclick="window.openEnvelope('${letter.id}', this)">
                     <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
@@ -498,12 +495,13 @@ try {
         setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 1000);
     };
 
-    // --- FIXED HOVER PREVIEW ---
-    window.showPreview = function(el) {
+    // --- FIXED HOVER PREVIEW (Attaches to Envelope) ---
+    window.showPreview = function(id, el) {
+        const letter = window.lettersData.find(l => l.id === id);
         const toast = document.getElementById('drawer-toast');
-        if(toast) {
+        if(toast && letter && letter.preview) {
             const rect = el.getBoundingClientRect();
-            toast.innerText = el.getAttribute('data-preview');
+            toast.innerText = letter.preview;
             toast.style.left = (rect.left + rect.width / 2) + 'px';
             toast.style.top = (rect.bottom + 20) + 'px';
             toast.classList.add('show');
@@ -606,6 +604,7 @@ try {
             controls.style.opacity = '0'; // Hide buttons initially
 
             room.style.display = 'flex';
+            window.startAmbientParticles(activeLetter.theme);
             
             setTimeout(() => { room.style.opacity = '1'; }, 50);
             
@@ -723,9 +722,51 @@ try {
         }
     };
 
+    // Ambient Particles based on Theme
+    let particleInterval;
+    window.startAmbientParticles = function(theme) {
+        clearInterval(particleInterval);
+        const container = document.getElementById('room-particles');
+        container.innerHTML = '';
+        
+        let type = '✨';
+        if(theme === 'sad' || theme === 'sick') type = '💧';
+        if(theme === 'happy') type = '🌸';
+        if(theme === 'night') type = '⭐';
+        if(theme === 'warm') type = '🍂';
+
+        particleInterval = setInterval(() => {
+            if(container.childElementCount > 15) return;
+            const p = document.createElement('div');
+            p.className = 'ambient-p';
+            p.innerText = type;
+            p.style.left = Math.random() * 100 + 'vw';
+            
+            if (type === '💧' || type === '🌸' || type === '🍂') {
+                p.style.top = '-5vh';
+                container.appendChild(p);
+                setTimeout(() => p.style.opacity = '0.4', 100);
+                setTimeout(() => {
+                    p.style.top = '105vh';
+                    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+                }, 200);
+            } else {
+                p.style.top = '105vh';
+                container.appendChild(p);
+                setTimeout(() => p.style.opacity = '0.6', 100);
+                setTimeout(() => {
+                    p.style.top = '-5vh';
+                    p.style.transform = `translateX(${(Math.random() - 0.5) * 100}px)`;
+                }, 200);
+            }
+            setTimeout(() => p.remove(), 15000); 
+        }, 2000); 
+    };
+
     // Closing Functions
     window.foldLetter = function() {
         window.isTyping = false; 
+        clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
         const paper = document.getElementById('active-paper');
         
@@ -759,6 +800,7 @@ try {
 
     window.backToDrawer = function() {
         window.isTyping = false;
+        clearInterval(particleInterval);
         const room = document.getElementById('letter-room');
         const paper = document.getElementById('active-paper');
         const overlay = document.getElementById('drawer-overlay');
