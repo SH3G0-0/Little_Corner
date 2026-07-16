@@ -2,8 +2,7 @@
 // 💌 MAGICAL LETTERS ENGINE - "The Vintage Keepsake Edition"
 // ==========================================================
 
-/* 
-   💡 TIP FOR CUSTOM PICTURES:
+/* 💡 TIP FOR CUSTOM PICTURES:
    If you want to use your own downloaded transparent pictures of dried flowers 
    instead of the default ones, just scroll down to the "themeGraphicsMap" variable (around line 200) 
    and replace the "https://images.unsplash.com/..." links with the name of your file 
@@ -32,10 +31,20 @@ try {
         .drawer-header { font-family: 'DM Serif Display', serif; color: #4A3B5C; text-align: center; margin: 80px 0 50px 0; font-size: 2.5rem; line-height: 1.4; }
         .drawer-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #6D5E85; font-style: italic; opacity: 0.8; }
         
-        #envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 80px 40px; width: 90%; max-width: 1100px; }
+        #envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 90px 40px; width: 90%; max-width: 1100px; margin-top: 20px; }
 
         .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
         
+        /* THE FIXED TOOLTIP: Attached directly to the envelope */
+        .envelope-container::after {
+            content: attr(data-preview); position: absolute; bottom: -55px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
+            color: #5A4A78; padding: 12px 24px; border-radius: 25px;
+            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid white; z-index: 20; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .envelope-container:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
             box-shadow: 0 15px 35px rgba(90, 74, 120, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
@@ -80,7 +89,7 @@ try {
         .envelope-opening .envelope-paper-preview { transform: translateY(-150px) scale(1.5) rotate(5deg); opacity: 0; transition: all 1.2s ease; }
         .envelope-opening .envelope-body { filter: brightness(1.2); transform: scale(1.05); opacity: 0; transition: all 1.5s ease; }
 
-        /* --- DYNAMIC Hover Toast for Previews --- */
+        /* --- DYNAMIC Hover Toast for Previews (Fixed Position Issue) --- */
         #drawer-toast {
             position: fixed; transform: translateX(-50%) translateY(10px); 
             padding: 15px 30px; border-radius: 30px;
@@ -116,17 +125,19 @@ try {
 
         .letter-paper-full {
             width: 90%; max-width: 750px; height: 85vh; padding: 0; 
-            border-radius: 2px 5px 3px 6px; 
-            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.4), 0 20px 50px rgba(60, 20, 0, 0.3); 
+            border-radius: 2px 5px 3px 6px; /* Deckled torn edge */
+            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.4), 0 20px 50px rgba(60, 20, 0, 0.3); /* Warm Vignette */
             transform: translateY(120px) scale(0.6) rotate(-5deg); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
         
+        /* 6. GENTLE SWAY ANIMATION */
         @keyframes sway { 0% { transform: rotate(1deg) translateY(0); } 50% { transform: rotate(0.6deg) translateY(-2px); } 100% { transform: rotate(1deg) translateY(0); } }
         .paper-ready { transform: rotate(0deg) translateY(0) scale(1); opacity: 1; animation: sway 12s ease-in-out infinite; }
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
+        /* The inner wrapper that actually holds the content and flashlight */
         .paper-content-wrapper { 
             position: relative; z-index: 5; padding: 140px 60px 80px 60px; min-height: 100%; box-sizing: border-box;
             background-image: 
@@ -137,33 +148,36 @@ try {
             background-blend-mode: multiply;
         }
         
-        /* 18. LIGHT FOLLOWS MOUSE */
+        /* 18. LIGHT FOLLOWS MOUSE (FIXED BOUNDS) */
         .paper-content-wrapper::after {
             content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
             background: radial-gradient(circle 450px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.18), transparent);
             pointer-events: none; z-index: 10;
         }
         
-        /* Dynamic Theme Faded Images */
+        /* 4. PAPER SMELLS (Vintage Dried Flowers) */
         .real-pressed-flower {
             position: absolute; z-index: 4; pointer-events: none; background-size: cover; background-position: center;
-            mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); 
-            mask-image: radial-gradient(circle, black 30%, transparent 65%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 65%);
+            mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); /* Faded look */
+            mask-image: radial-gradient(circle, black 40%, transparent 70%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
         }
 
-        /* FIXED FLOATING DECORATIONS (Pinned outside the typing area) */
+        /* 2. FLOATING DECORATIONS */
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
         .floating-decor.d-tl { top: 40px; left: 40px; }
         .floating-decor.d-br { bottom: 80px; right: 40px; animation-delay: 2s; } /* Sits right next to signature */
 
+        /* 12. COFFEE STAIN */
         .coffee-stain { position:absolute; top:15%; right:10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
+
+        /* 13. MARGIN NOTES */
         .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; }
-        
+
         /* Sweet Notes (Top corner) */
         .sweet-note-top { position: absolute; top: 40px; left: 40px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: inherit; opacity: 0.5; font-style: italic; z-index: 5; font-weight: 700;}
 
-        /* Fonts */
+        /* --- 5. DIFFERENT HANDWRITING FOR EMOTIONS --- */
         .font-happy { font-family: 'Caveat', cursive; font-size: 26px; }
         .font-sad { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 24px; }
         .font-night { font-family: 'Marck Script', cursive; font-size: 28px; }
@@ -172,8 +186,9 @@ try {
         .font-warm { font-family: 'Caveat', cursive; font-size: 26px; }
         .font-angry { font-family: 'Patrick Hand', cursive; font-size: 24px; }
         
+        /* 3. TINY INK IMPERFECTIONS */
         .ink-text { text-shadow: 0 0 1px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.05); line-height: 2.1; white-space: pre-wrap; font-weight: 500; position: relative; z-index: 6;}
-        .paper-night .ink-text { text-shadow: 0 0 2px rgba(255,255,255,0.15); } 
+        .paper-night .ink-text { text-shadow: 0 0 2px rgba(255,255,255,0.15); } /* Glow for dark paper */
 
         .paper-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; font-weight: 700; font-size: 1.3em;}
         .paper-greeting { margin-bottom: 30px; font-weight: 700; font-size: 1.2em;}
@@ -183,10 +198,12 @@ try {
         .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 80px; font-size: 1.4em;} /* Shifted slightly left to accommodate the icon */
         .you-exist { display: block; margin: 30px 0; text-align: center; opacity: 0.6; font-weight: 700; font-style: italic;}
 
+        /* BUTTONS (Moved Inside the Letter Wrapper) */
         .letter-controls { display: flex; justify-content: center; gap: 20px; margin-top: 60px; opacity: 0; transition: opacity 1s ease; position: relative; z-index: 20; }
         .letter-btn { background: rgba(255,255,255,0.85); border: 1px solid rgba(200, 180, 220, 0.5); color: #5D4E75; padding: 12px 25px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
         .letter-btn:hover { background: #FFFDF9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
+        /* Ambient Particles */
         #room-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; overflow: hidden; }
         .ambient-p { position: absolute; transition: all linear; opacity: 0; }
     `;
@@ -231,7 +248,7 @@ try {
         ]
     };
 
-    // --- 3. The Letter Data ---
+    // --- 3. The Letter Data (ALL 20 LETTERS RESTORED) ---
     window.lettersData = [
         { 
             id: "insecure", title: "When You're Feeling Insecure", theme: "warm", font: "font-warm", paper: "paper-warm",
@@ -389,7 +406,6 @@ try {
                     <div id="envelope-grid"></div>
                     <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
                     
-                    <!-- THE HOVER TOOLTIP -->
                     <div id="drawer-toast"></div>
                 </div>
 
@@ -399,19 +415,14 @@ try {
                         
                         <div class="paper-content-wrapper" id="paper-wrapper">
                             
-                            <!-- DYNAMIC GRAPHICS CONTAINER -->
                             <div id="dynamic-graphics"></div>
 
-                            <!-- COFFEE STAIN -->
                             <div id="paper-coffee" class="coffee-stain"></div>
                             
-                            <!-- MARGIN NOTE -->
                             <div id="paper-margin-note" class="margin-note" style="top: 20px; right: 40px;"></div>
 
-                            <!-- SWEET NOTE (TOP) -->
                             <div id="paper-top-note" class="sweet-note-top"></div>
 
-                            <!-- FIXED FLOATING DECORATIONS (Pinned outside typing area) -->
                             <div id="d-tl" class="floating-decor d-tl">🌸</div>
                             <div id="d-br" class="floating-decor d-br">❀</div>
                             
@@ -429,7 +440,6 @@ try {
                                 <div class="signature-text ink-text" id="paper-signature"></div>
                             </div>
                             
-                            <!-- MOVED BUTTONS TO BOTTOM OF PAPER -->
                             <div class="letter-controls" id="letter-controls">
                                 <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
                                 <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
@@ -679,11 +689,11 @@ try {
                 for(let j=0; j<lineStr.length; j++) {
                     if(!window.isTyping) { span.innerHTML = lineStr; break; }
                     span.innerHTML += lineStr[j];
-                    await new Promise(r => setTimeout(r, 35)); // 35ms per char (slower, deliberate)
+                    await new Promise(r => setTimeout(r, 40)); // 40ms per char (slower, deliberate)
                 }
             }
             container.appendChild(document.createElement('br'));
-            await new Promise(r => setTimeout(r, 400)); // Pause between lines
+            await new Promise(r => setTimeout(r, 450)); // Pause between lines
         }
         
         if (window.isTyping) {
