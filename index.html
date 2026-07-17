@@ -126,7 +126,9 @@
         /* --- Phase 2: Storybook Cover --- */
         #storybook-cover {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-gradient); display: flex; flex-direction: column;
+            background: var(--bg-gradient); 
+            display: flex; /* Ready behind the loading screen immediately */
+            flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
             z-index: 150; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
         }
@@ -144,12 +146,12 @@
 
         @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* --- NEW: IMMERSIVE SCENERY LAYER --- */
+        /* --- IMMERSIVE SCENERY LAYER --- */
         #scenery-layer {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; 
             z-index: 1; /* Keeps tree safely behind UI */
-            opacity: 0; /* HIDDEN INITIALLY to prevent the flashing bug */
+            opacity: 0; /* Hidden to prevent flashing bug */
             transition: opacity 2s ease;
         }
 
@@ -157,44 +159,50 @@
             opacity: 1; /* Fades in smoothly with the dashboard */
         }
 
-        /* The Tree: Perfectly grounded at the bottom right corner */
+        /* The Tree: Unrestricted height, pulled down to hide image padding */
         .scene-tree {
             position: absolute; 
-            bottom: 0; 
-            right: 0; 
-            height: 85vh; /* Fills most of the vertical space */
+            bottom: -8vh; /* TWEAK THIS: Makes the visible roots sit completely flush with the floor */
+            right: -3vw; /* Keeps it tight to the right side */
+            height: 75vh; /* Covers more than half the screen tall */
             width: auto; 
-            max-width: 50vw; /* Keeps it from crushing the cards on smaller screens */
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
-            object-fit: contain; /* Prevents the roots from being cropped */
-            object-position: bottom right; /* Locks the base of the image to the bottom-right */
         }
 
-        /* --- Phase 3: Main Dashboard --- */
+        /* --- NEW DASHBOARD WRAPPER: Safely Centers Without Breaking Letters --- */
+        .dashboard-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Let clicks pass through empty space */
+            z-index: 10;
+        }
+
+        /* Phase 3: Main Dashboard */
         .dashboard-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -35%); 
             width: 100%;
             max-width: 900px;
             padding: 0 20px; 
             text-align: center; 
             display: none; 
             opacity: 0;
+            position: relative;
+            top: 40px; /* Slides up gently */
             transition: all 1.5s ease;
-            z-index: 10;
+            pointer-events: auto; /* Reactivate clicks for cards */
         }
 
         .dashboard-container.visible { 
             opacity: 1; 
-            transform: translate(-50%, -50%); 
+            top: 0; 
         }
 
-        /* --- Interactive Garden Decor --- */
-        .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
+        /* --- Interactive Garden Decor (Now spanning the whole screen) --- */
+        .decor { position: fixed; pointer-events: none; z-index: 0; transition: all 0.5s ease; }
 
-        /* Parallax Clouds (Restored to their original, full-screen natural floating paths) */
+        /* Parallax Clouds */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
@@ -254,17 +262,17 @@
     <audio id="bg-happy" loop src="zenzenzense-piano.mp3"></audio>
     <audio id="bg-sad" loop src="sparkle-piano.mp3"></audio>
     <audio id="bg-katawaredoki" loop src="katawaredoki.mp3"></audio>
-    
     <audio id="sfx-rain" loop src="soft-rain.mp3"></audio>
 
     <div id="hover-toast"></div>
 
+    <!-- Loading Screen -->
     <div id="loading-screen">
         <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 600;">Collecting magic...</h2>
         <div class="heart-bar-container"><div class="heart-bar"></div></div>
     </div>
 
-    <!-- Cover is now present immediately, waiting behind the loading screen -->
+    <!-- Cover waiting behind loading screen -->
     <div id="storybook-cover" onclick="openStorybook()">
         <div class="storybook-text">
             <div style="font-size: 2rem;">🌸</div>
@@ -279,9 +287,69 @@
         <div class="nav-logo">🌸 Happy Place</div>
     </nav>
 
-    <!-- CLEANED SCENERY LAYER: Tree only, starts hidden! -->
+    <!-- CLEANED SCENERY LAYER -->
     <div id="scenery-layer">
         <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
+    </div>
+
+    <!-- BACKGROUND DECOR (Clouds spread out over entire screen) -->
+    <div id="background-decor">
+        <div class="decor cloud cloud-farthest" style="top: 15%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-farthest" style="top: 75%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        
+        <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 45%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 85%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+
+        <div class="decor cloud cloud-mid" style="top: 25%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 55%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 90%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
+
+        <div class="decor cloud cloud-near" style="top: 10%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 65%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+
+        <div class="decor cloud cloud-closest" style="top: 35%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 80%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
+        
+        <!-- Stars & Flowers -->
+        <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 60%; left: 3%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 25%; left: 8%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 80%; right: 8%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 45%; right: 2%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 8%; left: 20%;" onclick="twinkle(this)">⭐</div>
+
+        <div class="decor flower" style="top: 18%; left: 4%; animation-delay: 0s;">🌸</div>
+        <div class="decor flower" style="top: 65%; right: 3%; animation-delay: -2s;">🌼</div>
+        <div class="decor flower" style="top: 85%; left: 6%; animation-delay: -4s;">🌸</div>
+        <div class="decor flower" style="top: 32%; right: 6%; animation-delay: -1s;">🌷</div>
+        <div class="decor flower" style="top: 70%; left: 10%; animation-delay: -3s;">🌼</div>
+        <div class="decor flower" style="top: 22%; right: 12%; animation-delay: -5s;">🌸</div>
+        <div class="decor flower" style="top: 50%; left: 2%; animation-delay: -2.5s;">✨</div>
+        <div class="decor flower" style="top: 40%; right: 4%; animation-delay: -6s;">✨</div>        
+    </div>
+
+    <!-- Safe Centering Wrapper for the Dashboard -->
+    <div class="dashboard-wrapper">
+        <div class="dashboard-container" id="main-dashboard">
+            <div class="grid">
+                <div class="card" onclick="window.startSmileBox()" onmouseover="showToast('🌈 Let\'s find a little sunshine together.')" onmouseout="hideToast()">
+                    <span>🌸</span> Smile Box
+                </div>
+                
+                <div class="card" onclick="window.openLetters()" onmouseover="showToast('🌸 Open whenever you need to hear from me.')" onmouseout="hideToast()">
+                    <span>💌</span> Letters
+                </div>
+                
+                <div class="card" onclick="alert('Happy Jar opening...')" onmouseover="showToast('🍯 Pick a note... you never know what you\'ll find.')" onmouseout="hideToast()">
+                    <span>🍯</span> Happy Jar
+                </div>
+            </div>
+
+            <div class="footer">
+                Made with lots of love and a little bit of magic. ✨
+            </div>
+        </div>
     </div>
 
     <div id="cozy-corner">
@@ -312,62 +380,6 @@
             </svg>
             
             <div id="secret-song-btn" onclick="playSecretSong(event)" style="display:none; position:absolute; top:-20px; right:-10px; font-size:1.2rem; cursor:pointer; filter:drop-shadow(0 0 5px rgba(255,255,255,0.8));">🎵</div>
-        </div>
-    </div>
-
-    <div class="dashboard-container" id="main-dashboard">
-        
-        <!-- Clouds Restored to their Natural Full-Screen Float -->
-        <div class="decor cloud cloud-farthest" style="top: 12%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
-        <div class="decor cloud cloud-farthest" style="top: 70%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
-        
-        <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 35%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 85%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
-
-        <div class="decor cloud cloud-mid" style="top: 20%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 50%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 80%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
-
-        <div class="decor cloud cloud-near" style="top: 25%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
-        <div class="decor cloud cloud-near" style="top: 75%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
-
-        <div class="decor cloud cloud-closest" style="top: 15%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
-        <div class="decor cloud cloud-closest" style="top: 65%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
-        
-        <!-- Stars & Flowers -->
-        <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
-        <div class="decor star" style="top: 60%; left: 3%;" onclick="twinkle(this)">⭐</div>
-        <div class="decor star" style="top: 25%; left: 8%;" onclick="twinkle(this)">⭐</div>
-        <div class="decor star" style="top: 80%; right: 8%;" onclick="twinkle(this)">⭐</div>
-        <div class="decor star" style="top: 45%; right: 2%;" onclick="twinkle(this)">⭐</div>
-        <div class="decor star" style="top: 8%; left: 20%;" onclick="twinkle(this)">⭐</div>
-
-        <div class="decor flower" style="top: 18%; left: 4%; animation-delay: 0s;">🌸</div>
-        <div class="decor flower" style="top: 65%; right: 3%; animation-delay: -2s;">🌼</div>
-        <div class="decor flower" style="top: 85%; left: 6%; animation-delay: -4s;">🌸</div>
-        <div class="decor flower" style="top: 32%; right: 6%; animation-delay: -1s;">🌷</div>
-        <div class="decor flower" style="top: 70%; left: 10%; animation-delay: -3s;">🌼</div>
-        <div class="decor flower" style="top: 22%; right: 12%; animation-delay: -5s;">🌸</div>
-        <div class="decor flower" style="top: 50%; left: 2%; animation-delay: -2.5s;">✨</div>
-        <div class="decor flower" style="top: 40%; right: 4%; animation-delay: -6s;">✨</div>        
-
-        <div class="grid">
-            <div class="card" onclick="window.startSmileBox()" onmouseover="showToast('🌈 Let\'s find a little sunshine together.')" onmouseout="hideToast()">
-                <span>🌸</span> Smile Box
-            </div>
-            
-            <div class="card" onclick="window.openLetters()" onmouseover="showToast('🌸 Open whenever you need to hear from me.')" onmouseout="hideToast()">
-                <span>💌</span> Letters
-            </div>
-            
-            <div class="card" onclick="alert('Happy Jar opening...')" onmouseover="showToast('🍯 Pick a note... you never know what you\'ll find.')" onmouseout="hideToast()">
-                <span>🍯</span> Happy Jar
-            </div>
-        </div>
-
-        <div class="footer">
-            Made with lots of love and a little bit of magic. ✨
         </div>
     </div>
 
@@ -412,7 +424,7 @@
             }
         });
 
-        // --- Cinematic Cassette Player Logic (Master Toggle) ---
+        // --- Cinematic Cassette Player Logic ---
         let isPlaying = false;
 
         function toggleMusic() {
@@ -475,7 +487,6 @@
         }
 
         // --- Sequence Control ---
-        // 1. Remove Loading Screen. Storybook Cover is already behind it waiting perfectly.
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
@@ -484,7 +495,6 @@
             }, 1000);
         }, 3000);
 
-        // 2. Click Cover to Open Book
         function openStorybook() {
             let cover = document.getElementById('storybook-cover');
             cover.style.opacity = '0';
@@ -499,11 +509,11 @@
                 
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
-                let scenery = document.getElementById('scenery-layer'); /* Grab the tree layer */
+                let scenery = document.getElementById('scenery-layer'); 
                 
                 if(nav) nav.style.display = 'flex';
                 if(corner) corner.style.display = 'flex';
-                if(scenery) scenery.classList.add('visible'); /* FADE IN THE TREE NOW! No more flashing! */
+                if(scenery) scenery.classList.add('visible'); 
                 
                 setTimeout(() => {
                     if(nav) nav.style.opacity = '1';
