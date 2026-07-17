@@ -1,5 +1,5 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "The Indestructible Edition"
+// 💌 MAGICAL LETTERS ENGINE - "The Bulletproof Edition"
 // ==========================================================
 
 try {
@@ -145,14 +145,10 @@ try {
         /* FIXED FLOATING DECORATIONS */
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
-        
-        /* Moved emoji to the top right to avoid text overlap */
         .floating-decor.d-tr { top: 40px; right: 50px; }
 
         .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
         .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; top: 110px; right: 40px; }
-        
-        /* Kept sweet note safely on the left */
         .sweet-note-top { position: absolute; top: 30px; left: 40px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: inherit; opacity: 0.5; font-style: italic; z-index: 5; font-weight: 700;}
 
         /* Fonts */
@@ -196,7 +192,6 @@ try {
     ];
     const doodles = ["🌸", "☁️", "♡", "⭐", "🐇"];
 
-    // --- Dynamic Theme Graphics Engine ---
     const themeGraphicsMap = {
         'warm': [
             { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'top: 650px; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
@@ -224,7 +219,6 @@ try {
         ]
     };
 
-    // --- 3. The Letter Data (ALL 20 LETTERS RESTORED) ---
     window.lettersData = [
         { 
             id: "insecure", title: "When You're Feeling Insecure", theme: "warm", font: "font-warm", paper: "paper-warm",
@@ -372,6 +366,11 @@ try {
 
     // --- 4. The HTML Injection Function ---
     window.injectLettersEngine = function() {
+        if (!document.body) {
+            window.addEventListener('DOMContentLoaded', window.injectLettersEngine);
+            return;
+        }
+
         const oldOverlay = document.getElementById('drawer-overlay');
         const oldRoom = document.getElementById('letter-room');
         if (oldOverlay) oldOverlay.remove();
@@ -404,7 +403,6 @@ try {
 
                         <div id="paper-top-note" class="sweet-note-top"></div>
 
-                        <!-- Fixed floating decor to be on the right side so it doesn't overlap text -->
                         <div id="d-tr" class="floating-decor d-tr">🌸</div>
                         
                         <div class="paper-header ink-text" id="paper-title"></div>
@@ -448,36 +446,49 @@ try {
     window.isTyping = false;
 
     window.openLetters = function() {
-        const dash = document.getElementById('main-dashboard');
-        const overlay = document.getElementById('drawer-overlay');
-        const grid = document.getElementById('envelope-grid');
-        
-        if(dash) {
-            dash.style.transition = 'filter 0.8s ease';
-            dash.style.filter = 'blur(12px) brightness(0.7)';
-        }
-        
-        let gridHTML = '';
-        window.lettersData.forEach(letter => {
-            gridHTML += `
-                <div class="envelope-container" 
-                     onmouseenter="window.showPreview('${letter.id}', this)" 
-                     onmouseleave="window.hidePreview()"
-                     onclick="window.openEnvelope('${letter.id}', this)">
-                    <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
-                    <div class="envelope-paper-preview"></div>
-                    <div class="envelope-body" style="background: ${letter.envColor};">
-                        <div class="envelope-label">${letter.title}</div>
-                    </div>
-                    <div class="wax-seal" style="background: ${letter.sealColor};">${letter.sealIcon}</div>
-                </div>
-            `;
-        });
-        grid.innerHTML = gridHTML;
+        try {
+            let dash = document.getElementById('main-dashboard');
+            let overlay = document.getElementById('drawer-overlay');
+            let grid = document.getElementById('envelope-grid');
+            
+            // Failsafe: if the HTML got destroyed somehow, inject it again before opening
+            if (!overlay || !grid) {
+                window.injectLettersEngine();
+                overlay = document.getElementById('drawer-overlay');
+                grid = document.getElementById('envelope-grid');
+            }
 
-        overlay.style.display = 'flex';
-        void overlay.offsetWidth; 
-        overlay.style.opacity = '1';
+            if(dash) {
+                dash.style.transition = 'filter 0.8s ease';
+                dash.style.filter = 'blur(12px) brightness(0.7)';
+            }
+            
+            let gridHTML = '';
+            window.lettersData.forEach(letter => {
+                gridHTML += `
+                    <div class="envelope-container" 
+                         onmouseenter="window.showPreview('${letter.id}', this)" 
+                         onmouseleave="window.hidePreview()"
+                         onclick="window.openEnvelope('${letter.id}', this)">
+                        <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
+                        <div class="envelope-paper-preview"></div>
+                        <div class="envelope-body" style="background: ${letter.envColor};">
+                            <div class="envelope-label">${letter.title}</div>
+                        </div>
+                        <div class="wax-seal" style="background: ${letter.sealColor};">${letter.sealIcon}</div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = gridHTML;
+
+            overlay.style.display = 'flex';
+            void overlay.offsetWidth; 
+            overlay.style.opacity = '1';
+
+        } catch(e) {
+            console.error("Failsafe caught error opening drawer: ", e);
+            alert("Hold on! The magical letters are still loading. Please try again in just a second. ✨");
+        }
     };
 
     window.closeDrawer = function() {
@@ -499,6 +510,7 @@ try {
             toast.classList.add('show');
         }
     };
+    
     window.hidePreview = function() {
         const toast = document.getElementById('drawer-toast');
         if(toast) toast.classList.remove('show');
@@ -522,15 +534,33 @@ try {
                 }, 100);
             }
             
+            // --- FLAWLESS RAIN LOOP & FADE ENGINE ---
             const rainMusic = document.getElementById('sfx-rain');
             if (rainMusic) {
-                rainMusic.volume = 0;
-                let playPromise = rainMusic.play();
-                if (playPromise !== undefined) playPromise.catch(e => console.log("Rain playback prevented:", e));
-                let rainFadeIn = setInterval(() => {
-                    if (rainMusic.volume < 0.25) rainMusic.volume = Math.min(rainMusic.volume + 0.02, 0.25);
-                    else clearInterval(rainFadeIn);
-                }, 100);
+                if (!window.rainLoopAttached) {
+                    rainMusic.addEventListener('timeupdate', function() {
+                        const buffer = 0.4;
+                        if (this.duration && this.currentTime >= this.duration - buffer) {
+                            this.currentTime = 0.1;
+                            this.play().catch(e => console.log(e));
+                        }
+                    });
+                    window.rainLoopAttached = true;
+                }
+
+                // ONLY reset volume to 0 if the track is completely paused or muted
+                if (rainMusic.paused || rainMusic.volume === 0) {
+                    rainMusic.volume = 0;
+                    let playPromise = rainMusic.play();
+                    if (playPromise !== undefined) playPromise.catch(e => console.log("Rain playback prevented:", e));
+                    let rainFadeIn = setInterval(() => {
+                        if (rainMusic.volume < 0.35) rainMusic.volume = Math.min(rainMusic.volume + 0.02, 0.35);
+                        else clearInterval(rainFadeIn);
+                    }, 100);
+                } else {
+                    // It's already playing nicely! Just gently boost the volume back up
+                    rainMusic.volume = 0.35;
+                }
             }
 
             setTimeout(() => {
@@ -556,7 +586,6 @@ try {
                     graphicsContainer.appendChild(div);
                 });
                 
-                // Using the updated 'd-tr' ID
                 document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
                 document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
                 document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
