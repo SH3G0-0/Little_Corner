@@ -36,49 +36,46 @@
 
         /* --- THE WORLD ENGINE --- */
         #world {
-            position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            overflow: hidden;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;
             background: radial-gradient(circle at 70% 30%, var(--sunlight) 0%, var(--sky-top) 30%, #2B6DE5 100%);
-            transition: transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1), filter 1s ease;
+            transition: transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1), filter 1s ease;
             transform-origin: center bottom;
         }
 
         /* Cinematic Zoom Classes */
-        .zoom-mailbox { transform: scale(1.3) translate(15vw, 10vh); filter: blur(1px) brightness(0.8); }
-        .zoom-sign { transform: scale(1.3) translate(0vw, 15vh); filter: blur(1px) brightness(0.8); }
-        .zoom-jar { transform: scale(1.3) translate(-15vw, 10vh); filter: blur(1px) brightness(0.8); }
+        .zoom-mailbox { transform: scale(1.35) translate(10vw, 15vh); filter: brightness(0.85); }
+        .zoom-sign { transform: scale(1.35) translate(0vw, 15vh); filter: brightness(0.85); }
+        .zoom-jar { transform: scale(1.35) translate(-15vw, 15vh); filter: brightness(0.85); }
 
-        /* Generic Layer Setup */
-        .layer {
-            position: absolute; top: 0; left: -5vw; width: 110vw; height: 100vh;
-            pointer-events: none; will-change: transform;
-        }
+        .layer { position: absolute; top: 0; left: -5vw; width: 110vw; height: 100vh; pointer-events: none; will-change: transform; }
 
-        /* --- LAYER 1: SKY & SUNLIGHT --- */
+        /* --- LAYER 1: SKY & BREATHING SUNLIGHT --- */
         #layer-sky { z-index: 1; }
         .sun-glow {
-            position: absolute; top: 10%; right: 20%; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(255,230,155,0.4) 0%, transparent 60%);
-            mix-blend-mode: screen;
+            position: absolute; top: 5%; right: 15%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,230,155,0.45) 0%, transparent 60%);
+            mix-blend-mode: screen; animation: pulse-light 6s ease-in-out infinite alternate;
         }
         .god-rays {
-            position: absolute; top: -10%; right: 0; width: 80vw; height: 120vh;
-            background: repeating-linear-gradient(45deg, rgba(255, 230, 155, 0.05) 0%, rgba(255, 230, 155, 0.05) 2%, transparent 2%, transparent 4%);
+            position: absolute; top: -10%; right: -10vw; width: 80vw; height: 120vh;
+            background: repeating-linear-gradient(45deg, rgba(255, 230, 155, 0.08) 0%, rgba(255, 230, 155, 0.08) 2%, transparent 2%, transparent 4%);
             mix-blend-mode: overlay; opacity: 0.6; transform: rotate(-15deg);
+            animation: pulse-light 8s ease-in-out infinite alternate;
         }
-        .cloud { position: absolute; filter: blur(1px); animation: drift linear infinite; opacity: 0.8; }
+        @keyframes pulse-light { 0% { opacity: 0.5; } 100% { opacity: 0.8; } }
+        
+        .cloud { position: absolute; filter: blur(1px); animation: drift linear infinite; opacity: 0.85; }
         @keyframes drift { 0% { transform: translateX(-10vw); } 100% { transform: translateX(110vw); } }
 
-        /* --- LAYER 2: MOUNTAINS & FAR BACKGROUND --- */
-        #layer-mountains { z-index: 2; display: flex; align-items: flex-end; justify-content: space-around; opacity: 0.5; filter: blur(2px); bottom: 25%; height: 50%; }
+        /* --- LAYER 2: MOUNTAINS --- */
+        #layer-mountains { z-index: 2; display: flex; align-items: flex-end; justify-content: space-around; opacity: 0.4; filter: blur(2px); bottom: 25%; height: 50%; }
         .mountain-silhouette { font-size: 35rem; line-height: 1; color: #89D6FF; text-shadow: 0 0 20px #89D6FF; }
 
         /* --- LAYER 3: MIDGROUND FOREST --- */
         #layer-forest { z-index: 3; bottom: 20%; height: 40%; display: flex; align-items: flex-end; opacity: 0.85; filter: blur(1px); }
         .bg-tree { font-size: 15rem; line-height: 1; margin: 0 -2vw; }
 
-        /* --- LAYER 4: TERRAIN / GRASS --- */
+        /* --- LAYER 4: TERRAIN --- */
         #layer-ground { z-index: 4; }
         .terrain-base {
             position: absolute; bottom: -5vh; left: -5vw; width: 110vw; height: 35vh;
@@ -87,28 +84,46 @@
             box-shadow: inset 0 20px 40px rgba(255,255,255,0.2), 0 -10px 20px rgba(0,0,0,0.1);
         }
 
-        /* --- LAYER 5: ENVIRONMENT SCENERY (The User's Assets) --- */
+        /* --- LAYER 5: ENVIRONMENT SCENERY (Your Assets) --- */
         #layer-scenery { z-index: 5; }
         
-        /* The giant tree & bridge asset */
         .main-tree-bridge {
             position: absolute; bottom: 15vh; right: 5vw; width: 600px; max-width: 45vw; height: auto;
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
         }
 
-        /* Cottage (Fallback using emojis but styled like an object) */
-        .cottage-container {
-            position: absolute; bottom: 22vh; left: 12vw; font-size: 16rem; line-height: 1;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
+        @keyframes sway-ground { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
+        .landscape-item {
+            position: absolute; transform-origin: bottom center; animation: sway-ground 6s ease-in-out infinite alternate;
+            pointer-events: none; opacity: 0.95; filter: drop-shadow(0 5px 15px rgba(90, 74, 120, 0.2));
         }
 
-        /* Scattered environmental mushrooms */
-        .env-shroom { position: absolute; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
-        .shroom1 { bottom: 12vh; left: 35vw; width: 60px; }
-        .shroom2 { bottom: 8vh; left: 8vw; width: 80px; transform: scaleX(-1); }
-        .shroom3 { bottom: 15vh; right: 40vw; width: 50px; }
+        /* Cottage & CSS Smoke */
+        .cottage-wrapper {
+            position: absolute; bottom: 22vh; left: 10vw; width: 380px; z-index: 5;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));
+        }
+        .cottage-img { width: 100%; height: auto; }
+        .chimney { position: absolute; top: 10%; left: 65%; z-index: -1; }
+        .smoke {
+            position: absolute; width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6); filter: blur(8px);
+            animation: smoke-anim 6s linear infinite;
+        }
+        .s2 { animation-delay: 2s; } .s3 { animation-delay: 4s; }
+        @keyframes smoke-anim {
+            0% { opacity: 0; transform: translateY(0) scale(0.3); }
+            20% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-150px) translateX(40px) scale(2.5); }
+        }
 
-        /* --- LAYER 6: INTERACTIVE OBJECTS (The Menu) --- */
+        /* Scattered Mushrooms */
+        .env-shroom { position: absolute; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); transform-origin: bottom center; animation: sway-ground 5s ease-in-out infinite alternate; }
+        .shroom1 { bottom: 12vh; left: 35vw; width: 60px; }
+        .shroom2 { bottom: 8vh; left: 8vw; width: 80px; transform: scaleX(-1); animation-duration: 7s; }
+        .shroom3 { bottom: 15vh; right: 40vw; width: 50px; animation-duration: 4s; }
+
+        /* --- LAYER 6: INTERACTIVE UI OBJECTS --- */
         #layer-objects { z-index: 6; pointer-events: none; }
         
         .interactive-prop {
@@ -116,56 +131,68 @@
             filter: drop-shadow(0 15px 20px rgba(0,0,0,0.3)); transform-origin: bottom center;
         }
         .interactive-prop:hover {
-            transform: scale(1.1) translateY(-8px) rotate(-2deg);
-            filter: drop-shadow(0 25px 30px rgba(0,0,0,0.4)) drop-shadow(0 0 15px rgba(255, 230, 155, 0.6));
+            transform: scale(1.1) translateY(-8px) rotate(-3deg);
+            filter: drop-shadow(0 25px 30px rgba(0,0,0,0.4)) drop-shadow(0 0 20px rgba(255, 230, 155, 0.8));
         }
 
-        /* 1. Mailbox (Letters) */
-        .prop-mailbox { bottom: 18vh; left: 28vw; font-size: 8rem; line-height: 1; }
-        
-        /* 2. Wooden Sign (Smile Box) */
-        .prop-sign { bottom: 12vh; left: 45vw; width: 180px; }
-        
-        /* 3. Glass Jar (Happy Jar) */
+        .prop-mailbox { bottom: 18vh; left: 30vw; font-size: 8rem; line-height: 1; }
+        .prop-sign { bottom: 12vh; left: 45vw; width: 160px; }
         .prop-jar { bottom: 15vh; right: 38vw; font-size: 6rem; line-height: 1; z-index: 2; }
         .stump { position: absolute; bottom: 8vh; right: 37vw; font-size: 7rem; line-height: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); pointer-events: none; }
 
-        /* 4. Gramophone (Music) */
-        .prop-gramophone { bottom: 20vh; left: 5vw; font-size: 6rem; line-height: 1; }
-        .prop-gramophone.playing { animation: wobble 2s infinite alternate; filter: drop-shadow(0 0 20px var(--sunlight)); }
-        @keyframes wobble { 0% { transform: rotate(-3deg); } 100% { transform: rotate(3deg); } }
+        .prop-gramophone { bottom: 18vh; left: 4vw; font-size: 6rem; line-height: 1; z-index: 6; }
+        .prop-gramophone.playing { animation: wobble 2s infinite alternate; filter: drop-shadow(0 0 25px var(--sunlight)); }
+        @keyframes wobble { 0% { transform: rotate(-3deg) scale(1.05); } 100% { transform: rotate(3deg) scale(1.05); } }
 
-        /* --- LAYER 7: FOREGROUND FRAMING (Depth Blur) --- */
-        #layer-foreground { z-index: 7; filter: blur(3px) drop-shadow(0 30px 40px rgba(0,0,0,0.5)); pointer-events: none; }
+        /* --- LAYER 7: SWAYING FOREGROUND FRAMING --- */
+        #layer-foreground { z-index: 7; filter: blur(3px) drop-shadow(0 30px 40px rgba(0,0,0,0.6)); pointer-events: none; }
         
-        .fg-sakura-left { position: absolute; top: -5vh; left: -5vw; width: 400px; transform: rotate(15deg); }
-        .fg-sakura-right { position: absolute; top: -10vh; right: -10vw; width: 500px; transform: rotate(-10deg); }
-        .fg-floral-bottom { position: absolute; bottom: -5vh; right: -5vw; width: 350px; }
-        .fg-sakura-bottom { position: absolute; bottom: -10vh; left: -10vw; width: 300px; transform: rotate(20deg); }
+        @keyframes sway-fg { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
+        
+        .fg-sakura-left { position: absolute; top: -5vh; left: -5vw; width: 450px; transform-origin: top left; animation: sway-fg 8s ease-in-out infinite alternate; }
+        .fg-sakura-right { position: absolute; top: -10vh; right: -10vw; width: 550px; transform-origin: top right; animation: sway-fg 9s ease-in-out infinite alternate-reverse; }
+        .fg-floral-bottom { position: absolute; bottom: -5vh; right: -5vw; width: 400px; transform-origin: bottom right; animation: sway-fg 7s ease-in-out infinite alternate; }
+        .fg-sakura-bottom { position: absolute; bottom: -10vh; left: -10vw; width: 350px; transform-origin: bottom left; animation: sway-fg 6s ease-in-out infinite alternate-reverse; }
 
-        /* --- LAYER 8: PARTICLES & EFFECTS --- */
+        /* --- LAYER 8: PARTICLES (Petals & Fireflies) --- */
         #layer-particles { z-index: 8; pointer-events: none; }
+        
+        /* Petals using your JPG */
         .petal {
-            position: absolute; width: 25px; height: 25px; opacity: 0.8;
-            background-image: url('image_f3ad05.png'); background-size: cover;
+            position: absolute; width: 25px; height: 25px; opacity: 0.85;
+            background-image: url('image_f3ad05.jpg'); background-size: cover;
+            mix-blend-mode: multiply; /* Removes white background from JPG */
             animation: fall linear forwards; filter: drop-shadow(0 5px 5px rgba(246, 165, 201, 0.4));
         }
         @keyframes fall {
             0% { transform: translate(0, -10vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
+            10% { opacity: 0.85; }
+            90% { opacity: 0.85; }
             100% { transform: translate(-30vw, 110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Magical Fireflies */
+        .firefly {
+            position: absolute; width: 6px; height: 6px; background: #FFF6CC; border-radius: 50%;
+            box-shadow: 0 0 10px #FFE69B, 0 0 20px #FFE69B;
+            animation: float-up linear forwards; mix-blend-mode: screen;
+        }
+        @keyframes float-up {
+            0% { transform: translateY(10vh) translateX(0) scale(0); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-10vh) translateX(20px) scale(1); }
+            80% { opacity: 1; transform: translateY(-40vh) translateX(-20px) scale(1); }
+            100% { transform: translateY(-60vh) translateX(0) scale(0); opacity: 0; }
         }
 
         /* --- UI: Game Tooltip --- */
         #game-tooltip {
-            position: fixed; padding: 8px 18px; border-radius: 8px;
-            background: rgba(124, 90, 60, 0.9); color: var(--paper);
-            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
+            position: fixed; padding: 10px 22px; border-radius: 12px;
+            background: rgba(124, 90, 60, 0.95); color: var(--paper);
+            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem;
             z-index: 9999; pointer-events: none; opacity: 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 2px solid #5A3A20;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); border: 2px solid #5A3A20;
             transition: opacity 0.2s ease; transform: translate(-50%, -150%);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); letter-spacing: 0.5px;
         }
 
         /* --- Loading Screen / Entrance --- */
@@ -175,22 +202,21 @@
             z-index: 10000; transition: opacity 2s ease, transform 2s ease; cursor: pointer; 
         }
         .enter-btn {
-            padding: 15px 40px; background: var(--wood); color: var(--paper); border-radius: 8px;
-            font-size: 1.5rem; font-weight: bold; border: 3px solid #5A3A20;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); animation: pulse 2s infinite alternate;
+            padding: 15px 45px; background: var(--wood); color: var(--paper); border-radius: 12px;
+            font-size: 1.8rem; font-weight: bold; border: 3px solid #5A3A20; font-family: 'DM Serif Display', serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); animation: pulse 2.5s infinite alternate;
         }
-        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); filter: brightness(1.2); } }
 
     </style>
 </head>
 <body>
 
-    <!-- Audio Atmosphere -->
+    <!-- EXACT Audio Atmosphere Mapping based on your files -->
     <audio id="bg-dashboard" loop src="first-snow.mp3"></audio>
     <audio id="bg-smilebox" loop src="smilebox-ambient.mp3"></audio>
-    <audio id="bg-happy" loop src="zenzenzense-piano.mp3"></audio>
+    <audio id="bg-happy" loop src="katawaredoki.mp3"></audio>
     <audio id="bg-sad" loop src="sparkle-piano.mp3"></audio>
-    <audio id="bg-katawaredoki" loop src="katawaredoki.mp3"></audio>
     <audio id="sfx-rain" loop src="soft-rain.mp3"></audio>
 
     <!-- UI Tooltip -->
@@ -201,9 +227,7 @@
         <div class="enter-btn">Enter World</div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- THE LIVING WORLD ENGINE (Scene Graph)      -->
-    <!-- ========================================== -->
+    <!-- THE LIVING WORLD ENGINE -->
     <div id="world">
         
         <!-- Layer 1: Sky & Atmosphere -->
@@ -232,16 +256,22 @@
             <div class="terrain-base"></div>
         </div>
 
-        <!-- Layer 5: Scenery & Architecture -->
+        <!-- Layer 5: Scenery & Architecture (Your Exact Files) -->
         <div class="layer" id="layer-scenery">
-            <!-- Provided Assets -->
-            <img src="image_f3adc0.png" class="main-tree-bridge" alt="Bridge Tree">
+            <img src="image_f3adc0.png" class="main-tree-bridge landscape-item" alt="Bridge Tree">
             <img src="image_f3b181.png" class="env-shroom shroom1" alt="Mushroom">
             <img src="image_f3b1a2.png" class="env-shroom shroom2" alt="Mushroom">
             <img src="image_f3b181.png" class="env-shroom shroom3" alt="Mushroom">
             
-            <!-- Cottage -->
-            <div class="cottage-container">🏡</div>
+            <!-- Cottage with Dynamic Smoke -->
+            <div class="cottage-wrapper landscape-item">
+                <div class="chimney">
+                    <div class="smoke s1"></div>
+                    <div class="smoke s2"></div>
+                    <div class="smoke s3"></div>
+                </div>
+                <img src="cottage.png" class="cottage-img" alt="Cottage">
+            </div>
         </div>
 
         <!-- Layer 6: Interactive Objects (The "Menu") -->
@@ -253,7 +283,7 @@
             <!-- 2. Letters Mailbox -->
             <div id="mailbox" class="interactive-prop prop-mailbox" onclick="openGameMenu('letters')" onmousemove="moveToast(event, '📮 Check the Mail')" onmouseleave="hideToast()">📮</div>
 
-            <!-- 3. Smile Box Sign (Provided Asset) -->
+            <!-- 3. Smile Box Sign -->
             <img src="image_f3b483.png" id="sign" class="interactive-prop prop-sign" onclick="openGameMenu('smilebox')" onmousemove="moveToast(event, '🪵 Open Smile Box')" onmouseleave="hideToast()" alt="Wooden Sign">
 
             <!-- 4. Happy Jar & Stump -->
@@ -262,16 +292,15 @@
 
         </div>
 
-        <!-- Layer 7: Foreground Framing -->
+        <!-- Layer 7: Foreground Framing (Your Exact Files) -->
         <div class="layer" id="layer-foreground">
-            <!-- Provided Assets -->
             <img src="image_f3ad47.png" class="fg-sakura-left" alt="Sakura">
             <img src="image_f3b128.png" class="fg-sakura-right" alt="Sakura">
             <img src="image_f3b103.png" class="fg-floral-bottom" alt="Flowers">
             <img src="image_f3b0cb.png" class="fg-sakura-bottom" alt="Sakura Cluster">
         </div>
 
-        <!-- Layer 8: Particles -->
+        <!-- Layer 8: Magical Particles -->
         <div class="layer" id="layer-particles"></div>
 
     </div>
@@ -287,19 +316,18 @@
             tooltip.innerText = text;
             tooltip.style.opacity = '1';
             tooltip.style.left = e.clientX + 'px';
-            tooltip.style.top = (e.clientY - 20) + 'px';
+            tooltip.style.top = (e.clientY - 25) + 'px';
         }
         function hideToast() { tooltip.style.opacity = '0'; }
 
         // --- PARALLAX ENGINE ---
-        // Layer speeds (Foreground moves fastest, mountains move slowest)
         const sceneLayers = [
-            { el: document.getElementById('layer-mountains'), speed: 5 },
-            { el: document.getElementById('layer-forest'), speed: 10 },
-            { el: document.getElementById('layer-ground'), speed: 20 },
-            { el: document.getElementById('layer-scenery'), speed: 20 },
-            { el: document.getElementById('layer-objects'), speed: 25 },
-            { el: document.getElementById('layer-foreground'), speed: 60 }
+            { el: document.getElementById('layer-mountains'), speed: 3 },
+            { el: document.getElementById('layer-forest'), speed: 8 },
+            { el: document.getElementById('layer-ground'), speed: 18 },
+            { el: document.getElementById('layer-scenery'), speed: 18 },
+            { el: document.getElementById('layer-objects'), speed: 22 },
+            { el: document.getElementById('layer-foreground'), speed: 50 }
         ];
 
         window.addEventListener('mousemove', (e) => {
@@ -313,21 +341,31 @@
             });
         });
 
-        // --- PARTICLE ENGINE (Falling Petals) ---
+        // --- PARTICLE ENGINE (Petals & Fireflies) ---
+        const particleLayer = document.getElementById('layer-particles');
+
         function spawnPetal() {
-            const particleLayer = document.getElementById('layer-particles');
             const petal = document.createElement('div');
             petal.className = 'petal';
-            
-            // Randomize starting position, size, and speed
             petal.style.left = (Math.random() * 120 - 10) + 'vw';
-            petal.style.width = petal.style.height = (15 + Math.random() * 20) + 'px';
-            petal.style.animationDuration = (10 + Math.random() * 15) + 's'; 
-            
+            petal.style.width = petal.style.height = (15 + Math.random() * 25) + 'px';
+            petal.style.animationDuration = (12 + Math.random() * 15) + 's'; 
             particleLayer.appendChild(petal);
-            setTimeout(() => { petal.remove(); }, 25000); // Cleanup
+            setTimeout(() => { petal.remove(); }, 28000); 
         }
-        setInterval(spawnPetal, 800); // Spawn a petal every 800ms
+
+        function spawnFirefly() {
+            const firefly = document.createElement('div');
+            firefly.className = 'firefly';
+            firefly.style.left = (Math.random() * 100) + 'vw';
+            firefly.style.bottom = (Math.random() * 20) + 'vh';
+            firefly.style.animationDuration = (8 + Math.random() * 8) + 's';
+            particleLayer.appendChild(firefly);
+            setTimeout(() => { firefly.remove(); }, 16000);
+        }
+
+        setInterval(spawnPetal, 900); 
+        setInterval(spawnFirefly, 1500);
 
         // --- WORLD ENTRY ---
         function enterWorld() {
@@ -335,7 +373,7 @@
             cover.style.opacity = '0';
             cover.style.transform = 'scale(1.2)'; 
             
-            toggleWorldMusic(true); // Auto-play ambient music
+            toggleWorldMusic(true); 
             
             setTimeout(() => { cover.style.display = 'none'; }, 2000);
         }
@@ -346,27 +384,24 @@
         function openGameMenu(type) {
             hideToast();
             
-            // Apply specific camera zoom based on the object clicked
             if (type === 'letters') {
                 world.className = 'zoom-mailbox';
-                setTimeout(() => { window.openLetters(); }, 1000);
+                setTimeout(() => { if(window.openLetters) window.openLetters(); }, 1200);
             } 
             else if (type === 'smilebox') {
                 world.className = 'zoom-sign';
-                setTimeout(() => { window.startSmileBox(); }, 1000);
+                setTimeout(() => { if(window.startSmileBox) window.startSmileBox(); }, 1200);
             }
             else if (type === 'jar') {
                 world.className = 'zoom-jar';
-                setTimeout(() => { alert("The Happy Jar opens... (Attach to jar logic)"); world.className = ''; }, 1000);
+                setTimeout(() => { alert("The Happy Jar opens... (Attach to jar logic)"); world.className = ''; }, 1200);
             }
         }
 
-        // Listen for standard UI closures to reset the camera
-        // (Assuming window.closeDrawer() exists in your letters.js/smilebox.js)
         const originalCloseDrawer = window.closeDrawer;
         window.closeDrawer = function() {
             if(originalCloseDrawer) originalCloseDrawer();
-            world.className = ''; // Resets camera zoom back to normal
+            world.className = ''; 
         };
 
         // --- AMBIENT AUDIO ENGINE ---
@@ -395,7 +430,6 @@
                 }
             }
         }
-
     </script>
 </body>
 </html>
