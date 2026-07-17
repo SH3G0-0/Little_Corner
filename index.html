@@ -14,7 +14,7 @@
             --text-color: #5A4A78;
             --glass-bg: rgba(255, 255, 255, 0.4);
             --glass-border: rgba(255, 255, 255, 0.7);
-            --outline-color: #5A4A78;
+            --outline-color: #5A4A78; /* Used for the indie-game illustration outlines */
         }
 
         /* --- Magical Sparkle Cursor --- */
@@ -30,17 +30,17 @@
         }
         
         html, body {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
 
         body {
             margin: 0;
             padding: 0;
             background: var(--bg-gradient);
-            background-attachment: fixed;
+            background-attachment: fixed; /* Fixes the screen cutoff */
             background-size: cover;
-            min-height: 100vh;
+            min-height: 100vh; /* Ensures the gradient always fills the screen */
             font-family: 'Quicksand', sans-serif;
             overflow-x: hidden;
             color: var(--text-color);
@@ -54,86 +54,150 @@
         /* --- Minimal Navbar --- */
         nav {
             position: fixed;
-            top: 0; left: 0; width: 100%;
-            display: flex; justify-content: center; align-items: center;
-            padding: 20px 40px; box-sizing: border-box;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 40px;
+            box-sizing: border-box;
             background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            z-index: 90; border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 90;
+            border-bottom: 1px solid var(--glass-border);
         }
         
         .nav-logo { font-size: 1.5rem; letter-spacing: 1px; color: var(--text-color); opacity: 0.8; }
 
         /* --- Anime Slice-of-Life Cozy Corner --- */
         #cozy-corner {
-            position: fixed; bottom: 30px; left: 40px;
-            display: flex; align-items: flex-end; gap: 15px;
-            z-index: 9999; display: none; opacity: 0; transition: opacity 2s ease;
+            position: fixed;
+            bottom: 30px;
+            left: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            z-index: 9999;
+            display: none; /* Hidden until dashboard loads */
+            opacity: 0;
+            transition: opacity 2s ease;
         }
 
         .desk-item {
-            position: relative; transition: transform 0.3s ease;
+            position: relative;
+            transition: transform 0.3s ease;
             filter: drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15));
         }
 
         .desk-item:hover { transform: translateY(-5px); }
 
         /* Cassette Player Specifics */
-        .cassette-player { cursor: pointer; transition: all 0.4s ease; }
+        .cassette-player {
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
         
+        /* Tooltip for the Mixtape */
         .cassette-player::before {
             content: "📼 A Little Mixtape";
-            position: absolute; top: -40px; left: 50%;
+            position: absolute;
+            top: -40px;
+            left: 50%;
             transform: translateX(-50%) scale(0.9);
-            background: white; color: var(--text-color);
-            padding: 5px 12px; border-radius: 20px;
-            font-size: 0.85rem; font-weight: bold;
-            opacity: 0; pointer-events: none; transition: all 0.3s ease;
-            border: 1px solid var(--glass-border); white-space: nowrap;
+            background: white;
+            color: var(--text-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            white-space: nowrap;
         }
 
-        .cassette-player:hover::before { opacity: 1; transform: translateX(-50%) scale(1); }
+        .cassette-player:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
 
-        .cassette-player.playing { filter: drop-shadow(0 0 15px rgba(255, 230, 150, 0.8)) drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15)); }
+        /* Glowing & Spinning logic for active music */
+        .cassette-player.playing {
+            filter: drop-shadow(0 0 15px rgba(255, 230, 150, 0.8)) drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15));
+        }
         
-        .cassette-player.playing::before { content: "🎵 Now Playing"; opacity: 1; background: #FFF6CC; }
+        .cassette-player.playing::before {
+            content: "🎵 Now Playing";
+            opacity: 1;
+            background: #FFF6CC;
+        }
 
         .reels-group { transform-origin: center; }
         .playing .reels-group { animation: spinReels 3s linear infinite; }
 
-        @keyframes spinReels { 100% { transform: rotate(360deg); } }
+        @keyframes spinReels {
+            100% { transform: rotate(360deg); }
+        }
 
         /* --- Phase 1: Loading Screen --- */
         #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-gradient); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 200; transition: opacity 1s ease-out;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            transition: opacity 1s ease-out;
         }
 
         .heart-bar-container {
-            width: 200px; height: 10px; background: rgba(255,255,255,0.5);
-            border-radius: 10px; margin-top: 20px; overflow: hidden; position: relative;
+            width: 200px;
+            height: 10px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
         .heart-bar {
-            height: 100%; width: 0%; background: #FFDCEB;
-            border-radius: 10px; animation: fillBar 3s ease-in-out forwards;
+            height: 100%;
+            width: 0%;
+            background: #FFDCEB;
+            border-radius: 10px;
+            animation: fillBar 3s ease-in-out forwards;
         }
 
         @keyframes fillBar { to { width: 100%; } }
 
         /* --- Phase 2: Storybook Cover --- */
         #storybook-cover {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-gradient); display: none; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            z-index: 150; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-gradient);
+            display: none; /* Shows after loading */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 150;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+            cursor: pointer; 
         }
 
         .storybook-text {
-            max-width: 500px; padding: 40px; background: rgba(255, 255, 255, 0.4);
-            border-radius: 30px; backdrop-filter: blur(10px);
-            border: 2px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             animation: gentleFloat 4s ease-in-out infinite;
         }
 
@@ -141,57 +205,35 @@
         .storybook-text p { font-size: 1.2rem; line-height: 1.8; margin: 20px 0; }
         .storybook-text .hint { font-size: 0.9rem; opacity: 0.6; margin-top: 30px; font-style: italic; }
 
-        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        /* --- NEW: IMMERSIVE SCENERY LAYER --- */
-        #scenery-layer {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; /* Crucial: allows clicking cards through the tree */
-            z-index: 1; /* Sits behind the cards */
-        }
-
-        .scene-cottage {
-            position: absolute; bottom: 16vh; left: 8vw;
-            height: 38vh; width: auto; z-index: 1;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
-        }
-
-        .grass-bg {
-            position: absolute; bottom: 0; left: 0;
-            width: 100vw; height: 22vh; /* Fills the bottom perfectly to prevent cuts */
-            background-image: url('grass.png');
-            background-size: cover; background-position: bottom center;
-            background-repeat: no-repeat; z-index: 2;
-        }
-
-        .scene-tree {
-            position: absolute; bottom: 0; right: 0;
-            height: 75vh; width: auto; z-index: 3;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.25));
-        }
-
-        .scene-shroom {
-            position: absolute; z-index: 4;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         /* --- Phase 3: Main Dashboard --- */
         .dashboard-container {
-            position: relative;
             max-width: 900px;
-            margin: 220px auto 0;
+            margin: 220px auto 0; /* Pushed the buttons down significantly */
             padding: 40px 20px 160px 20px;
-            text-align: center; display: none; opacity: 0;
-            transform: translateY(30px); transition: all 1.5s ease;
-            z-index: 10; /* Keeps cards safely above the grass/tree */
+            text-align: center;
+            display: none; 
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease;
         }
 
-        .dashboard-container.visible { opacity: 1; transform: translateY(0); }
+        .dashboard-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* --- Interactive Garden Decor --- */
-        .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
+        .decor {
+            position: fixed;
+            pointer-events: none; z-index: -5; transition: all 0.5s ease;
+        }
 
-        /* Parallax Clouds (Confined to Top/Middle) */
+        /* Parallax Clouds */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
@@ -199,48 +241,88 @@
         .cloud-far { font-size: 1.5rem; opacity: 0.3; z-index: -4; filter: blur(2px); }
         .cloud-farthest { font-size: 1rem; opacity: 0.15; z-index: -5; filter: blur(4px); }
 
-        @keyframes drift-r { from { transform: translateX(-20vw); } to { transform: translateX(110vw); } }
+        @keyframes drift-r {
+            from { transform: translateX(-20vw); }
+            to { transform: translateX(110vw); }
+        }
 
         /* Stars & Flowers */
         .star { font-size: 1.5rem; opacity: 0.6; z-index: -5; }
         .flower { font-size: 1.8rem; opacity: 0.6; z-index: -5; animation: gentle-sway 8s ease-in-out infinite alternate; }
-        @keyframes gentle-sway { 0% { transform: translateY(0) rotate(-10deg); } 100% { transform: translateY(-20px) rotate(15deg); } }
+        @keyframes gentle-sway {
+            0% { transform: translateY(0) rotate(-10deg); }
+            100% { transform: translateY(-20px) rotate(15deg); }
+        }
 
         /* --- Centered 3-Card Layout --- */
         .grid {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; position: relative; z-index: 10; 
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            position: relative;
+            z-index: 10; 
         }
 
         .card {
-            width: 250px; box-sizing: border-box; padding: 35px 20px; border-radius: 20px 35px 15px 30px; 
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 1.3rem; font-weight: 700;
-            display: flex; flex-direction: column; align-items: center; gap: 15px; color: var(--text-color);
-            background: var(--glass-bg); backdrop-filter: blur(8px); border: 2px solid var(--glass-border);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04); cursor: pointer;
+            width: 250px;
+            box-sizing: border-box;
+            padding: 35px 20px;
+            border-radius: 20px 35px 15px 30px; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-color);
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            cursor: pointer;
         }
 
         .card span { font-size: 3.5rem; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); }
 
         .card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-radius: 30px 15px 35px 20px; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-radius: 30px 15px 35px 20px; 
         }
 
+        /* Fixed colors for the 3 remaining cards */
         .card:nth-child(1) { background-color: rgba(255, 220, 235, 0.6); } 
         .card:nth-child(2) { background-color: rgba(221, 238, 255, 0.6); } 
         .card:nth-child(3) { background-color: rgba(255, 246, 204, 0.6); } 
 
         .footer {
-            margin-top: 80px; font-size: 1rem; opacity: 0.8; font-family: 'DM Serif Display', serif;
+            margin-top: 80px;
+            font-size: 1rem;
+            opacity: 0.8;
+            font-family: 'DM Serif Display', serif;
         }
 
         /* --- New Hover Toast --- */
         #hover-toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            padding: 12px 24px; border-radius: 25px; background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
-            color: var(--text-color); font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
-            z-index: 1000; display: none; pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid white; white-space: nowrap;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 25px;
+            background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
+            color: var(--text-color);
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 1000;
+            display: none;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid white;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -275,25 +357,6 @@
         <div class="nav-logo">🌸 Happy Place</div>
     </nav>
 
-    <!-- NEW BACKGROUND SCENERY LAYER -->
-    <div id="scenery-layer">
-        <!-- Cottage (Farther back) -->
-        <img src="cottage.png" class="scene-cottage" alt="Cottage" onerror="this.style.display='none'">
-        
-        <!-- Grass base (Prevents the awkward cut) -->
-        <div class="grass-bg"></div>
-
-        <!-- Cherry Blossom Tree (Static, bottom right) -->
-        <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
-
-        <!-- Random Foreground Mushrooms -->
-        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 4%; left: 15%; width: 70px;" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 8%; left: 38%; width: 50px;" onerror="this.style.display='none'">
-        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 2%; right: 42%; width: 90px; transform: scaleX(-1);" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 6%; right: 30%; width: 60px;" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 12%; left: 5%; width: 45px;" onerror="this.style.display='none'">
-    </div>
-
     <div id="cozy-corner">
         <div class="desk-item cassette-player" id="cassette-player" onclick="toggleMusic()" onmouseover="showToast('📼 A little soundtrack for your visit.')" onmouseout="hideToast()">
             <svg viewBox="0 0 90 60" width="90" height="60">
@@ -327,25 +390,24 @@
 
     <div class="dashboard-container" id="main-dashboard">
         
-        <!-- Clouds Restrained to Top/Middle ONLY -->
+        <!-- Clouds & Stars -->
         <div class="decor cloud cloud-farthest" style="top: 12%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
-        <div class="decor cloud cloud-farthest" style="top: 18%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        <div class="decor cloud cloud-farthest" style="top: 70%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
         
         <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
         <div class="decor cloud cloud-far" style="top: 35%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 28%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 85%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
 
         <div class="decor cloud cloud-mid" style="top: 20%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 45%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 38%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 50%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 80%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
 
         <div class="decor cloud cloud-near" style="top: 25%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
-        <div class="decor cloud cloud-near" style="top: 42%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 75%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
 
         <div class="decor cloud cloud-closest" style="top: 15%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
-        <div class="decor cloud cloud-closest" style="top: 48%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 65%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
         
-        <!-- Stars & Flowers -->
         <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
         <div class="decor star" style="top: 60%; left: 3%;" onclick="twinkle(this)">⭐</div>
         <div class="decor star" style="top: 25%; left: 8%;" onclick="twinkle(this)">⭐</div>
@@ -434,6 +496,7 @@
                 if (window.stopAllMusic) {
                     window.stopAllMusic();
                 } else {
+                    // Fallback if smilebox.js isn't loaded yet
                     if(dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
                     if(playerUI) playerUI.classList.remove('playing');
                 }
@@ -471,7 +534,7 @@
             totalVisits = localStorage.getItem('siteVisits') ? parseInt(localStorage.getItem('siteVisits')) : 0;
             totalVisits++;
             localStorage.setItem('siteVisits', totalVisits);
-        } catch(e) {} 
+        } catch(e) {} // Failsafe for local testing!
 
         if (totalVisits >= 10) {
             const secretBtn = document.getElementById('secret-song-btn');
@@ -479,7 +542,7 @@
         }
 
         function playSecretSong(e) {
-            e.stopPropagation(); 
+            e.stopPropagation(); // Prevents the cassette player from turning off
             showToast("A song I saved for you. 🤍");
             
             if(window.crossfade) {
@@ -497,6 +560,7 @@
                 let cover = document.getElementById('storybook-cover');
                 if(cover) {
                     cover.style.display = 'flex';
+                    // Trigger reflow to ensure transition works
                     void cover.offsetWidth; 
                     cover.style.opacity = '1';
                 }
