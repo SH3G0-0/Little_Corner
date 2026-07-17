@@ -22,7 +22,7 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>") 12 12, auto !important;
         }
 
-        /* --- Complete Scrollbar Removal & Scroll Lock --- */
+        /* --- Complete Scrollbar Removal & Absolute Scroll Lock --- */
         ::-webkit-scrollbar {
             display: none;
             width: 0px;
@@ -126,7 +126,9 @@
         /* --- Phase 2: Storybook Cover --- */
         #storybook-cover {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-gradient); display: none; flex-direction: column;
+            background: var(--bg-gradient); 
+            display: flex; /* FIXED: Now present immediately, sitting behind the loading screen */
+            flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
             z-index: 150; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
         }
@@ -147,20 +149,24 @@
         /* --- NEW: IMMERSIVE SCENERY LAYER --- */
         #scenery-layer {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 1; 
+            pointer-events: none; 
+            z-index: 1; /* Keeps tree safely behind UI */
+            opacity: 0; /* HIDDEN INITIALLY to prevent the flashing bug */
+            transition: opacity 2s ease;
         }
 
-        /* The Tree: Large, pulled down negative to hide transparent image padding */
+        #scenery-layer.visible {
+            opacity: 1; /* Fades in smoothly with the dashboard */
+        }
+
+        /* The Tree: Adjusted aggressively to slice off the invisible transparent padding */
         .scene-tree {
             position: absolute; 
-            bottom: -6vh; /* PULLS THE INVISIBLE BORDER OFF SCREEN */
-            right: -5vw; 
-            height: 95vh; 
+            bottom: -20vh; /* Aggressive pull down to force the roots onto the floor */
+            right: -8vw; 
+            height: 120vh; /* Scaled up to keep it grand */
             width: auto; 
-            z-index: 2; 
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
-            object-fit: contain;
-            object-position: bottom right;
         }
 
         /* --- Phase 3: Main Dashboard --- */
@@ -168,7 +174,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -35%); /* Start slightly lower for entrance animation */
+            transform: translate(-50%, -35%); 
             width: 100%;
             max-width: 900px;
             padding: 0 20px; 
@@ -181,13 +187,13 @@
 
         .dashboard-container.visible { 
             opacity: 1; 
-            transform: translate(-50%, -50%); /* Perfectly centered */
+            transform: translate(-50%, -50%); 
         }
 
         /* --- Interactive Garden Decor --- */
         .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
 
-        /* Parallax Clouds (Confined ONLY to the very top) */
+        /* Parallax Clouds (Tightly packed into the top 15% of the screen) */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
@@ -257,6 +263,7 @@
         <div class="heart-bar-container"><div class="heart-bar"></div></div>
     </div>
 
+    <!-- Cover is now present immediately, waiting behind the loading screen -->
     <div id="storybook-cover" onclick="openStorybook()">
         <div class="storybook-text">
             <div style="font-size: 2rem;">🌸</div>
@@ -271,9 +278,8 @@
         <div class="nav-logo">🌸 Happy Place</div>
     </nav>
 
-    <!-- CLEANED SCENERY LAYER: Tree only! -->
+    <!-- CLEANED SCENERY LAYER: Tree only, starts hidden! -->
     <div id="scenery-layer">
-        <!-- Cherry Blossom Tree (Pulled down slightly to hide invisible padding) -->
         <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
     </div>
 
@@ -310,23 +316,23 @@
 
     <div class="dashboard-container" id="main-dashboard">
         
-        <!-- Clouds Restrained to Top ONLY (2% to 22%) -->
+        <!-- Clouds Restrained to Top ONLY (2% to 15%) -->
         <div class="decor cloud cloud-farthest" style="top: 2%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
-        <div class="decor cloud cloud-farthest" style="top: 8%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        <div class="decor cloud cloud-farthest" style="top: 6%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
         
-        <div class="decor cloud cloud-far" style="top: 4%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 12%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 18%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 3%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 8%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 12%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
 
-        <div class="decor cloud cloud-mid" style="top: 6%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 15%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 22%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 5%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 10%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 14%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
 
-        <div class="decor cloud cloud-near" style="top: 10%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
-        <div class="decor cloud cloud-near" style="top: 18%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 7%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 11%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
 
-        <div class="decor cloud cloud-closest" style="top: 5%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
-        <div class="decor cloud cloud-closest" style="top: 12%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 4%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 9%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
         
         <!-- Stars & Flowers -->
         <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
@@ -468,20 +474,16 @@
         }
 
         // --- Sequence Control ---
+        // 1. Remove Loading Screen. Storybook Cover is already behind it waiting perfectly.
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
             setTimeout(() => {
                 if(loading) loading.style.display = 'none';
-                let cover = document.getElementById('storybook-cover');
-                if(cover) {
-                    cover.style.display = 'flex';
-                    void cover.offsetWidth; 
-                    cover.style.opacity = '1';
-                }
             }, 1000);
         }, 3000);
 
+        // 2. Click Cover to Open Book
         function openStorybook() {
             let cover = document.getElementById('storybook-cover');
             cover.style.opacity = '0';
@@ -496,9 +498,11 @@
                 
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
+                let scenery = document.getElementById('scenery-layer'); /* Grab the tree layer */
                 
                 if(nav) nav.style.display = 'flex';
                 if(corner) corner.style.display = 'flex';
+                if(scenery) scenery.classList.add('visible'); /* FADE IN THE TREE NOW! No more flashing! */
                 
                 setTimeout(() => {
                     if(nav) nav.style.opacity = '1';
