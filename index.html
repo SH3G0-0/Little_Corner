@@ -126,9 +126,7 @@
         /* --- Phase 2: Storybook Cover --- */
         #storybook-cover {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-gradient); 
-            display: flex; /* FIXED: Now present immediately, sitting behind the loading screen */
-            flex-direction: column;
+            background: var(--bg-gradient); display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
             z-index: 150; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
         }
@@ -159,14 +157,17 @@
             opacity: 1; /* Fades in smoothly with the dashboard */
         }
 
-        /* The Tree: Adjusted aggressively to slice off the invisible transparent padding */
+        /* The Tree: Perfectly grounded at the bottom right corner */
         .scene-tree {
             position: absolute; 
-            bottom: -20vh; /* Aggressive pull down to force the roots onto the floor */
-            right: -8vw; 
-            height: 120vh; /* Scaled up to keep it grand */
+            bottom: 0; 
+            right: 0; 
+            height: 85vh; /* Fills most of the vertical space */
             width: auto; 
+            max-width: 50vw; /* Keeps it from crushing the cards on smaller screens */
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+            object-fit: contain; /* Prevents the roots from being cropped */
+            object-position: bottom right; /* Locks the base of the image to the bottom-right */
         }
 
         /* --- Phase 3: Main Dashboard --- */
@@ -193,7 +194,7 @@
         /* --- Interactive Garden Decor --- */
         .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
 
-        /* Parallax Clouds (Tightly packed into the top 15% of the screen) */
+        /* Parallax Clouds (Restored to their original, full-screen natural floating paths) */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
@@ -316,23 +317,23 @@
 
     <div class="dashboard-container" id="main-dashboard">
         
-        <!-- Clouds Restrained to Top ONLY (2% to 15%) -->
-        <div class="decor cloud cloud-farthest" style="top: 2%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
-        <div class="decor cloud cloud-farthest" style="top: 6%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        <!-- Clouds Restored to their Natural Full-Screen Float -->
+        <div class="decor cloud cloud-farthest" style="top: 12%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-farthest" style="top: 70%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
         
-        <div class="decor cloud cloud-far" style="top: 3%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 8%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 12%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 35%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 85%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
 
-        <div class="decor cloud cloud-mid" style="top: 5%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 10%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
-        <div class="decor cloud cloud-mid" style="top: 14%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 20%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 50%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 80%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
 
-        <div class="decor cloud cloud-near" style="top: 7%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
-        <div class="decor cloud cloud-near" style="top: 11%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 25%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 75%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
 
-        <div class="decor cloud cloud-closest" style="top: 4%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
-        <div class="decor cloud cloud-closest" style="top: 9%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 15%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 65%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
         
         <!-- Stars & Flowers -->
         <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
