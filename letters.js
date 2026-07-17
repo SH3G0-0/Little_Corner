@@ -120,8 +120,16 @@ try {
             overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
         
-        @keyframes sway { 0% { transform: rotate(1deg) translateY(0); } 50% { transform: rotate(0.6deg) translateY(-2px); } 100% { transform: rotate(1deg) translateY(0); } }
-        .paper-ready { transform: rotate(0deg) translateY(0) scale(1); opacity: 1; animation: sway 12s ease-in-out infinite; }
+        @keyframes sway { 
+            0% { transform: rotate(1deg) translateY(0) scale(1); } 
+            50% { transform: rotate(0.6deg) translateY(-2px) scale(1); } 
+            100% { transform: rotate(1deg) translateY(0) scale(1); } 
+        }
+        .paper-ready { 
+            transform: rotate(0deg) translateY(0) scale(1); 
+            opacity: 1; 
+            animation: sway 12s ease-in-out infinite 1.8s; /* FIXED: Waits for the slide-up transition to finish before swaying */
+        }
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
@@ -149,7 +157,7 @@ try {
             mask-image: radial-gradient(circle, black 30%, transparent 65%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 65%);
         }
 
-        /* FIXED FLOATING DECORATIONS (Pinned outside typing area) */
+        /* FIXED FLOATING DECORATIONS */
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
         .floating-decor.d-tl { top: 40px; left: 40px; }
@@ -176,7 +184,7 @@ try {
         .paper-divider { border-bottom: 2px dashed rgba(0,0,0,0.1); width: 40%; margin: 40px auto; }
         .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
         
-        /* Signature Area & Embedded Emoji */
+        /* Signature Area */
         .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 80px; font-size: 1.4em;}
         .signature-icon { display: inline-block; font-size: 1.4rem; margin-left: 10px; animation: drift 6s ease-in-out infinite; vertical-align: middle; }
         
@@ -392,6 +400,8 @@ try {
                 </div>
 
                 <div id="letter-room">
+                    <!-- FIXED: Added the missing room-particles container that was crashing the script! -->
+                    <div id="room-particles"></div> 
                     
                     <div class="room-decor-bg">
                         <div class="cloud" style="top: 20%; left: -10%; animation-duration: 60s;">☁️</div>
@@ -727,6 +737,10 @@ try {
     window.startAmbientParticles = function(theme) {
         clearInterval(particleInterval);
         const container = document.getElementById('room-particles');
+        
+        // Safety check to ensure the container actually loaded!
+        if (!container) return; 
+        
         container.innerHTML = '';
         
         let type = '✨';
@@ -787,8 +801,11 @@ try {
         let track = window.currentTrack || document.getElementById('bg-dashboard');
         if (track && track.dataset.oldVol) {
             let fadeUp = setInterval(() => {
-                if (track.volume < parseFloat(track.dataset.oldVol)) track.volume += 0.01;
-                else clearInterval(fadeUp);
+                if (track.volume < parseFloat(track.dataset.oldVol)) {
+                    track.volume = Math.min(track.volume + 0.01, parseFloat(track.dataset.oldVol));
+                } else {
+                    clearInterval(fadeUp);
+                }
             }, 100);
         }
 
@@ -822,8 +839,11 @@ try {
         let track = window.currentTrack || document.getElementById('bg-dashboard');
         if (track && track.dataset.oldVol) {
             let fadeUp = setInterval(() => {
-                if (track.volume < parseFloat(track.dataset.oldVol)) track.volume += 0.01;
-                else clearInterval(fadeUp);
+                if (track.volume < parseFloat(track.dataset.oldVol)) {
+                    track.volume = Math.min(track.volume + 0.01, parseFloat(track.dataset.oldVol));
+                } else {
+                    clearInterval(fadeUp);
+                }
             }, 100);
         }
 
