@@ -145,45 +145,63 @@
 
         /* --- NEW: IMMERSIVE SCENERY LAYER --- */
         #scenery-layer {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; /* Crucial: allows clicking cards through the tree */
-            z-index: 1; /* Sits behind the cards */
-        }
-
-        .scene-cottage {
-            position: absolute; bottom: 16vh; left: 8vw;
-            height: 38vh; width: auto; z-index: 1;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; /* Allows clicking cards through the scenery */
+            z-index: 0; /* Sits completely behind the cards */
         }
 
         .grass-bg {
-            position: absolute; bottom: 0; left: 0;
-            width: 100vw; height: 22vh; /* Fills the bottom perfectly to prevent cuts */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 25vh; /* Perfectly lines up and fills the bottom edge */
             background-image: url('grass.png');
-            background-size: cover; background-position: bottom center;
-            background-repeat: no-repeat; z-index: 2;
+            background-size: cover;
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            z-index: 2;
         }
 
         .scene-tree {
-            position: absolute; bottom: 0; right: 0;
-            height: 75vh; width: auto; z-index: 3;
+            position: absolute;
+            bottom: -2vh; /* Pulled down slightly to anchor firmly */
+            right: -2vw; /* Pushed to the very right edge */
+            height: 85vh; /* Scaled up to be closer to the screen */
+            width: auto;
+            z-index: 3; /* Placed in front of the grass */
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.25));
         }
 
+        .scene-cottage {
+            position: absolute;
+            bottom: 20vh; /* Lifted higher up to sit farther back */
+            left: 8vw;
+            height: 32vh; /* Scaled smaller to look distant */
+            width: auto;
+            z-index: 1; /* Placed behind the grass layer for depth */
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+        }
+
         .scene-shroom {
-            position: absolute; z-index: 4;
+            position: absolute;
+            z-index: 3; /* Placed in front of the grass */
             filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
         }
 
         /* --- Phase 3: Main Dashboard --- */
         .dashboard-container {
-            position: relative;
             max-width: 900px;
             margin: 220px auto 0;
             padding: 40px 20px 160px 20px;
             text-align: center; display: none; opacity: 0;
             transform: translateY(30px); transition: all 1.5s ease;
-            z-index: 10; /* Keeps cards safely above the grass/tree */
+            position: relative;
+            z-index: 10;
         }
 
         .dashboard-container.visible { opacity: 1; transform: translateY(0); }
@@ -191,7 +209,7 @@
         /* --- Interactive Garden Decor --- */
         .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
 
-        /* Parallax Clouds (Confined to Top/Middle) */
+        /* Parallax Clouds (Confined strictly to Top/Middle) */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
@@ -275,23 +293,23 @@
         <div class="nav-logo">🌸 Happy Place</div>
     </nav>
 
-    <!-- NEW BACKGROUND SCENERY LAYER -->
+    <!-- STATIC SCENERY LAYER -->
     <div id="scenery-layer">
-        <!-- Cottage (Farther back) -->
+        <!-- Cottage (Placed farther back, behind grass) -->
         <img src="cottage.png" class="scene-cottage" alt="Cottage" onerror="this.style.display='none'">
         
-        <!-- Grass base (Prevents the awkward cut) -->
+        <!-- Grass base (Fills the absolute bottom perfectly) -->
         <div class="grass-bg"></div>
 
-        <!-- Cherry Blossom Tree (Static, bottom right) -->
+        <!-- Cherry Blossom Tree (Static, huge, right side, front of grass) -->
         <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
 
-        <!-- Random Foreground Mushrooms -->
-        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 4%; left: 15%; width: 70px;" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 8%; left: 38%; width: 50px;" onerror="this.style.display='none'">
-        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 2%; right: 42%; width: 90px; transform: scaleX(-1);" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 6%; right: 30%; width: 60px;" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 12%; left: 5%; width: 45px;" onerror="this.style.display='none'">
+        <!-- Random Foreground Mushrooms (Front of grass) -->
+        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 2vh; left: 15vw; height: 9vh;" alt="Mushroom Cluster" onerror="this.style.display='none'">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 5vh; left: 35vw; height: 6vh;" alt="Single Mushroom" onerror="this.style.display='none'">
+        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 1vh; right: 45vw; height: 10vh; transform: scaleX(-1);" alt="Mushroom Cluster" onerror="this.style.display='none'">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 4vh; right: 30vw; height: 5vh;" alt="Single Mushroom" onerror="this.style.display='none'">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 2vh; right: 10vw; height: 4vh;" alt="Single Mushroom" onerror="this.style.display='none'">
     </div>
 
     <div id="cozy-corner">
@@ -329,21 +347,21 @@
         
         <!-- Clouds Restrained to Top/Middle ONLY -->
         <div class="decor cloud cloud-farthest" style="top: 12%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
-        <div class="decor cloud cloud-farthest" style="top: 18%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        <div class="decor cloud cloud-farthest" style="top: 28%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
         
         <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
         <div class="decor cloud cloud-far" style="top: 35%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
-        <div class="decor cloud cloud-far" style="top: 28%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 42%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
 
         <div class="decor cloud cloud-mid" style="top: 20%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
         <div class="decor cloud cloud-mid" style="top: 45%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
         <div class="decor cloud cloud-mid" style="top: 38%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
 
         <div class="decor cloud cloud-near" style="top: 25%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
-        <div class="decor cloud cloud-near" style="top: 42%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 32%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
 
         <div class="decor cloud cloud-closest" style="top: 15%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
-        <div class="decor cloud cloud-closest" style="top: 48%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 40%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
         
         <!-- Stars & Flowers -->
         <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
@@ -430,7 +448,6 @@
             const dashboardMusic = document.getElementById('bg-dashboard');
 
             if (isPlaying) {
-                // MASTER PAUSE
                 if (window.stopAllMusic) {
                     window.stopAllMusic();
                 } else {
@@ -439,14 +456,12 @@
                 }
                 isPlaying = false;
             } else {
-                // MASTER PLAY
                 const trackToResume = (window.currentTrack && !window.currentTrack.paused) ? window.currentTrack : dashboardMusic;
                 
                 if (trackToResume) {
                     trackToResume.play().catch(e => console.log("Playback blocked:", e));
                     if(playerUI) playerUI.classList.add('playing');
                     
-                    // Fade it in
                     let fade = setInterval(() => {
                         if (trackToResume.volume < 0.15) {
                             trackToResume.volume = Math.min(trackToResume.volume + 0.01, 0.15);
@@ -509,7 +524,6 @@
             cover.style.opacity = '0';
             cover.style.transform = 'scale(1.1)'; 
             
-            // Start music IMMEDIATELY upon human click
             if(!isPlaying) {
                 toggleMusic();
             }
@@ -517,7 +531,6 @@
             setTimeout(() => {
                 cover.style.display = 'none';
                 
-                // Show Nav & Cozy Corner
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
                 
@@ -529,7 +542,6 @@
                     if(corner) corner.style.opacity = '1';
                 }, 50);
 
-                // Show Dashboard
                 let dashboard = document.getElementById('main-dashboard');
                 if(dashboard) {
                     dashboard.style.display = 'block';
