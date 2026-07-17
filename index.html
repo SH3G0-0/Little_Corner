@@ -12,12 +12,15 @@
         :root {
             --sky-top: #79C9FF;
             --sky-bottom: #DFF4FF;
+            --mountain-back: #A8C0D8;
+            --mountain-front: #C4D7E8;
+            --hill-back: #A0D28D;
+            --hill-front: #BFE0A8;
             --grass-light: #86C86B;
             --grass-dark: #5FAF52;
             --wood: #7C5A3C;
             --sunlight: #FFE69B;
             --text-color: #5A4A78;
-            --glass-border: rgba(255, 255, 255, 0.7);
         }
 
         * {
@@ -43,9 +46,9 @@
         }
 
         /* Cinematic Zoom Classes */
-        .zoom-mailbox { transform: scale(1.35) translate(10vw, 15vh); filter: brightness(0.85); }
-        .zoom-sign { transform: scale(1.35) translate(0vw, 15vh); filter: brightness(0.85); }
-        .zoom-jar { transform: scale(1.35) translate(-15vw, 15vh); filter: brightness(0.85); }
+        .zoom-mailbox { transform: scale(1.4) translate(10vw, 15vh); filter: brightness(0.85); }
+        .zoom-sign { transform: scale(1.4) translate(0vw, 15vh); filter: brightness(0.85); }
+        .zoom-jar { transform: scale(1.4) translate(-10vw, 15vh); filter: brightness(0.85); }
 
         .layer { position: absolute; top: 0; left: -5vw; width: 110vw; height: 100vh; pointer-events: none; will-change: transform; }
 
@@ -58,7 +61,7 @@
         }
         .god-rays {
             position: absolute; top: -10%; right: -10vw; width: 80vw; height: 120vh;
-            background: repeating-linear-gradient(45deg, rgba(255, 230, 155, 0.08) 0%, rgba(255, 230, 155, 0.08) 2%, transparent 2%, transparent 4%);
+            background: repeating-linear-gradient(45deg, rgba(255, 230, 155, 0.06) 0%, rgba(255, 230, 155, 0.06) 2%, transparent 2%, transparent 4%);
             mix-blend-mode: overlay; opacity: 0.6; transform: rotate(-15deg);
             animation: pulse-light 8s ease-in-out infinite alternate;
         }
@@ -67,108 +70,118 @@
         .cloud { position: absolute; filter: blur(1px); animation: drift linear infinite; opacity: 0.85; }
         @keyframes drift { 0% { transform: translateX(-10vw); } 100% { transform: translateX(110vw); } }
 
-        /* --- LAYER 2 & 3: CLEAN SILHOUETTE BACKGROUNDS (No fake PNGs allowed!) --- */
-        #layer-mountains { z-index: 2; display: flex; align-items: flex-end; justify-content: space-around; opacity: 0.4; filter: blur(2px); bottom: 25%; height: 50%; }
-        .mountain-silhouette { font-size: 35rem; line-height: 1; color: #89D6FF; text-shadow: 0 0 20px #89D6FF; }
+        /* --- LAYER 2: PURE CSS MOUNTAINS (No more ugly emojis) --- */
+        #layer-mountains { z-index: 2; }
+        .css-mountain {
+            position: absolute; bottom: 25%;
+            background: linear-gradient(180deg, var(--mountain-back) 0%, var(--mountain-front) 100%);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: 0.6;
+            filter: drop-shadow(0 -5px 15px rgba(137, 214, 255, 0.3));
+        }
 
-        #layer-forest { z-index: 3; bottom: 20%; height: 40%; display: flex; align-items: flex-end; justify-content: space-between; opacity: 0.85; filter: blur(1px); }
-        .bg-tree { font-size: 15rem; line-height: 1; margin: 0 -2vw; }
+        /* --- LAYER 3: PURE CSS ROLLING HILLS (Replacing background trees) --- */
+        #layer-hills { z-index: 3; }
+        .css-hill {
+            position: absolute; bottom: 20%;
+            background: linear-gradient(180deg, var(--hill-back) 0%, var(--hill-front) 100%);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: 0.8;
+            filter: drop-shadow(0 -5px 15px rgba(134, 200, 107, 0.2));
+        }
 
-        /* --- LAYER 4: TERRAIN --- */
+        /* --- LAYER 4: TERRAIN / MAIN GROUND --- */
         #layer-ground { z-index: 4; }
         .terrain-base {
             position: absolute; bottom: -5vh; left: -5vw; width: 110vw; height: 35vh;
             background: linear-gradient(180deg, var(--grass-light) 0%, var(--grass-dark) 100%);
             border-radius: 50% 50% 0 0 / 20% 20% 0 0;
-            box-shadow: inset 0 20px 40px rgba(255,255,255,0.2), 0 -10px 20px rgba(0,0,0,0.1);
+            box-shadow: inset 0 20px 40px rgba(255,255,255,0.15), 0 -10px 20px rgba(0,0,0,0.1);
         }
 
-        /* --- LAYER 5: ENVIRONMENT SCENERY (Perfectly scaled) --- */
+        /* --- LAYER 5: ENVIRONMENT SCENERY (Your Assets, Properly Scaled) --- */
         #layer-scenery { z-index: 5; }
         
-        /* The giant tree */
-        .main-tree-bridge {
-            position: absolute; bottom: 15vh; right: 5vw; width: auto; height: 60vh;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
-        }
-
         @keyframes sway-ground { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
         .landscape-item {
             position: absolute; transform-origin: bottom center; animation: sway-ground 6s ease-in-out infinite alternate;
-            pointer-events: none; opacity: 0.95; filter: drop-shadow(0 5px 15px rgba(90, 74, 120, 0.2));
+            pointer-events: none; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
         }
 
-        /* Cottage & CSS Smoke */
+        /* The giant tree - scaled to fit screen gracefully */
+        .main-tree-bridge {
+            bottom: 22vh; right: 5vw; width: auto; height: 45vh; max-width: 40vw; object-fit: contain;
+        }
+
+        /* Cottage & CSS Smoke - scaled down */
         .cottage-wrapper {
-            position: absolute; bottom: 18vh; left: 15vw; height: 35vh; z-index: 5;
+            position: absolute; bottom: 23vh; left: 12vw; height: 30vh; width: auto; z-index: 5;
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
         }
         .cottage-img { height: 100%; width: auto; }
         
-        .chimney { position: absolute; top: 10%; left: 65%; z-index: -1; }
+        .chimney { position: absolute; top: 8%; left: 65%; z-index: -1; }
         .smoke {
-            position: absolute; width: 30px; height: 30px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6); filter: blur(8px);
+            position: absolute; width: 25px; height: 25px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6); filter: blur(6px);
             animation: smoke-anim 6s linear infinite;
         }
         .s2 { animation-delay: 2s; } .s3 { animation-delay: 4s; }
         @keyframes smoke-anim {
             0% { opacity: 0; transform: translateY(0) scale(0.3); }
             20% { opacity: 0.6; }
-            100% { opacity: 0; transform: translateY(-150px) translateX(40px) scale(2.5); }
+            100% { opacity: 0; transform: translateY(-120px) translateX(30px) scale(2.5); }
         }
 
         /* Scattered Mushrooms */
-        .env-shroom { position: absolute; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); transform-origin: bottom center; animation: sway-ground 5s ease-in-out infinite alternate; }
-        .shroom1 { bottom: 10vh; left: 35vw; height: 8vh; }
-        .shroom2 { bottom: 8vh; left: 10vw; height: 6vh; transform: scaleX(-1); animation-duration: 7s; }
-        .shroom3 { bottom: 12vh; right: 40vw; height: 5vh; animation-duration: 4s; }
+        .shroom1 { bottom: 18vh; left: 32vw; height: 6vh; }
+        .shroom2 { bottom: 15vh; left: 10vw; height: 5vh; transform: scaleX(-1); animation-duration: 7s; }
+        .shroom3 { bottom: 20vh; right: 38vw; height: 4vh; animation-duration: 4s; }
 
-        /* --- LAYER 6: INTERACTIVE UI OBJECTS --- */
+        /* --- LAYER 6: INTERACTIVE UI OBJECTS (Scaled beautifully) --- */
         #layer-objects { z-index: 6; pointer-events: none; }
         
-        @keyframes gentle-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
+        @keyframes gentle-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
 
         .interactive-prop {
             position: absolute; pointer-events: auto; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.3)); transform-origin: bottom center;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); transform-origin: bottom center;
             animation: gentle-float 3s ease-in-out infinite alternate;
         }
         .interactive-prop:hover {
-            transform: scale(1.1) translateY(-15px) rotate(-3deg);
-            filter: drop-shadow(0 25px 30px rgba(0,0,0,0.4)) drop-shadow(0 0 20px rgba(255, 230, 155, 0.8));
+            transform: scale(1.15) translateY(-10px) rotate(-3deg);
+            filter: drop-shadow(0 20px 25px rgba(0,0,0,0.3)) drop-shadow(0 0 15px rgba(255, 230, 155, 0.6));
             animation: none;
         }
 
-        /* Fixed sizing for interactive objects so they don't look horrible */
-        .prop-mailbox { bottom: 14vh; left: 32vw; height: 18vh; width: auto; font-size: 7rem; line-height: 1; animation-delay: 0s; }
-        .prop-sign { bottom: 10vh; left: 45vw; height: 22vh; width: auto; animation-delay: -1s; }
+        /* Icons properly sized to not overwhelm the scene */
+        .prop-mailbox { bottom: 18vh; left: 28vw; font-size: 4rem; line-height: 1; animation-delay: 0s; }
+        .prop-sign { bottom: 15vh; left: 42vw; height: 16vh; width: auto; animation-delay: -1s; }
         
-        .jar-container { position: absolute; bottom: 12vh; right: 35vw; pointer-events: auto; }
-        .stump { font-size: 8rem; line-height: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
-        .prop-jar { position: absolute; bottom: 80%; left: 15%; font-size: 5rem; line-height: 1; z-index: 2; animation-delay: -2s; }
+        .jar-container { position: absolute; bottom: 18vh; right: 32vw; pointer-events: auto; }
+        .stump { font-size: 4rem; line-height: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+        .prop-jar { position: absolute; bottom: 70%; left: 15%; font-size: 3rem; line-height: 1; z-index: 2; animation-delay: -2s; }
 
-        .prop-gramophone { bottom: 16vh; left: 5vw; font-size: 6rem; line-height: 1; z-index: 6; animation-delay: -1.5s; }
-        .prop-gramophone.playing { animation: wobble 2s infinite alternate; filter: drop-shadow(0 0 25px var(--sunlight)); }
+        .prop-gramophone { bottom: 17vh; left: 6vw; font-size: 3.5rem; line-height: 1; z-index: 6; animation-delay: -1.5s; }
+        .prop-gramophone.playing { animation: wobble 2s infinite alternate; filter: drop-shadow(0 0 20px var(--sunlight)); }
         @keyframes wobble { 0% { transform: rotate(-3deg) scale(1.05); } 100% { transform: rotate(3deg) scale(1.05); } }
 
-        /* --- LAYER 7: SWAYING FOREGROUND FRAMING --- */
-        #layer-foreground { z-index: 7; filter: blur(4px) drop-shadow(0 30px 40px rgba(0,0,0,0.6)); pointer-events: none; }
+        /* --- LAYER 7: SWAYING FOREGROUND FRAMING (Hug the edges!) --- */
+        #layer-foreground { z-index: 7; filter: blur(3px) drop-shadow(0 20px 30px rgba(0,0,0,0.5)); pointer-events: none; }
         
         @keyframes sway-fg { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
         
-        .fg-sakura-left { position: absolute; top: -5vh; left: -5vw; height: 50vh; width: auto; transform-origin: top left; animation: sway-fg 8s ease-in-out infinite alternate; }
-        .fg-sakura-right { position: absolute; top: -10vh; right: -10vw; height: 55vh; width: auto; transform-origin: top right; animation: sway-fg 9s ease-in-out infinite alternate-reverse; }
-        .fg-floral-bottom { position: absolute; bottom: -5vh; right: -5vw; height: 40vh; width: auto; transform-origin: bottom right; animation: sway-fg 7s ease-in-out infinite alternate; }
-        .fg-sakura-bottom { position: absolute; bottom: -10vh; left: -10vw; height: 35vh; width: auto; transform-origin: bottom left; animation: sway-fg 6s ease-in-out infinite alternate-reverse; }
+        .fg-sakura-left { position: absolute; top: -5vh; left: -2vw; height: 45vh; width: auto; transform-origin: top left; animation: sway-fg 8s ease-in-out infinite alternate; }
+        .fg-sakura-right { position: absolute; top: -5vh; right: -2vw; height: 45vh; width: auto; transform-origin: top right; animation: sway-fg 9s ease-in-out infinite alternate-reverse; }
+        .fg-floral-bottom { position: absolute; bottom: -5vh; left: -2vw; height: 35vh; width: auto; transform-origin: bottom left; animation: sway-fg 7s ease-in-out infinite alternate; }
+        .fg-sakura-bottom { position: absolute; bottom: -5vh; right: -2vw; height: 35vh; width: auto; transform-origin: bottom right; animation: sway-fg 6s ease-in-out infinite alternate-reverse; }
 
         /* --- LAYER 8: PARTICLES (Petals & Fireflies) --- */
         #layer-particles { z-index: 8; pointer-events: none; }
         
+        /* JPG Petals using mix-blend-mode to remove white background */
         .petal {
-            position: absolute; width: 25px; height: 25px; opacity: 0.85;
+            position: absolute; width: 22px; height: 22px; opacity: 0.85;
             background-image: url('image_f3ad05.jpg'); background-size: cover;
-            mix-blend-mode: multiply; /* Removes white background from JPG */
+            mix-blend-mode: multiply; 
             animation: fall linear forwards; filter: drop-shadow(0 5px 5px rgba(246, 165, 201, 0.4));
         }
         @keyframes fall {
@@ -179,26 +192,26 @@
         }
 
         .firefly {
-            position: absolute; width: 6px; height: 6px; background: #FFF6CC; border-radius: 50%;
-            box-shadow: 0 0 10px #FFE69B, 0 0 20px #FFE69B;
+            position: absolute; width: 5px; height: 5px; background: #FFF6CC; border-radius: 50%;
+            box-shadow: 0 0 8px #FFE69B, 0 0 15px #FFE69B;
             animation: float-up linear forwards; mix-blend-mode: screen;
         }
         @keyframes float-up {
             0% { transform: translateY(10vh) translateX(0) scale(0); opacity: 0; }
-            20% { opacity: 1; transform: translateY(-10vh) translateX(20px) scale(1); }
-            80% { opacity: 1; transform: translateY(-40vh) translateX(-20px) scale(1); }
-            100% { transform: translateY(-60vh) translateX(0) scale(0); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-10vh) translateX(15px) scale(1); }
+            80% { opacity: 1; transform: translateY(-30vh) translateX(-15px) scale(1); }
+            100% { transform: translateY(-50vh) translateX(0) scale(0); opacity: 0; }
         }
 
         /* --- UI: Game Tooltip --- */
         #game-tooltip {
-            position: fixed; padding: 10px 22px; border-radius: 12px;
-            background: rgba(124, 90, 60, 0.95); color: #F4E9DA;
-            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem;
+            position: fixed; padding: 8px 18px; border-radius: 10px;
+            background: rgba(124, 90, 60, 0.95); color: #FFF8F0;
+            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
             z-index: 9999; pointer-events: none; opacity: 0;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4); border: 2px solid #5A3A20;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 2px solid #5A3A20;
             transition: opacity 0.2s ease; transform: translate(-50%, -150%);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); letter-spacing: 0.5px;
+            letter-spacing: 0.5px;
         }
 
         /* --- THE ORIGINAL MAGICAL LOADING SCREEN & STORYBOOK COVER --- */
@@ -208,16 +221,11 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 20000; transition: opacity 1s ease-out; pointer-events: none;
         }
-
         .heart-bar-container {
             width: 200px; height: 10px; background: rgba(255,255,255,0.5);
             border-radius: 10px; margin-top: 20px; overflow: hidden; position: relative;
         }
-
-        .heart-bar {
-            height: 100%; width: 0%; background: #FFDCEB; border-radius: 10px;
-            animation: fillBar 3s ease-in-out forwards;
-        }
+        .heart-bar { height: 100%; width: 0%; background: #FFDCEB; border-radius: 10px; animation: fillBar 3s ease-in-out forwards; }
         @keyframes fillBar { to { width: 100%; } }
 
         #storybook-cover {
@@ -226,16 +234,15 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
             z-index: 10000; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
         }
-
         .storybook-text {
             max-width: 500px; padding: 40px; background: rgba(255, 255, 255, 0.4); border-radius: 30px;
-            backdrop-filter: blur(10px); border: 2px solid var(--glass-border);
+            backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: gentleFloat 4s ease-in-out infinite;
         }
-
         .storybook-text h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; margin: 10px 0; color: var(--text-color); }
         .storybook-text p { font-size: 1.2rem; line-height: 1.8; margin: 20px 0; }
         .storybook-text .hint { font-size: 0.9rem; opacity: 0.6; margin-top: 30px; font-style: italic; }
+        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     </style>
 </head>
@@ -253,7 +260,7 @@
 
     <!-- THE ORIGINAL MAGICAL LOADING SCREEN -->
     <div id="loading-screen">
-        <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 600;">Collecting magic...</h2>
+        <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 600; color: #5A4A78;">Collecting magic...</h2>
         <div class="heart-bar-container"><div class="heart-bar"></div></div>
     </div>
 
@@ -275,21 +282,21 @@
         <div class="layer" id="layer-sky">
             <div class="sun-glow"></div>
             <div class="god-rays"></div>
-            <div class="cloud" style="top: 15%; font-size: 12rem; animation-duration: 120s;">☁️</div>
-            <div class="cloud" style="top: 30%; font-size: 8rem; animation-duration: 80s; animation-delay: -40s; opacity: 0.5;">☁️</div>
+            <div class="cloud" style="top: 15%; font-size: 10rem; animation-duration: 120s;">☁️</div>
+            <div class="cloud" style="top: 30%; font-size: 7rem; animation-duration: 80s; animation-delay: -40s; opacity: 0.5;">☁️</div>
         </div>
 
-        <!-- Layer 2: Clean Distant Mountains (Using Emojis to avoid fake PNGs) -->
+        <!-- Layer 2: Pure CSS Mountains (No Emojis) -->
         <div class="layer" id="layer-mountains">
-            <div class="mountain-silhouette">⛰️</div>
-            <div class="mountain-silhouette" style="font-size: 45rem; margin-bottom: -10vh;">⛰️</div>
-            <div class="mountain-silhouette">⛰️</div>
+            <div class="css-mountain" style="left: -10vw; width: 45vw; height: 50vh;"></div>
+            <div class="css-mountain" style="left: 20vw; width: 65vw; height: 65vh; opacity: 0.4;"></div>
+            <div class="css-mountain" style="right: -5vw; width: 50vw; height: 55vh;"></div>
         </div>
 
-        <!-- Layer 3: Clean Midground Forest (Using Emojis to avoid fake PNGs) -->
-        <div class="layer" id="layer-forest">
-            <div class="bg-tree">🌲</div><div class="bg-tree">🌳</div><div class="bg-tree">🌲</div>
-            <div class="bg-tree">🌳</div><div class="bg-tree">🌲</div><div class="bg-tree">🌳</div>
+        <!-- Layer 3: Pure CSS Rolling Hills (No Emojis) -->
+        <div class="layer" id="layer-hills">
+            <div class="css-hill" style="left: -15vw; width: 60vw; height: 40vh;"></div>
+            <div class="css-hill" style="right: -10vw; width: 70vw; height: 45vh; background: linear-gradient(180deg, #96D294 0%, #AEE0A0 100%);"></div>
         </div>
 
         <!-- Layer 4: Terrain / Ground -->
@@ -299,46 +306,42 @@
 
         <!-- Layer 5: Scenery & Architecture -->
         <div class="layer" id="layer-scenery">
-            <!-- Big Sakura Tree -->
+            <!-- Scaled Background Tree -->
             <img src="image_f3adc0.png" class="main-tree-bridge landscape-item" onerror="this.style.display='none'">
             
-            <!-- Mushrooms -->
+            <!-- Scaled Mushrooms -->
             <img src="image_f3b181.png" class="env-shroom shroom1" onerror="this.style.display='none'">
             <img src="image_f3b1a2.png" class="env-shroom shroom2" onerror="this.style.display='none'">
             <img src="image_f3b181.png" class="env-shroom shroom3" onerror="this.style.display='none'">
             
-            <!-- Cottage with Dynamic Smoke -->
+            <!-- Scaled Cottage -->
             <div class="cottage-wrapper landscape-item">
                 <div class="chimney">
                     <div class="smoke s1"></div>
                     <div class="smoke s2"></div>
                     <div class="smoke s3"></div>
                 </div>
-                <img src="cottage.png" class="cottage-img" alt="🏡" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22><text y=%22100%25%22 font-size=%22200%22>🏡</text></svg>'">
+                <img src="cottage.png" class="cottage-img" onerror="this.style.display='none'">
             </div>
         </div>
 
-        <!-- Layer 6: Interactive Objects (The "Menu") -->
+        <!-- Layer 6: Interactive Objects (Icons Scaled Down) -->
         <div class="layer" id="layer-objects">
             
-            <!-- 1. Music Player -->
             <div id="gramophone" class="interactive-prop prop-gramophone" onclick="toggleWorldMusic()" onmousemove="moveToast(event, '📻 Play Ambience')" onmouseleave="hideToast()">📻</div>
-
-            <!-- 2. Letters Mailbox (Will use emoji or image if you map it) -->
+            
             <div id="mailbox" class="interactive-prop prop-mailbox" onclick="openGameMenu('letters')" onmousemove="moveToast(event, '📮 Check the Mail')" onmouseleave="hideToast()">📮</div>
 
-            <!-- 3. Smile Box Sign -->
-            <img src="image_f3b483.png" id="sign" class="interactive-prop prop-sign" onclick="openGameMenu('smilebox')" onmousemove="moveToast(event, '🪵 Open Smile Box')" onmouseleave="hideToast()" alt="🪵" onerror="this.style.display='none'">
+            <img src="image_f3b483.png" id="sign" class="interactive-prop prop-sign" onclick="openGameMenu('smilebox')" onmousemove="moveToast(event, '🪵 Open Smile Box')" onmouseleave="hideToast()" onerror="this.style.display='none'">
 
-            <!-- 4. Happy Jar & Stump -->
-            <div class="jar-container">
+            <div class="jar-container interactive-prop" onclick="openGameMenu('jar')" onmousemove="moveToast(event, '🍯 Pick a Happy Note')" onmouseleave="hideToast()">
                 <div class="stump">🪵</div>
-                <div id="jar" class="interactive-prop prop-jar" onclick="openGameMenu('jar')" onmousemove="moveToast(event, '🍯 Pick a Happy Note')" onmouseleave="hideToast()">🫙</div>
+                <div id="jar" class="prop-jar">🫙</div>
             </div>
 
         </div>
 
-        <!-- Layer 7: Foreground Framing -->
+        <!-- Layer 7: Foreground Framing (Anchored to corners) -->
         <div class="layer" id="layer-foreground">
             <img src="image_f3ad47.png" class="fg-sakura-left" onerror="this.style.display='none'">
             <img src="image_f3b128.png" class="fg-sakura-right" onerror="this.style.display='none'">
@@ -346,7 +349,7 @@
             <img src="image_f3b0cb.png" class="fg-sakura-bottom" onerror="this.style.display='none'">
         </div>
 
-        <!-- Layer 8: Magical Particles -->
+        <!-- Layer 8: Particles -->
         <div class="layer" id="layer-particles"></div>
 
     </div>
@@ -383,18 +386,18 @@
             tooltip.innerText = text;
             tooltip.style.opacity = '1';
             tooltip.style.left = e.clientX + 'px';
-            tooltip.style.top = (e.clientY - 25) + 'px';
+            tooltip.style.top = (e.clientY - 30) + 'px';
         }
         function hideToast() { tooltip.style.opacity = '0'; }
 
         // --- PARALLAX ENGINE ---
         const sceneLayers = [
-            { el: document.getElementById('layer-mountains'), speed: 3 },
-            { el: document.getElementById('layer-forest'), speed: 8 },
-            { el: document.getElementById('layer-ground'), speed: 18 },
-            { el: document.getElementById('layer-scenery'), speed: 18 },
-            { el: document.getElementById('layer-objects'), speed: 22 },
-            { el: document.getElementById('layer-foreground'), speed: 50 }
+            { el: document.getElementById('layer-mountains'), speed: 2 },
+            { el: document.getElementById('layer-hills'), speed: 5 },
+            { el: document.getElementById('layer-ground'), speed: 12 },
+            { el: document.getElementById('layer-scenery'), speed: 12 },
+            { el: document.getElementById('layer-objects'), speed: 15 },
+            { el: document.getElementById('layer-foreground'), speed: 30 }
         ];
 
         window.addEventListener('mousemove', (e) => {
@@ -415,7 +418,7 @@
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.left = (Math.random() * 120 - 10) + 'vw';
-            petal.style.width = petal.style.height = (15 + Math.random() * 25) + 'px';
+            petal.style.width = petal.style.height = (15 + Math.random() * 20) + 'px';
             petal.style.animationDuration = (12 + Math.random() * 15) + 's'; 
             particleLayer.appendChild(petal);
             setTimeout(() => { petal.remove(); }, 28000); 
