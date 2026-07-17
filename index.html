@@ -5,267 +5,263 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wajeeha's Happy Place</title>
     <style>
-        /* Storybook & UI Fonts */
+        /* New Storybook Fonts */
         @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Quicksand:wght@400;600;700&display=swap');
 
-        /* Cozy Game Palette */
+        /* Pastel Garden Variables */
         :root {
-            --sky-top: #79C9FF;
-            --sky-bottom: #DFF4FF;
-            --mountain-back: #A8C0D8;
-            --mountain-front: #C4D7E8;
-            --hill-back: #A0D28D;
-            --hill-front: #BFE0A8;
-            --grass-light: #86C86B;
-            --grass-dark: #5FAF52;
-            --wood: #7C5A3C;
-            --sunlight: #FFE69B;
+            --bg-gradient: linear-gradient(135deg, #F2ECFF 0%, #FFDCEB 50%, #DDEEFF 100%);
             --text-color: #5A4A78;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --outline-color: #5A4A78;
         }
 
+        /* --- Magical Sparkle Cursor --- */
         * {
-            margin: 0; padding: 0; box-sizing: border-box; user-select: none;
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>") 12 12, auto !important;
         }
 
-        ::-webkit-scrollbar { display: none; }
-        html, body { -ms-overflow-style: none; scrollbar-width: none; overflow: hidden; }
+        /* --- Complete Scrollbar Removal --- */
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0px;
+            background: transparent;
+        }
+        
+        html, body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
         body {
-            background-color: var(--sky-top);
+            margin: 0;
+            padding: 0;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            background-size: cover;
+            min-height: 100vh;
             font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
             color: var(--text-color);
         }
 
-        /* --- THE WORLD ENGINE --- */
-        #world {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;
-            background: radial-gradient(circle at 70% 30%, var(--sunlight) 0%, var(--sky-top) 30%, #2B6DE5 100%);
-            transition: transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1), filter 1s ease;
-            transform-origin: center bottom;
+        h1, h2, h3, .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-weight: normal;
         }
 
-        /* Cinematic Zoom Classes */
-        .zoom-mailbox { transform: scale(1.4) translate(10vw, 15vh); filter: brightness(0.85); }
-        .zoom-sign { transform: scale(1.4) translate(0vw, 15vh); filter: brightness(0.85); }
-        .zoom-jar { transform: scale(1.4) translate(-10vw, 15vh); filter: brightness(0.85); }
-
-        .layer { position: absolute; top: 0; left: -5vw; width: 110vw; height: 100vh; pointer-events: none; will-change: transform; }
-
-        /* --- LAYER 1: SKY & BREATHING SUNLIGHT --- */
-        #layer-sky { z-index: 1; }
-        .sun-glow {
-            position: absolute; top: 5%; right: 15%; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(255,230,155,0.45) 0%, transparent 60%);
-            mix-blend-mode: screen; animation: pulse-light 6s ease-in-out infinite alternate;
+        /* --- Minimal Navbar --- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            display: flex; justify-content: center; align-items: center;
+            padding: 20px 40px; box-sizing: border-box;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 90; border-bottom: 1px solid var(--glass-border);
         }
-        .god-rays {
-            position: absolute; top: -10%; right: -10vw; width: 80vw; height: 120vh;
-            background: repeating-linear-gradient(45deg, rgba(255, 230, 155, 0.06) 0%, rgba(255, 230, 155, 0.06) 2%, transparent 2%, transparent 4%);
-            mix-blend-mode: overlay; opacity: 0.6; transform: rotate(-15deg);
-            animation: pulse-light 8s ease-in-out infinite alternate;
-        }
-        @keyframes pulse-light { 0% { opacity: 0.5; } 100% { opacity: 0.8; } }
         
-        .cloud { position: absolute; filter: blur(1px); animation: drift linear infinite; opacity: 0.85; }
-        @keyframes drift { 0% { transform: translateX(-10vw); } 100% { transform: translateX(110vw); } }
+        .nav-logo { font-size: 1.5rem; letter-spacing: 1px; color: var(--text-color); opacity: 0.8; }
 
-        /* --- LAYER 2: PURE CSS MOUNTAINS (No more ugly emojis) --- */
-        #layer-mountains { z-index: 2; }
-        .css-mountain {
-            position: absolute; bottom: 25%;
-            background: linear-gradient(180deg, var(--mountain-back) 0%, var(--mountain-front) 100%);
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: 0.6;
-            filter: drop-shadow(0 -5px 15px rgba(137, 214, 255, 0.3));
+        /* --- Anime Slice-of-Life Cozy Corner --- */
+        #cozy-corner {
+            position: fixed; bottom: 30px; left: 40px;
+            display: flex; align-items: flex-end; gap: 15px;
+            z-index: 9999; display: none; opacity: 0; transition: opacity 2s ease;
         }
 
-        /* --- LAYER 3: PURE CSS ROLLING HILLS (Replacing background trees) --- */
-        #layer-hills { z-index: 3; }
-        .css-hill {
-            position: absolute; bottom: 20%;
-            background: linear-gradient(180deg, var(--hill-back) 0%, var(--hill-front) 100%);
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: 0.8;
-            filter: drop-shadow(0 -5px 15px rgba(134, 200, 107, 0.2));
+        .desk-item {
+            position: relative; transition: transform 0.3s ease;
+            filter: drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15));
         }
 
-        /* --- LAYER 4: TERRAIN / MAIN GROUND --- */
-        #layer-ground { z-index: 4; }
-        .terrain-base {
-            position: absolute; bottom: -5vh; left: -5vw; width: 110vw; height: 35vh;
-            background: linear-gradient(180deg, var(--grass-light) 0%, var(--grass-dark) 100%);
-            border-radius: 50% 50% 0 0 / 20% 20% 0 0;
-            box-shadow: inset 0 20px 40px rgba(255,255,255,0.15), 0 -10px 20px rgba(0,0,0,0.1);
-        }
+        .desk-item:hover { transform: translateY(-5px); }
 
-        /* --- LAYER 5: ENVIRONMENT SCENERY (Your Assets, Properly Scaled) --- */
-        #layer-scenery { z-index: 5; }
+        /* Cassette Player Specifics */
+        .cassette-player { cursor: pointer; transition: all 0.4s ease; }
         
-        @keyframes sway-ground { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
-        .landscape-item {
-            position: absolute; transform-origin: bottom center; animation: sway-ground 6s ease-in-out infinite alternate;
-            pointer-events: none; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+        .cassette-player::before {
+            content: "📼 A Little Mixtape";
+            position: absolute; top: -40px; left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: white; color: var(--text-color);
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: bold;
+            opacity: 0; pointer-events: none; transition: all 0.3s ease;
+            border: 1px solid var(--glass-border); white-space: nowrap;
         }
 
-        /* The giant tree - scaled to fit screen gracefully */
-        .main-tree-bridge {
-            bottom: 22vh; right: 5vw; width: auto; height: 45vh; max-width: 40vw; object-fit: contain;
-        }
+        .cassette-player:hover::before { opacity: 1; transform: translateX(-50%) scale(1); }
 
-        /* Cottage & CSS Smoke - scaled down */
-        .cottage-wrapper {
-            position: absolute; bottom: 23vh; left: 12vw; height: 30vh; width: auto; z-index: 5;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
-        }
-        .cottage-img { height: 100%; width: auto; }
+        .cassette-player.playing { filter: drop-shadow(0 0 15px rgba(255, 230, 150, 0.8)) drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15)); }
         
-        .chimney { position: absolute; top: 8%; left: 65%; z-index: -1; }
-        .smoke {
-            position: absolute; width: 25px; height: 25px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6); filter: blur(6px);
-            animation: smoke-anim 6s linear infinite;
-        }
-        .s2 { animation-delay: 2s; } .s3 { animation-delay: 4s; }
-        @keyframes smoke-anim {
-            0% { opacity: 0; transform: translateY(0) scale(0.3); }
-            20% { opacity: 0.6; }
-            100% { opacity: 0; transform: translateY(-120px) translateX(30px) scale(2.5); }
-        }
+        .cassette-player.playing::before { content: "🎵 Now Playing"; opacity: 1; background: #FFF6CC; }
 
-        /* Scattered Mushrooms */
-        .shroom1 { bottom: 18vh; left: 32vw; height: 6vh; }
-        .shroom2 { bottom: 15vh; left: 10vw; height: 5vh; transform: scaleX(-1); animation-duration: 7s; }
-        .shroom3 { bottom: 20vh; right: 38vw; height: 4vh; animation-duration: 4s; }
+        .reels-group { transform-origin: center; }
+        .playing .reels-group { animation: spinReels 3s linear infinite; }
 
-        /* --- LAYER 6: INTERACTIVE UI OBJECTS (Scaled beautifully) --- */
-        #layer-objects { z-index: 6; pointer-events: none; }
-        
-        @keyframes gentle-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
+        @keyframes spinReels { 100% { transform: rotate(360deg); } }
 
-        .interactive-prop {
-            position: absolute; pointer-events: auto; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); transform-origin: bottom center;
-            animation: gentle-float 3s ease-in-out infinite alternate;
-        }
-        .interactive-prop:hover {
-            transform: scale(1.15) translateY(-10px) rotate(-3deg);
-            filter: drop-shadow(0 20px 25px rgba(0,0,0,0.3)) drop-shadow(0 0 15px rgba(255, 230, 155, 0.6));
-            animation: none;
-        }
-
-        /* Icons properly sized to not overwhelm the scene */
-        .prop-mailbox { bottom: 18vh; left: 28vw; font-size: 4rem; line-height: 1; animation-delay: 0s; }
-        .prop-sign { bottom: 15vh; left: 42vw; height: 16vh; width: auto; animation-delay: -1s; }
-        
-        .jar-container { position: absolute; bottom: 18vh; right: 32vw; pointer-events: auto; }
-        .stump { font-size: 4rem; line-height: 1; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
-        .prop-jar { position: absolute; bottom: 70%; left: 15%; font-size: 3rem; line-height: 1; z-index: 2; animation-delay: -2s; }
-
-        .prop-gramophone { bottom: 17vh; left: 6vw; font-size: 3.5rem; line-height: 1; z-index: 6; animation-delay: -1.5s; }
-        .prop-gramophone.playing { animation: wobble 2s infinite alternate; filter: drop-shadow(0 0 20px var(--sunlight)); }
-        @keyframes wobble { 0% { transform: rotate(-3deg) scale(1.05); } 100% { transform: rotate(3deg) scale(1.05); } }
-
-        /* --- LAYER 7: SWAYING FOREGROUND FRAMING (Hug the edges!) --- */
-        #layer-foreground { z-index: 7; filter: blur(3px) drop-shadow(0 20px 30px rgba(0,0,0,0.5)); pointer-events: none; }
-        
-        @keyframes sway-fg { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
-        
-        .fg-sakura-left { position: absolute; top: -5vh; left: -2vw; height: 45vh; width: auto; transform-origin: top left; animation: sway-fg 8s ease-in-out infinite alternate; }
-        .fg-sakura-right { position: absolute; top: -5vh; right: -2vw; height: 45vh; width: auto; transform-origin: top right; animation: sway-fg 9s ease-in-out infinite alternate-reverse; }
-        .fg-floral-bottom { position: absolute; bottom: -5vh; left: -2vw; height: 35vh; width: auto; transform-origin: bottom left; animation: sway-fg 7s ease-in-out infinite alternate; }
-        .fg-sakura-bottom { position: absolute; bottom: -5vh; right: -2vw; height: 35vh; width: auto; transform-origin: bottom right; animation: sway-fg 6s ease-in-out infinite alternate-reverse; }
-
-        /* --- LAYER 8: PARTICLES (Petals & Fireflies) --- */
-        #layer-particles { z-index: 8; pointer-events: none; }
-        
-        /* JPG Petals using mix-blend-mode to remove white background */
-        .petal {
-            position: absolute; width: 22px; height: 22px; opacity: 0.85;
-            background-image: url('image_f3ad05.jpg'); background-size: cover;
-            mix-blend-mode: multiply; 
-            animation: fall linear forwards; filter: drop-shadow(0 5px 5px rgba(246, 165, 201, 0.4));
-        }
-        @keyframes fall {
-            0% { transform: translate(0, -10vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.85; }
-            90% { opacity: 0.85; }
-            100% { transform: translate(-30vw, 110vh) rotate(360deg); opacity: 0; }
-        }
-
-        .firefly {
-            position: absolute; width: 5px; height: 5px; background: #FFF6CC; border-radius: 50%;
-            box-shadow: 0 0 8px #FFE69B, 0 0 15px #FFE69B;
-            animation: float-up linear forwards; mix-blend-mode: screen;
-        }
-        @keyframes float-up {
-            0% { transform: translateY(10vh) translateX(0) scale(0); opacity: 0; }
-            20% { opacity: 1; transform: translateY(-10vh) translateX(15px) scale(1); }
-            80% { opacity: 1; transform: translateY(-30vh) translateX(-15px) scale(1); }
-            100% { transform: translateY(-50vh) translateX(0) scale(0); opacity: 0; }
-        }
-
-        /* --- UI: Game Tooltip --- */
-        #game-tooltip {
-            position: fixed; padding: 8px 18px; border-radius: 10px;
-            background: rgba(124, 90, 60, 0.95); color: #FFF8F0;
-            font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
-            z-index: 9999; pointer-events: none; opacity: 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 2px solid #5A3A20;
-            transition: opacity 0.2s ease; transform: translate(-50%, -150%);
-            letter-spacing: 0.5px;
-        }
-
-        /* --- THE ORIGINAL MAGICAL LOADING SCREEN & STORYBOOK COVER --- */
+        /* --- Phase 1: Loading Screen --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, #DDEEFF 0%, #F2ECFF 40%, #FFDCEB 100%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 20000; transition: opacity 1s ease-out; pointer-events: none;
+            background: var(--bg-gradient); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 200; transition: opacity 1s ease-out;
         }
+
         .heart-bar-container {
             width: 200px; height: 10px; background: rgba(255,255,255,0.5);
             border-radius: 10px; margin-top: 20px; overflow: hidden; position: relative;
         }
-        .heart-bar { height: 100%; width: 0%; background: #FFDCEB; border-radius: 10px; animation: fillBar 3s ease-in-out forwards; }
+
+        .heart-bar {
+            height: 100%; width: 0%; background: #FFDCEB;
+            border-radius: 10px; animation: fillBar 3s ease-in-out forwards;
+        }
+
         @keyframes fillBar { to { width: 100%; } }
 
+        /* --- Phase 2: Storybook Cover --- */
         #storybook-cover {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, #DDEEFF 0%, #F2ECFF 40%, #FFDCEB 100%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            z-index: 10000; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
+            background: var(--bg-gradient); display: none; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            z-index: 150; transition: opacity 1.5s ease, transform 1.5s ease; cursor: pointer; 
         }
+
         .storybook-text {
-            max-width: 500px; padding: 40px; background: rgba(255, 255, 255, 0.4); border-radius: 30px;
-            backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: gentleFloat 4s ease-in-out infinite;
+            max-width: 500px; padding: 40px; background: rgba(255, 255, 255, 0.4);
+            border-radius: 30px; backdrop-filter: blur(10px);
+            border: 2px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            animation: gentleFloat 4s ease-in-out infinite;
         }
-        .storybook-text h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; margin: 10px 0; color: var(--text-color); }
+
+        .storybook-text h1 { font-size: 2.8rem; margin: 10px 0; color: #5A4A78; }
         .storybook-text p { font-size: 1.2rem; line-height: 1.8; margin: 20px 0; }
         .storybook-text .hint { font-size: 0.9rem; opacity: 0.6; margin-top: 30px; font-style: italic; }
+
         @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
+        /* --- NEW: IMMERSIVE SCENERY LAYER --- */
+        #scenery-layer {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; /* Crucial: allows clicking cards through the tree */
+            z-index: 1; /* Sits behind the cards */
+        }
+
+        .scene-cottage {
+            position: absolute; bottom: 16vh; left: 8vw;
+            height: 38vh; width: auto; z-index: 1;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
+        }
+
+        .grass-bg {
+            position: absolute; bottom: 0; left: 0;
+            width: 100vw; height: 22vh; /* Fills the bottom perfectly to prevent cuts */
+            background-image: url('grass.png');
+            background-size: cover; background-position: bottom center;
+            background-repeat: no-repeat; z-index: 2;
+        }
+
+        .scene-tree {
+            position: absolute; bottom: 0; right: 0;
+            height: 75vh; width: auto; z-index: 3;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.25));
+        }
+
+        .scene-shroom {
+            position: absolute; z-index: 4;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
+        }
+
+        /* --- Phase 3: Main Dashboard --- */
+        .dashboard-container {
+            position: relative;
+            max-width: 900px;
+            margin: 220px auto 0;
+            padding: 40px 20px 160px 20px;
+            text-align: center; display: none; opacity: 0;
+            transform: translateY(30px); transition: all 1.5s ease;
+            z-index: 10; /* Keeps cards safely above the grass/tree */
+        }
+
+        .dashboard-container.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- Interactive Garden Decor --- */
+        .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
+
+        /* Parallax Clouds (Confined to Top/Middle) */
+        .cloud { animation: drift-r linear infinite; pointer-events: none; }
+        .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
+        .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
+        .cloud-mid { font-size: 2.5rem; opacity: 0.5; z-index: -3; filter: blur(1px); }
+        .cloud-far { font-size: 1.5rem; opacity: 0.3; z-index: -4; filter: blur(2px); }
+        .cloud-farthest { font-size: 1rem; opacity: 0.15; z-index: -5; filter: blur(4px); }
+
+        @keyframes drift-r { from { transform: translateX(-20vw); } to { transform: translateX(110vw); } }
+
+        /* Stars & Flowers */
+        .star { font-size: 1.5rem; opacity: 0.6; z-index: -5; }
+        .flower { font-size: 1.8rem; opacity: 0.6; z-index: -5; animation: gentle-sway 8s ease-in-out infinite alternate; }
+        @keyframes gentle-sway { 0% { transform: translateY(0) rotate(-10deg); } 100% { transform: translateY(-20px) rotate(15deg); } }
+
+        /* --- Centered 3-Card Layout --- */
+        .grid {
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; position: relative; z-index: 10; 
+        }
+
+        .card {
+            width: 250px; box-sizing: border-box; padding: 35px 20px; border-radius: 20px 35px 15px 30px; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 1.3rem; font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; gap: 15px; color: var(--text-color);
+            background: var(--glass-bg); backdrop-filter: blur(8px); border: 2px solid var(--glass-border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); cursor: pointer;
+        }
+
+        .card span { font-size: 3.5rem; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-radius: 30px 15px 35px 20px; 
+        }
+
+        .card:nth-child(1) { background-color: rgba(255, 220, 235, 0.6); } 
+        .card:nth-child(2) { background-color: rgba(221, 238, 255, 0.6); } 
+        .card:nth-child(3) { background-color: rgba(255, 246, 204, 0.6); } 
+
+        .footer {
+            margin-top: 80px; font-size: 1rem; opacity: 0.8; font-family: 'DM Serif Display', serif;
+        }
+
+        /* --- New Hover Toast --- */
+        #hover-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 12px 24px; border-radius: 25px; background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
+            color: var(--text-color); font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem;
+            z-index: 1000; display: none; pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid white; white-space: nowrap;
+        }
     </style>
 </head>
 <body>
 
-    <!-- EXACT Audio Atmosphere Mapping -->
     <audio id="bg-dashboard" loop src="first-snow.mp3"></audio>
     <audio id="bg-smilebox" loop src="smilebox-ambient.mp3"></audio>
-    <audio id="bg-happy" loop src="katawaredoki.mp3"></audio>
+    <audio id="bg-happy" loop src="zenzenzense-piano.mp3"></audio>
     <audio id="bg-sad" loop src="sparkle-piano.mp3"></audio>
+    <audio id="bg-katawaredoki" loop src="katawaredoki.mp3"></audio>
+    
     <audio id="sfx-rain" loop src="soft-rain.mp3"></audio>
 
-    <!-- UI Tooltip -->
-    <div id="game-tooltip"></div>
+    <div id="hover-toast"></div>
 
-    <!-- THE ORIGINAL MAGICAL LOADING SCREEN -->
     <div id="loading-screen">
-        <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 600; color: #5A4A78;">Collecting magic...</h2>
+        <h2 style="font-family: 'Quicksand', sans-serif; font-weight: 600;">Collecting magic...</h2>
         <div class="heart-bar-container"><div class="heart-bar"></div></div>
     </div>
 
-    <!-- THE ORIGINAL STORYBOOK COVER -->
-    <div id="storybook-cover" onclick="enterWorld()">
+    <div id="storybook-cover" onclick="openStorybook()">
         <div class="storybook-text">
             <div style="font-size: 2rem;">🌸</div>
             <h1>Welcome to Your Happy Place</h1>
@@ -275,219 +271,272 @@
         </div>
     </div>
 
-    <!-- THE LIVING WORLD ENGINE -->
-    <div id="world">
+    <nav id="main-nav" style="display: none; opacity: 0; transition: opacity 1s;">
+        <div class="nav-logo">🌸 Happy Place</div>
+    </nav>
+
+    <!-- NEW BACKGROUND SCENERY LAYER -->
+    <div id="scenery-layer">
+        <!-- Cottage (Farther back) -->
+        <img src="cottage.png" class="scene-cottage" alt="Cottage" onerror="this.style.display='none'">
         
-        <!-- Layer 1: Sky & Atmosphere -->
-        <div class="layer" id="layer-sky">
-            <div class="sun-glow"></div>
-            <div class="god-rays"></div>
-            <div class="cloud" style="top: 15%; font-size: 10rem; animation-duration: 120s;">☁️</div>
-            <div class="cloud" style="top: 30%; font-size: 7rem; animation-duration: 80s; animation-delay: -40s; opacity: 0.5;">☁️</div>
-        </div>
+        <!-- Grass base (Prevents the awkward cut) -->
+        <div class="grass-bg"></div>
 
-        <!-- Layer 2: Pure CSS Mountains (No Emojis) -->
-        <div class="layer" id="layer-mountains">
-            <div class="css-mountain" style="left: -10vw; width: 45vw; height: 50vh;"></div>
-            <div class="css-mountain" style="left: 20vw; width: 65vw; height: 65vh; opacity: 0.4;"></div>
-            <div class="css-mountain" style="right: -5vw; width: 50vw; height: 55vh;"></div>
-        </div>
+        <!-- Cherry Blossom Tree (Static, bottom right) -->
+        <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
 
-        <!-- Layer 3: Pure CSS Rolling Hills (No Emojis) -->
-        <div class="layer" id="layer-hills">
-            <div class="css-hill" style="left: -15vw; width: 60vw; height: 40vh;"></div>
-            <div class="css-hill" style="right: -10vw; width: 70vw; height: 45vh; background: linear-gradient(180deg, #96D294 0%, #AEE0A0 100%);"></div>
-        </div>
-
-        <!-- Layer 4: Terrain / Ground -->
-        <div class="layer" id="layer-ground">
-            <div class="terrain-base"></div>
-        </div>
-
-        <!-- Layer 5: Scenery & Architecture -->
-        <div class="layer" id="layer-scenery">
-            <!-- Scaled Background Tree -->
-            <img src="image_f3adc0.png" class="main-tree-bridge landscape-item" onerror="this.style.display='none'">
-            
-            <!-- Scaled Mushrooms -->
-            <img src="image_f3b181.png" class="env-shroom shroom1" onerror="this.style.display='none'">
-            <img src="image_f3b1a2.png" class="env-shroom shroom2" onerror="this.style.display='none'">
-            <img src="image_f3b181.png" class="env-shroom shroom3" onerror="this.style.display='none'">
-            
-            <!-- Scaled Cottage -->
-            <div class="cottage-wrapper landscape-item">
-                <div class="chimney">
-                    <div class="smoke s1"></div>
-                    <div class="smoke s2"></div>
-                    <div class="smoke s3"></div>
-                </div>
-                <img src="cottage.png" class="cottage-img" onerror="this.style.display='none'">
-            </div>
-        </div>
-
-        <!-- Layer 6: Interactive Objects (Icons Scaled Down) -->
-        <div class="layer" id="layer-objects">
-            
-            <div id="gramophone" class="interactive-prop prop-gramophone" onclick="toggleWorldMusic()" onmousemove="moveToast(event, '📻 Play Ambience')" onmouseleave="hideToast()">📻</div>
-            
-            <div id="mailbox" class="interactive-prop prop-mailbox" onclick="openGameMenu('letters')" onmousemove="moveToast(event, '📮 Check the Mail')" onmouseleave="hideToast()">📮</div>
-
-            <img src="image_f3b483.png" id="sign" class="interactive-prop prop-sign" onclick="openGameMenu('smilebox')" onmousemove="moveToast(event, '🪵 Open Smile Box')" onmouseleave="hideToast()" onerror="this.style.display='none'">
-
-            <div class="jar-container interactive-prop" onclick="openGameMenu('jar')" onmousemove="moveToast(event, '🍯 Pick a Happy Note')" onmouseleave="hideToast()">
-                <div class="stump">🪵</div>
-                <div id="jar" class="prop-jar">🫙</div>
-            </div>
-
-        </div>
-
-        <!-- Layer 7: Foreground Framing (Anchored to corners) -->
-        <div class="layer" id="layer-foreground">
-            <img src="image_f3ad47.png" class="fg-sakura-left" onerror="this.style.display='none'">
-            <img src="image_f3b128.png" class="fg-sakura-right" onerror="this.style.display='none'">
-            <img src="image_f3b103.png" class="fg-floral-bottom" onerror="this.style.display='none'">
-            <img src="image_f3b0cb.png" class="fg-sakura-bottom" onerror="this.style.display='none'">
-        </div>
-
-        <!-- Layer 8: Particles -->
-        <div class="layer" id="layer-particles"></div>
-
+        <!-- Random Foreground Mushrooms -->
+        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 4%; left: 15%; width: 70px;" onerror="this.style.display='none'">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 8%; left: 38%; width: 50px;" onerror="this.style.display='none'">
+        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 2%; right: 42%; width: 90px; transform: scaleX(-1);" onerror="this.style.display='none'">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 6%; right: 30%; width: 60px;" onerror="this.style.display='none'">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 12%; left: 5%; width: 45px;" onerror="this.style.display='none'">
     </div>
 
-    <!-- Linked External Logic -->
+    <div id="cozy-corner">
+        <div class="desk-item cassette-player" id="cassette-player" onclick="toggleMusic()" onmouseover="showToast('📼 A little soundtrack for your visit.')" onmouseout="hideToast()">
+            <svg viewBox="0 0 90 60" width="90" height="60">
+                <rect x="5" y="10" width="80" height="45" rx="6" fill="#F2ECFF" stroke="var(--outline-color)" stroke-width="2"/>
+                <rect x="10" y="15" width="70" height="35" rx="4" fill="#ffffff" stroke="var(--outline-color)" stroke-width="2"/>
+                <rect x="20" y="22" width="50" height="20" rx="2" fill="#3a3a3a"/>
+                
+                <g class="reels-group" style="transform-origin: 32px 32px;">
+                    <circle cx="32" cy="32" r="7" fill="#FFF6CC"/>
+                    <circle cx="32" cy="32" r="2" fill="#3a3a3a"/>
+                    <line x1="32" y1="25" x2="32" y2="39" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="25" y1="32" x2="39" y2="32" stroke="#3a3a3a" stroke-width="1.5"/>
+                </g>
+
+                <g class="reels-group" style="transform-origin: 58px 32px;">
+                    <circle cx="58" cy="32" r="7" fill="#FFF6CC"/>
+                    <circle cx="58" cy="32" r="2" fill="#3a3a3a"/>
+                    <line x1="58" y1="25" x2="58" y2="39" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <line x1="51" y1="32" x2="65" y2="32" stroke="#3a3a3a" stroke-width="1.5"/>
+                </g>
+
+                <line x1="32" y1="25" x2="58" y2="25" stroke="#ffffff" stroke-width="1"/>
+                
+                <rect x="25" y="5" width="10" height="5" rx="1" fill="#FFDCEB" stroke="var(--outline-color)" stroke-width="1.5"/>
+                <rect x="40" y="5" width="10" height="5" rx="1" fill="#DDEEFF" stroke="var(--outline-color)" stroke-width="1.5"/>
+            </svg>
+            
+            <div id="secret-song-btn" onclick="playSecretSong(event)" style="display:none; position:absolute; top:-20px; right:-10px; font-size:1.2rem; cursor:pointer; filter:drop-shadow(0 0 5px rgba(255,255,255,0.8));">🎵</div>
+        </div>
+    </div>
+
+    <div class="dashboard-container" id="main-dashboard">
+        
+        <!-- Clouds Restrained to Top/Middle ONLY -->
+        <div class="decor cloud cloud-farthest" style="top: 12%; animation-duration: 120s; animation-delay: -10s;">☁️</div>
+        <div class="decor cloud cloud-farthest" style="top: 18%; animation-duration: 140s; animation-delay: -60s;">☁️</div>
+        
+        <div class="decor cloud cloud-far" style="top: 5%; animation-duration: 85s; animation-delay: -40s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 35%; animation-duration: 90s; animation-delay: -5s;">☁️</div>
+        <div class="decor cloud cloud-far" style="top: 28%; animation-duration: 100s; animation-delay: -10s;">☁️</div>
+
+        <div class="decor cloud cloud-mid" style="top: 20%; animation-duration: 58s; animation-delay: -25s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 45%; animation-duration: 60s; animation-delay: -35s;">☁️</div>
+        <div class="decor cloud cloud-mid" style="top: 38%; animation-duration: 65s; animation-delay: -15s;">☁️</div>
+
+        <div class="decor cloud cloud-near" style="top: 25%; animation-duration: 40s; animation-delay: 0s;">☁️</div>
+        <div class="decor cloud cloud-near" style="top: 42%; animation-duration: 45s; animation-delay: -25s;">☁️</div>
+
+        <div class="decor cloud cloud-closest" style="top: 15%; animation-duration: 28s; animation-delay: -15s;">☁️</div>
+        <div class="decor cloud cloud-closest" style="top: 48%; animation-duration: 32s; animation-delay: -5s;">☁️</div>
+        
+        <!-- Stars & Flowers -->
+        <div class="decor star" style="top: 12%; right: 4%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 60%; left: 3%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 25%; left: 8%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 80%; right: 8%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 45%; right: 2%;" onclick="twinkle(this)">⭐</div>
+        <div class="decor star" style="top: 8%; left: 20%;" onclick="twinkle(this)">⭐</div>
+
+        <div class="decor flower" style="top: 18%; left: 4%; animation-delay: 0s;">🌸</div>
+        <div class="decor flower" style="top: 65%; right: 3%; animation-delay: -2s;">🌼</div>
+        <div class="decor flower" style="top: 85%; left: 6%; animation-delay: -4s;">🌸</div>
+        <div class="decor flower" style="top: 32%; right: 6%; animation-delay: -1s;">🌷</div>
+        <div class="decor flower" style="top: 70%; left: 10%; animation-delay: -3s;">🌼</div>
+        <div class="decor flower" style="top: 22%; right: 12%; animation-delay: -5s;">🌸</div>
+        <div class="decor flower" style="top: 50%; left: 2%; animation-delay: -2.5s;">✨</div>
+        <div class="decor flower" style="top: 40%; right: 4%; animation-delay: -6s;">✨</div>        
+
+        <div class="grid">
+            <div class="card" onclick="window.startSmileBox()" onmouseover="showToast('🌈 Let\'s find a little sunshine together.')" onmouseout="hideToast()">
+                <span>🌸</span> Smile Box
+            </div>
+            
+            <div class="card" onclick="window.openLetters()" onmouseover="showToast('🌸 Open whenever you need to hear from me.')" onmouseout="hideToast()">
+                <span>💌</span> Letters
+            </div>
+            
+            <div class="card" onclick="alert('Happy Jar opening...')" onmouseover="showToast('🍯 Pick a note... you never know what you\'ll find.')" onmouseout="hideToast()">
+                <span>🍯</span> Happy Jar
+            </div>
+        </div>
+
+        <div class="footer">
+            Made with lots of love and a little bit of magic. ✨
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="smilebox.js"></script>
     <script src="letters.js"></script>
 
     <script>
-        // --- LOADING SCREEN & ENTRANCE SEQUENCE ---
+        // --- Hover Toast Logic ---
+        function showToast(text) {
+            const toast = document.getElementById('hover-toast');
+            if(toast) {
+                toast.innerText = text;
+                toast.style.display = 'block';
+            }
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('hover-toast');
+            if(toast) toast.style.display = 'none';
+        }
+
+        // --- Click Burst Sparkle Effect ---
+        document.addEventListener('click', function(e) {
+            for(let i=0; i<3; i++) {
+                let sparkle = document.createElement('div');
+                sparkle.innerHTML = '✨';
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = e.clientX + 'px';
+                sparkle.style.top = e.clientY + 'px';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.zIndex = '9999';
+                sparkle.style.transition = 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.style.transform = `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px) scale(0)`;
+                    sparkle.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => { sparkle.remove(); }, 600);
+            }
+        });
+
+        // --- Cinematic Cassette Player Logic (Master Toggle) ---
+        let isPlaying = false;
+
+        function toggleMusic() {
+            const playerUI = document.getElementById('cassette-player');
+            const dashboardMusic = document.getElementById('bg-dashboard');
+
+            if (isPlaying) {
+                // MASTER PAUSE
+                if (window.stopAllMusic) {
+                    window.stopAllMusic();
+                } else {
+                    if(dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
+                    if(playerUI) playerUI.classList.remove('playing');
+                }
+                isPlaying = false;
+            } else {
+                // MASTER PLAY
+                const trackToResume = (window.currentTrack && !window.currentTrack.paused) ? window.currentTrack : dashboardMusic;
+                
+                if (trackToResume) {
+                    trackToResume.play().catch(e => console.log("Playback blocked:", e));
+                    if(playerUI) playerUI.classList.add('playing');
+                    
+                    // Fade it in
+                    let fade = setInterval(() => {
+                        if (trackToResume.volume < 0.15) {
+                            trackToResume.volume = Math.min(trackToResume.volume + 0.01, 0.15);
+                        } else {
+                            clearInterval(fade);
+                        }
+                    }, 50);
+                    isPlaying = true;
+                }
+            }
+        }
+
+       // --- Hidden Interactions ---
+        function twinkle(element) {
+            element.classList.add('twinkle');
+            setTimeout(() => { element.classList.remove('twinkle'); }, 1000);
+        }
+
+        // --- Check for Secret Song ---
+        let totalVisits = 0;
+        try {
+            totalVisits = localStorage.getItem('siteVisits') ? parseInt(localStorage.getItem('siteVisits')) : 0;
+            totalVisits++;
+            localStorage.setItem('siteVisits', totalVisits);
+        } catch(e) {} 
+
+        if (totalVisits >= 10) {
+            const secretBtn = document.getElementById('secret-song-btn');
+            if(secretBtn) secretBtn.style.display = 'block';
+        }
+
+        function playSecretSong(e) {
+            e.stopPropagation(); 
+            showToast("A song I saved for you. 🤍");
+            
+            if(window.crossfade) {
+                window.crossfade('bg-katawaredoki', 0.4);
+            }
+        }
+
+        // --- Sequence Control ---
+        // 1. Remove Loading Screen, Show Storybook Cover
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
             setTimeout(() => {
                 if(loading) loading.style.display = 'none';
+                let cover = document.getElementById('storybook-cover');
+                if(cover) {
+                    cover.style.display = 'flex';
+                    void cover.offsetWidth; 
+                    cover.style.opacity = '1';
+                }
             }, 1000);
         }, 3000);
 
-        function enterWorld() {
-            const cover = document.getElementById('storybook-cover');
+        // 2. Click Cover to Open Book
+        function openStorybook() {
+            let cover = document.getElementById('storybook-cover');
             cover.style.opacity = '0';
             cover.style.transform = 'scale(1.1)'; 
             
-            toggleWorldMusic(true); 
+            // Start music IMMEDIATELY upon human click
+            if(!isPlaying) {
+                toggleMusic();
+            }
             
-            setTimeout(() => { 
-                cover.style.display = 'none'; 
+            setTimeout(() => {
+                cover.style.display = 'none';
+                
+                // Show Nav & Cozy Corner
+                let nav = document.getElementById('main-nav');
+                let corner = document.getElementById('cozy-corner');
+                
+                if(nav) nav.style.display = 'flex';
+                if(corner) corner.style.display = 'flex';
+                
+                setTimeout(() => {
+                    if(nav) nav.style.opacity = '1';
+                    if(corner) corner.style.opacity = '1';
+                }, 50);
+
+                // Show Dashboard
+                let dashboard = document.getElementById('main-dashboard');
+                if(dashboard) {
+                    dashboard.style.display = 'block';
+                    void dashboard.offsetWidth;
+                    dashboard.classList.add('visible');
+                }
             }, 1500);
-        }
-
-        // --- GAME UI: TOOLTIP ---
-        const tooltip = document.getElementById('game-tooltip');
-        function moveToast(e, text) {
-            tooltip.innerText = text;
-            tooltip.style.opacity = '1';
-            tooltip.style.left = e.clientX + 'px';
-            tooltip.style.top = (e.clientY - 30) + 'px';
-        }
-        function hideToast() { tooltip.style.opacity = '0'; }
-
-        // --- PARALLAX ENGINE ---
-        const sceneLayers = [
-            { el: document.getElementById('layer-mountains'), speed: 2 },
-            { el: document.getElementById('layer-hills'), speed: 5 },
-            { el: document.getElementById('layer-ground'), speed: 12 },
-            { el: document.getElementById('layer-scenery'), speed: 12 },
-            { el: document.getElementById('layer-objects'), speed: 15 },
-            { el: document.getElementById('layer-foreground'), speed: 30 }
-        ];
-
-        window.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5);
-            const y = (e.clientY / window.innerHeight - 0.5);
-
-            sceneLayers.forEach(layer => {
-                if(layer.el) {
-                    layer.el.style.transform = `translate(${x * layer.speed}vw, ${y * layer.speed}vh)`;
-                }
-            });
-        });
-
-        // --- PARTICLE ENGINE (Petals & Fireflies) ---
-        const particleLayer = document.getElementById('layer-particles');
-
-        function spawnPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.style.left = (Math.random() * 120 - 10) + 'vw';
-            petal.style.width = petal.style.height = (15 + Math.random() * 20) + 'px';
-            petal.style.animationDuration = (12 + Math.random() * 15) + 's'; 
-            particleLayer.appendChild(petal);
-            setTimeout(() => { petal.remove(); }, 28000); 
-        }
-
-        function spawnFirefly() {
-            const firefly = document.createElement('div');
-            firefly.className = 'firefly';
-            firefly.style.left = (Math.random() * 100) + 'vw';
-            firefly.style.bottom = (Math.random() * 20) + 'vh';
-            firefly.style.animationDuration = (8 + Math.random() * 8) + 's';
-            particleLayer.appendChild(firefly);
-            setTimeout(() => { firefly.remove(); }, 16000);
-        }
-
-        setInterval(spawnPetal, 900); 
-        setInterval(spawnFirefly, 1500);
-
-        // --- INTERACTION & CINEMATIC CAMERA ZOOM ---
-        const world = document.getElementById('world');
-
-        function openGameMenu(type) {
-            hideToast();
-            
-            if (type === 'letters') {
-                world.className = 'zoom-mailbox';
-                setTimeout(() => { if(window.openLetters) window.openLetters(); }, 1200);
-            } 
-            else if (type === 'smilebox') {
-                world.className = 'zoom-sign';
-                setTimeout(() => { if(window.startSmileBox) window.startSmileBox(); }, 1200);
-            }
-            else if (type === 'jar') {
-                world.className = 'zoom-jar';
-                setTimeout(() => { alert("The Happy Jar opens... (Attach to jar logic)"); world.className = ''; }, 1200);
-            }
-        }
-
-        const originalCloseDrawer = window.closeDrawer;
-        window.closeDrawer = function() {
-            if(originalCloseDrawer) originalCloseDrawer();
-            world.className = ''; 
-        };
-
-        // --- AMBIENT AUDIO ENGINE ---
-        let isPlaying = false;
-        function toggleWorldMusic(forcePlay = false) {
-            const playerUI = document.getElementById('gramophone');
-            const dashboardMusic = document.getElementById('bg-dashboard');
-
-            if (isPlaying && !forcePlay) {
-                if (window.stopAllMusic) { window.stopAllMusic(); } 
-                else if (dashboardMusic) { dashboardMusic.pause(); dashboardMusic.volume = 0; }
-                playerUI.classList.remove('playing');
-                isPlaying = false;
-            } else {
-                const trackToResume = (window.currentTrack && !window.currentTrack.paused) ? window.currentTrack : dashboardMusic;
-                if (trackToResume) {
-                    trackToResume.play().catch(e => console.log("Playback blocked:", e));
-                    playerUI.classList.add('playing');
-                    
-                    let fade = setInterval(() => {
-                        if (trackToResume.volume < 0.15) {
-                            trackToResume.volume = Math.min(trackToResume.volume + 0.01, 0.15);
-                        } else { clearInterval(fade); }
-                    }, 50);
-                    isPlaying = true;
-                }
-            }
         }
     </script>
 </body>
