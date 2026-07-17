@@ -30,16 +30,16 @@
         }
         
         html, body {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
             overflow: hidden; /* ABSOLUTE SCROLL LOCK */
             height: 100vh;
             width: 100vw;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
             background: var(--bg-gradient);
             background-attachment: fixed;
             background-size: cover;
@@ -96,7 +96,6 @@
         .cassette-player:hover::before { opacity: 1; transform: translateX(-50%) scale(1); }
 
         .cassette-player.playing { filter: drop-shadow(0 0 15px rgba(255, 230, 150, 0.8)) drop-shadow(0 10px 10px rgba(90, 74, 120, 0.15)); }
-        
         .cassette-player.playing::before { content: "🎵 Now Playing"; opacity: 1; background: #FFF6CC; }
 
         .reels-group { transform-origin: center; }
@@ -147,78 +146,64 @@
         /* --- NEW: IMMERSIVE SCENERY LAYER --- */
         #scenery-layer {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0; 
+            bottom: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; 
+            z-index: 1; /* Establishes a clean stacking context below dashboard */
         }
 
         .grass-bg {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100vw;
-            height: 25vh; 
+            bottom: 0; left: 0; width: 100vw; height: 25vh; 
             background-image: url('grass.png');
             background-size: cover;
             background-position: bottom center;
             background-repeat: no-repeat;
-            z-index: -4; /* Placed far back */
-        }
-
-        .scene-tree {
-            position: absolute;
-            bottom: 0; /* PERFECTLY anchored to the bottom */
-            right: -5vw; /* Pushed slightly off the right side */
-            height: 85vh; /* Tall and prominent */
-            width: auto;
-            z-index: -3; /* PLACED IN FRONT OF GRASS to fix cutoff bug! */
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.25));
+            z-index: 1; /* Grass is the base layer */
         }
 
         .scene-cottage {
             position: absolute;
-            bottom: 15vh; /* Resting properly in the background */
+            bottom: 18vh; 
             left: 8vw;
-            height: 32vh; 
+            height: 35vh; 
             width: auto;
-            z-index: -5; /* Placed behind the grass for depth */
+            z-index: 0; /* Placed cleanly BEHIND the grass */
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+        }
+
+        .scene-tree {
+            position: absolute;
+            bottom: 0; /* Perfectly anchored to bottom edge */
+            right: -2vw; /* Pushed slightly to the right */
+            height: 90vh; /* Scaled up to be closer to camera */
+            width: auto;
+            z-index: 2; /* STRICTLY IN FRONT OF GRASS */
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
         }
 
         .scene-shroom {
             position: absolute;
-            z-index: -3; /* In front of grass */
+            z-index: 3; /* Always in front of grass */
             filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
         }
 
         /* --- Phase 3: Main Dashboard --- */
         .dashboard-container {
-            position: absolute;
-            top: 45vh; /* Using absolute positioning to prevent scrolling */
-            left: 50%;
-            transform: translate(-50%, -30%); /* Start slightly lower for transition */
-            width: 100%;
             max-width: 900px;
-            padding: 0 20px;
-            text-align: center; 
-            display: none; 
-            opacity: 0;
+            margin: 20vh auto 0; /* Uses margin to center so it doesn't break fixed clouds */
+            padding: 40px 20px; /* Removed massive bottom padding that caused scrolling */
+            text-align: center; display: none; opacity: 0;
+            position: relative; top: 30px; /* Uses top instead of transform for animation */
             transition: all 1.5s ease;
             z-index: 10;
         }
 
-        .dashboard-container.visible { 
-            opacity: 1; 
-            transform: translate(-50%, -50%); /* Rises into perfect center */
-        }
+        .dashboard-container.visible { opacity: 1; top: 0; }
 
         /* --- Interactive Garden Decor --- */
         .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
 
-        /* Parallax Clouds (Confined strictly to Top/Middle) */
+        /* Parallax Clouds (Confined to Top/Middle) */
         .cloud { animation: drift-r linear infinite; pointer-events: none; }
         .cloud-closest { font-size: 8rem; opacity: 0.9; z-index: -1; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
         .cloud-near { font-size: 4.5rem; opacity: 0.7; z-index: -2; }
@@ -304,21 +289,21 @@
 
     <!-- STATIC SCENERY LAYER -->
     <div id="scenery-layer">
-        <!-- Cottage (Placed farther back, behind grass) -->
-        <img src="cottage.png" class="scene-cottage" alt="Cottage" onerror="this.style.display='none'">
+        <!-- Cottage (Behind grass) -->
+        <img src="cottage.png" class="scene-cottage" alt="Cottage">
         
         <!-- Grass base -->
         <div class="grass-bg"></div>
 
-        <!-- Cherry Blossom Tree (Bottom right, flush with screen edge) -->
-        <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
+        <!-- Cherry Blossom Tree (IN FRONT of grass, completely flush with bottom) -->
+        <img src="image_f3adc0.png" class="scene-tree" alt="Tree">
 
-        <!-- Random Foreground Mushrooms (Front of grass) -->
-        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 2vh; left: 15vw; height: 9vh;" alt="Mushroom Cluster" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 5vh; left: 35vw; height: 6vh;" alt="Single Mushroom" onerror="this.style.display='none'">
-        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 1vh; right: 45vw; height: 10vh; transform: scaleX(-1);" alt="Mushroom Cluster" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 4vh; right: 30vw; height: 5vh;" alt="Single Mushroom" onerror="this.style.display='none'">
-        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 2vh; right: 10vw; height: 4vh;" alt="Single Mushroom" onerror="this.style.display='none'">
+        <!-- Random Foreground Mushrooms (In front of grass) -->
+        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 2vh; left: 15vw; height: 9vh;" alt="Mushroom Cluster">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 5vh; left: 35vw; height: 6vh;" alt="Single Mushroom">
+        <img src="image_f3b181.png" class="scene-shroom" style="bottom: 1vh; right: 45vw; height: 10vh; transform: scaleX(-1);" alt="Mushroom Cluster">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 4vh; right: 30vw; height: 5vh;" alt="Single Mushroom">
+        <img src="image_f3b1a2.png" class="scene-shroom" style="bottom: 2vh; right: 10vw; height: 4vh;" alt="Single Mushroom">
     </div>
 
     <div id="cozy-corner">
@@ -449,7 +434,7 @@
             }
         });
 
-        // --- Cinematic Cassette Player Logic (Master Toggle) ---
+        // --- Cinematic Cassette Player Logic ---
         let isPlaying = false;
 
         function toggleMusic() {
@@ -512,7 +497,6 @@
         }
 
         // --- Sequence Control ---
-        // 1. Remove Loading Screen, Show Storybook Cover
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
@@ -527,7 +511,6 @@
             }, 1000);
         }, 3000);
 
-        // 2. Click Cover to Open Book
         function openStorybook() {
             let cover = document.getElementById('storybook-cover');
             cover.style.opacity = '0';
