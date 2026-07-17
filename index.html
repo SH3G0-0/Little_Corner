@@ -22,7 +22,7 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>") 12 12, auto !important;
         }
 
-        /* --- Complete Scrollbar Removal --- */
+        /* --- Complete Scrollbar Removal & Scroll Lock --- */
         ::-webkit-scrollbar {
             display: none;
             width: 0px;
@@ -32,6 +32,9 @@
         html, body {
             -ms-overflow-style: none;
             scrollbar-width: none;
+            overflow: hidden; /* ABSOLUTE SCROLL LOCK */
+            height: 100vh;
+            width: 100vw;
         }
 
         body {
@@ -40,9 +43,7 @@
             background: var(--bg-gradient);
             background-attachment: fixed;
             background-size: cover;
-            min-height: 100vh;
             font-family: 'Quicksand', sans-serif;
-            overflow-x: hidden;
             color: var(--text-color);
         }
 
@@ -150,8 +151,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            pointer-events: none; /* Allows clicking cards through the scenery */
-            z-index: 0; /* Sits completely behind the cards */
+            pointer-events: none;
+            z-index: 0; 
         }
 
         .grass-bg {
@@ -159,52 +160,60 @@
             bottom: 0;
             left: 0;
             width: 100vw;
-            height: 25vh; /* Perfectly lines up and fills the bottom edge */
+            height: 25vh; 
             background-image: url('grass.png');
             background-size: cover;
             background-position: bottom center;
             background-repeat: no-repeat;
-            z-index: 2;
+            z-index: -4; /* Placed far back */
         }
 
         .scene-tree {
             position: absolute;
-            bottom: -2vh; /* Pulled down slightly to anchor firmly */
-            right: -2vw; /* Pushed to the very right edge */
-            height: 85vh; /* Scaled up to be closer to the screen */
+            bottom: 0; /* PERFECTLY anchored to the bottom */
+            right: -5vw; /* Pushed slightly off the right side */
+            height: 85vh; /* Tall and prominent */
             width: auto;
-            z-index: 3; /* Placed in front of the grass */
+            z-index: -3; /* PLACED IN FRONT OF GRASS to fix cutoff bug! */
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.25));
         }
 
         .scene-cottage {
             position: absolute;
-            bottom: 20vh; /* Lifted higher up to sit farther back */
+            bottom: 15vh; /* Resting properly in the background */
             left: 8vw;
-            height: 32vh; /* Scaled smaller to look distant */
+            height: 32vh; 
             width: auto;
-            z-index: 1; /* Placed behind the grass layer for depth */
+            z-index: -5; /* Placed behind the grass for depth */
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
         }
 
         .scene-shroom {
             position: absolute;
-            z-index: 3; /* Placed in front of the grass */
+            z-index: -3; /* In front of grass */
             filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
         }
 
         /* --- Phase 3: Main Dashboard --- */
         .dashboard-container {
+            position: absolute;
+            top: 45vh; /* Using absolute positioning to prevent scrolling */
+            left: 50%;
+            transform: translate(-50%, -30%); /* Start slightly lower for transition */
+            width: 100%;
             max-width: 900px;
-            margin: 220px auto 0;
-            padding: 40px 20px 160px 20px;
-            text-align: center; display: none; opacity: 0;
-            transform: translateY(30px); transition: all 1.5s ease;
-            position: relative;
+            padding: 0 20px;
+            text-align: center; 
+            display: none; 
+            opacity: 0;
+            transition: all 1.5s ease;
             z-index: 10;
         }
 
-        .dashboard-container.visible { opacity: 1; transform: translateY(0); }
+        .dashboard-container.visible { 
+            opacity: 1; 
+            transform: translate(-50%, -50%); /* Rises into perfect center */
+        }
 
         /* --- Interactive Garden Decor --- */
         .decor { position: fixed; pointer-events: none; z-index: -5; transition: all 0.5s ease; }
@@ -249,7 +258,7 @@
         .card:nth-child(3) { background-color: rgba(255, 246, 204, 0.6); } 
 
         .footer {
-            margin-top: 80px; font-size: 1rem; opacity: 0.8; font-family: 'DM Serif Display', serif;
+            margin-top: 60px; font-size: 1rem; opacity: 0.8; font-family: 'DM Serif Display', serif;
         }
 
         /* --- New Hover Toast --- */
@@ -298,10 +307,10 @@
         <!-- Cottage (Placed farther back, behind grass) -->
         <img src="cottage.png" class="scene-cottage" alt="Cottage" onerror="this.style.display='none'">
         
-        <!-- Grass base (Fills the absolute bottom perfectly) -->
+        <!-- Grass base -->
         <div class="grass-bg"></div>
 
-        <!-- Cherry Blossom Tree (Static, huge, right side, front of grass) -->
+        <!-- Cherry Blossom Tree (Bottom right, flush with screen edge) -->
         <img src="image_f3adc0.png" class="scene-tree" alt="Cherry Blossom Tree" onerror="this.style.display='none'">
 
         <!-- Random Foreground Mushrooms (Front of grass) -->
