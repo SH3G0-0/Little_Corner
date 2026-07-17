@@ -1,12 +1,6 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "The Vintage Keepsake Edition"
+// 💌 MAGICAL LETTERS ENGINE - "The Indestructible Edition"
 // ==========================================================
-
-/* 💡 TIP FOR CUSTOM PICTURES:
-   If you want to use your own downloaded transparent pictures of dried flowers 
-   instead of the default ones, just scroll down to the "themeGraphicsMap" variable
-   and replace the "https://images.unsplash.com/..." links with the name of your file.
-*/
 
 try {
     // --- 1. Load All Storybook & Handwritten Fonts ---
@@ -23,7 +17,7 @@ try {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(245, 240, 235, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; flex-direction: column; align-items: center; z-index: 2000;
-            opacity: 0; transition: opacity 1.2s ease; overflow-y: auto; padding-bottom: 100px;
+            opacity: 0; transition: opacity 0.8s ease; overflow-y: auto; padding-bottom: 100px;
             scroll-behavior: smooth;
         }
 
@@ -47,7 +41,7 @@ try {
         .envelope-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 140px solid transparent; border-right: 140px solid transparent;
-            border-top-width: 110px; border-top-style: solid; /* Color injected inline */
+            border-top-width: 110px; border-top-style: solid;
             z-index: 5; transform-origin: top; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.08));
         }
@@ -93,7 +87,7 @@ try {
         /* --- The Reading Room --- */
         #letter-room {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 3000;
-            opacity: 0; transition: opacity 1.5s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
+            opacity: 0; transition: opacity 1.2s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
         }
 
         .bg-sad { background: linear-gradient(135deg, #1f2229, #353a47); }
@@ -120,16 +114,8 @@ try {
             overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
         
-        @keyframes sway { 
-            0% { transform: rotate(1deg) translateY(0) scale(1); } 
-            50% { transform: rotate(0.6deg) translateY(-2px) scale(1); } 
-            100% { transform: rotate(1deg) translateY(0) scale(1); } 
-        }
-        .paper-ready { 
-            transform: rotate(0deg) translateY(0) scale(1); 
-            opacity: 1; 
-            animation: sway 12s ease-in-out infinite 1.8s; /* FIXED: Waits for the slide-up transition to finish before swaying */
-        }
+        @keyframes sway { 0% { transform: rotate(1deg) translateY(0) scale(1); } 50% { transform: rotate(0.6deg) translateY(-2px) scale(1); } 100% { transform: rotate(1deg) translateY(0) scale(1); } }
+        .paper-ready { transform: rotate(0deg) translateY(0) scale(1); opacity: 1; animation: sway 12s ease-in-out infinite 1.8s; }
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
@@ -139,8 +125,7 @@ try {
                 url("https://www.transparenttextures.com/patterns/aged-paper.png"),
                 linear-gradient(to bottom, transparent 33%, rgba(0,0,0,0.04) 33%, rgba(255,255,255,0.04) 34%, transparent 34%),
                 linear-gradient(to bottom, transparent 66%, rgba(0,0,0,0.04) 66%, rgba(255,255,255,0.04) 67%, transparent 67%);
-            background-color: #d8b898;
-            background-blend-mode: multiply;
+            background-color: #d8b898; background-blend-mode: multiply;
         }
         
         /* 18. LIGHT FOLLOWS MOUSE */
@@ -180,7 +165,6 @@ try {
 
         .paper-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; font-weight: 700; font-size: 1.3em;}
         .paper-greeting { margin-bottom: 30px; font-weight: 700; font-size: 1.2em;}
-        
         .paper-divider { border-bottom: 2px dashed rgba(0,0,0,0.1); width: 40%; margin: 40px auto; }
         .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
         
@@ -188,8 +172,6 @@ try {
         .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 80px; font-size: 1.4em;}
         .signature-icon { display: inline-block; font-size: 1.4rem; margin-left: 10px; animation: drift 6s ease-in-out infinite; vertical-align: middle; }
         
-        .you-exist { display: block; margin: 30px 0; text-align: center; opacity: 0.6; font-weight: 700; font-style: italic;}
-
         .letter-controls { display: flex; justify-content: center; gap: 20px; margin-top: 60px; opacity: 0; transition: opacity 1s ease; position: relative; z-index: 20; }
         .letter-btn { background: rgba(255,255,255,0.85); border: 1px solid rgba(200, 180, 220, 0.5); color: #5D4E75; padding: 12px 25px; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
         .letter-btn:hover { background: #FFFDF9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
@@ -257,7 +239,7 @@ try {
         { 
             id: "nosleep", title: "When You Can't Sleep", theme: "night", font: "font-night", paper: "paper-night",
             envColor: "#1A2235", flapColor: "#111826", sealColor: "#C0C0D0", sealIcon: "🌙",
-            memory: "📍 Wish we could stay up talking.", preview: "It's very late, isn't it?", greeting: "Hey, sleepyhead.", 
+            preview: "It's very late, isn't it?", greeting: "Hey, sleepyhead.", 
             ps: "Sleep. That's an order. (A very loving one.)", 
             content: `You're awake again, aren't you?\nI knew it.\nInstead of sleeping like a normal person, you're reading letters on a website.\nHonestly... that's kind of cute.\n\nI know why you're awake.\nThe house gets quiet, the distractions stop, and suddenly your brain decides it's the perfect time to review everything that happened since 2014.\nEvery awkward moment.\nEvery unresolved worry.\nEvery thing you have to do tomorrow.\n\nIf I was sitting beside you right now, I'd probably pull the phone out of your hands.\nI'd hand you a warm mug of tea and pretend I wasn't worried about you.\nWe'd talk until your eyes couldn't stay open anymore.\n\nBut since I can't do that...\nI need you to do it for yourself.\nTake a slow breath.\nRelease the tension in your jaw.\nDrop your shoulders.\n\nYou don't have to solve tomorrow tonight.\nTomorrow's problems belong to tomorrow's version of you.\nTonight's version of you only has one job: to rest.\n\nClose your eyes.\nI'll meet you in tomorrow.` 
         },
@@ -271,7 +253,7 @@ try {
         { 
             id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad",
             envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧",
-            memory: "🌧 It rained today. Thought of you.", preview: "I know today probably wasn't your favorite.", greeting: "Hi, sunshine.", 
+            preview: "I know today probably wasn't your favorite.", greeting: "Hi, sunshine.", 
             ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", 
             content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` 
         },
@@ -334,7 +316,7 @@ try {
         { 
             id: "happy", title: "When You're Happy", theme: "happy", font: "font-happy", paper: "paper-happy",
             envColor: "#FFFDF0", flapColor: "#FFF6D6", sealColor: "#FFC233", sealIcon: "☀",
-            memory: "📍 You looked really pretty that day. Just saying.", preview: "I had a feeling today was kinder to you.", greeting: "Heyyy!!", 
+            preview: "I had a feeling today was kinder to you.", greeting: "Heyyy!!", 
             ps: "I hope today keeps surprising you in the best ways. And if something even better happens... I expect to hear about it. ❤️", 
             content: `Look at you!!\nYou're happy!!\nFinally, the universe decided to do its job for once.\nI love that.\nHonestly, I think the world is a much better place when it's being kind to you.\nYou deserve days that make you smile for absolutely no reason.\nYou deserve moments where you're laughing so hard your stomach hurts.\nYou deserve days that end with you thinking,\n"Today was actually really nice."\nIf something wonderful happened today...\nI hope you celebrated it.\nEven if it's something tiny.\nMaybe you finished something you've been working on.\nMaybe someone complimented you.\nMaybe you got good news.\nMaybe today just felt... lighter.\nWhatever it was...\nI'm so happy it happened to you.\nSometimes we're so busy waiting for the next big thing that we forget to enjoy the little victories.\nSo don't do that today.\nBe proud of yourself.\nSmile a little longer.\nReplay the happy moment in your head as many times as you want.\nThose moments deserve to stay with you.\nAnd selfishly...\nI wish I was there to see you smiling.\nBecause I think your smile is one of my favorite things in the world.\nSo keep it around for a while, okay?\nYou look really, really pretty wearing it.\nNow go enjoy your day.\nYou've earned it.\nNow stop reading this.\nGo enjoy your happy moment.\nThe letter will still be here tomorrow, but today won't.\nGo make another memory.\nAnd don't forget to tell me all about it later. ❤️` 
         },
@@ -384,80 +366,82 @@ try {
 
     const hungryText = `I have one very important question.\nHave. You. Eaten?\n\nNo, "I'll eat later" is not an acceptable answer.\nNeither is "I forgot."\nAnd absolutely not "I just had coffee." That is not food.\n\nI know you.\nYou'll keep saying, "I'll eat in five minutes." And somehow five minutes turns into three hours.\nWe're not doing that today.\n\nSo here's the deal.\nPause whatever you're doing.\nGo find something to eat.\nI genuinely don't care if it's a full meal, leftovers from yesterday, instant noodles, a sandwich, or breakfast at 4 p.m.\nJust eat something.\n\nYour body has been working hard for you all day. The least you can do is give it some fuel.\nAnd before you say, "I'm not that hungry." You probably are. You've just ignored it long enough that your stomach gave up trying to convince you.\n\nIf you're sitting there thinking, "I don't really have anything to eat." Tell me.\nSeriously. I'll order you food.\nNo arguments. No "it's okay." No "you don't have to."\nI know exactly what you're about to say, and the answer is still no. Let me.\n\nNow... close this letter.\nGo eat.\nThen you can come back and tell me what you had.\nAnd if your answer is, "Nothing." I'm going to pretend to be very disappointed in you. (Okay... not pretend. I actually will be.)\n\nSo go. Shoo.\nYour food is waiting.`;
 
-    // --- 4. The HTML Injection Function ---
+    // --- 4. The HTML Injection Function (FIXED BULLETPROOF VERSION) ---
     window.injectLettersEngine = function() {
-        if (!document.getElementById('drawer-overlay')) {
-            const engineHTML = `
-                <div id="drawer-overlay">
-                    <div class="drawer-header">
-                        A Drawer Full Of Days<br>I Couldn't Be There
-                        <div class="drawer-subtitle">Pick whichever one your heart needs today.</div>
-                    </div>
-                    <div id="envelope-grid"></div>
-                    <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
-                    
-                    <div id="drawer-toast"></div>
+        // FAILSAFE: Destroy any old/broken code trapped in the HTML before injecting the clean version
+        const oldOverlay = document.getElementById('drawer-overlay');
+        const oldRoom = document.getElementById('letter-room');
+        if (oldOverlay) oldOverlay.remove();
+        if (oldRoom) oldRoom.remove();
+
+        const engineHTML = `
+            <div id="drawer-overlay">
+                <div class="drawer-header">
+                    A Drawer Full Of Days<br>I Couldn't Be There
+                    <div class="drawer-subtitle">Pick whichever one your heart needs today.</div>
+                </div>
+                <div id="envelope-grid"></div>
+                <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
+                
+                <div id="drawer-toast"></div>
+            </div>
+
+            <div id="letter-room">
+                <div id="room-particles"></div> 
+                
+                <div class="room-decor-bg">
+                    <div class="cloud" style="top: 20%; left: -10%; animation-duration: 60s;">☁️</div>
+                    <div class="cloud" style="top: 60%; left: -10%; animation-duration: 90s;">☁️</div>
+                    <div class="star" style="top: 15%; right: 10%;">⭐</div>
+                    <div class="star" style="top: 80%; left: 10%;">⭐</div>
                 </div>
 
-                <div id="letter-room">
-                    <!-- FIXED: Added the missing room-particles container that was crashing the script! -->
-                    <div id="room-particles"></div> 
+                <div class="letter-paper-full" id="active-paper">
                     
-                    <div class="room-decor-bg">
-                        <div class="cloud" style="top: 20%; left: -10%; animation-duration: 60s;">☁️</div>
-                        <div class="cloud" style="top: 60%; left: -10%; animation-duration: 90s;">☁️</div>
-                        <div class="star" style="top: 15%; right: 10%;">⭐</div>
-                        <div class="star" style="top: 80%; left: 10%;">⭐</div>
-                    </div>
-
-                    <div class="letter-paper-full" id="active-paper">
+                    <div class="paper-content-wrapper" id="paper-wrapper">
                         
-                        <div class="paper-content-wrapper" id="paper-wrapper">
-                            
-                            <div id="dynamic-graphics"></div>
+                        <div id="dynamic-graphics"></div>
 
-                            <div id="paper-coffee" class="coffee-stain"></div>
-                            
-                            <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
+                        <div id="paper-coffee" class="coffee-stain"></div>
+                        
+                        <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
 
-                            <div id="paper-top-note" class="sweet-note-top"></div>
+                        <div id="paper-top-note" class="sweet-note-top"></div>
 
-                            <div id="d-tl" class="floating-decor d-tl">🌸</div>
-                            
-                            <div class="paper-header ink-text" id="paper-title"></div>
-                            <div class="paper-greeting ink-text" id="paper-greeting"></div>
-                            <div class="paper-body ink-text" id="paper-body"></div>
-                            <div id="interactive-zone" style="margin-top: 20px; position:relative; z-index:10;"></div>
-                            
-                            <div class="paper-footer" id="paper-footer" style="display:none; opacity:0; transition: opacity 1s;">
-                                <div class="paper-divider"></div>
-                                <div class="ps-box" id="paper-ps-box">
-                                    <span class="ps-title ink-text">P.S.</span><br>
-                                    <span class="ps-content ink-text" id="paper-ps-content"></span>
-                                </div>
-                                <div class="signature-text ink-text" id="paper-signature"></div>
+                        <div id="d-tl" class="floating-decor d-tl">🌸</div>
+                        
+                        <div class="paper-header ink-text" id="paper-title"></div>
+                        <div class="paper-greeting ink-text" id="paper-greeting"></div>
+                        <div class="paper-body ink-text" id="paper-body"></div>
+                        <div id="interactive-zone" style="margin-top: 20px; position:relative; z-index:10;"></div>
+                        
+                        <div class="paper-footer" id="paper-footer" style="display:none; opacity:0; transition: opacity 1s;">
+                            <div class="paper-divider"></div>
+                            <div class="ps-box" id="paper-ps-box">
+                                <span class="ps-title ink-text">P.S.</span><br>
+                                <span class="ps-content ink-text" id="paper-ps-content"></span>
                             </div>
-                            
-                            <div class="letter-controls" id="letter-controls">
-                                <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
-                                <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
-                            </div>
-
+                            <div class="signature-text ink-text" id="paper-signature"></div>
                         </div>
+                        
+                        <div class="letter-controls" id="letter-controls">
+                            <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
+                            <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
+                        </div>
+
                     </div>
                 </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', engineHTML);
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', engineHTML);
 
-            // 18. LIGHT FOLLOWS MOUSE (FIXED TO FULL SCROLL HEIGHT)
-            const paper = document.getElementById('active-paper');
-            const wrapper = document.getElementById('paper-wrapper');
-            paper.addEventListener('mousemove', (e) => {
-                const rect = wrapper.getBoundingClientRect();
-                wrapper.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
-                wrapper.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
-            });
-        }
+        const paper = document.getElementById('active-paper');
+        const wrapper = document.getElementById('paper-wrapper');
+        paper.addEventListener('mousemove', (e) => {
+            const rect = wrapper.getBoundingClientRect();
+            wrapper.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+            wrapper.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+        });
     };
 
     window.injectLettersEngine();
@@ -476,9 +460,9 @@ try {
             dash.style.filter = 'blur(12px) brightness(0.7)';
         }
         
-        grid.innerHTML = '';
+        let gridHTML = '';
         window.lettersData.forEach(letter => {
-            grid.innerHTML += `
+            gridHTML += `
                 <div class="envelope-container" 
                      onmouseenter="window.showPreview('${letter.id}', this)" 
                      onmouseleave="window.hidePreview()"
@@ -492,9 +476,11 @@ try {
                 </div>
             `;
         });
+        grid.innerHTML = gridHTML;
 
         overlay.style.display = 'flex';
-        setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+        void overlay.offsetWidth; // HARDWARE REFLOW FIX: Forces browser to render the display change before fading
+        overlay.style.opacity = '1';
     };
 
     window.closeDrawer = function() {
@@ -524,112 +510,123 @@ try {
 
     window.playPaperSound = function() {};
 
-    // Envelope Opening Sequence
+    // Envelope Opening Sequence (WRAPPED IN TRY/CATCH FAILSAFE)
     window.openEnvelope = function(id, element) {
-        activeLetter = window.lettersData.find(l => l.id === id);
-        window.hidePreview();
-        element.classList.add('envelope-opening');
-        window.playPaperSound();
-        
-        // --- WHISPER MUSIC FOR LETTERS ---
-        let track = window.currentTrack || document.getElementById('bg-dashboard');
-        if (track && !track.paused) {
-            track.dataset.oldVol = track.volume;
-            let fadeDown = setInterval(() => {
-                if (track.volume > 0.04) track.volume = Math.max(track.volume - 0.01, 0.04);
-                else clearInterval(fadeDown);
-            }, 100);
-        }
-        
-        // --- RAIN SOUND EFFECT (Reliable Play) ---
-        const rainMusic = document.getElementById('sfx-rain');
-        if (rainMusic) {
-            rainMusic.volume = 0;
-            let playPromise = rainMusic.play();
-            if (playPromise !== undefined) playPromise.catch(e => console.log("Rain playback prevented:", e));
-            let rainFadeIn = setInterval(() => {
-                if (rainMusic.volume < 0.1) rainMusic.volume = Math.min(rainMusic.volume + 0.01, 0.1);
-                else clearInterval(rainFadeIn);
-            }, 100);
-        }
-
-        setTimeout(() => {
-            const room = document.getElementById('letter-room');
-            const paper = document.getElementById('active-paper');
-            const body = document.getElementById('paper-body');
-            const footer = document.getElementById('paper-footer');
-            const controls = document.getElementById('letter-controls');
-            const graphicsContainer = document.getElementById('dynamic-graphics');
+        try {
+            activeLetter = window.lettersData.find(l => l.id === id);
+            window.hidePreview();
+            element.classList.add('envelope-opening');
+            window.playPaperSound();
             
-            document.getElementById('drawer-overlay').style.display = 'none';
-            room.className = `bg-${activeLetter.theme}`;
-            
-            // Theme application
-            paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
-            
-            // --- INJECT THEMATIC BACKGROUND GRAPHICS ---
-            graphicsContainer.innerHTML = ''; 
-            const graphics = themeGraphicsMap[activeLetter.theme] || themeGraphicsMap['warm'];
-            graphics.forEach(g => {
-                const div = document.createElement('div');
-                div.className = 'real-pressed-flower';
-                div.style.backgroundImage = `url('${g.url}')`;
-                div.style.cssText += g.css;
-                graphicsContainer.appendChild(div);
-            });
-            
-            // Random Dynamics
-            document.getElementById('d-tl').innerText = doodles[Math.floor(Math.random()*doodles.length)];
-            document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
-            document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
-            
-            // Sweet Note Top 
-            let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
-            while (randomTopNote.includes("always")) {
-               randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
+            // --- WHISPER MUSIC FOR LETTERS ---
+            let track = window.currentTrack || document.getElementById('bg-dashboard');
+            if (track && !track.paused) {
+                track.dataset.oldVol = track.volume;
+                let fadeDown = setInterval(() => {
+                    if (track.volume > 0.04) track.volume = Math.max(track.volume - 0.01, 0.04);
+                    else clearInterval(fadeDown);
+                }, 100);
             }
-            document.getElementById('paper-top-note').innerText = randomTopNote;
-
-            // Setup text
-            document.getElementById('paper-title').innerText = activeLetter.title;
-            document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
             
-            // EMOJI EMBEDDED IN SIGNATURE SO IT DOESN'T MOVE
-            const randomDoodle = doodles[Math.floor(Math.random()*doodles.length)];
-            document.getElementById('paper-signature').innerHTML = `${sigs[Math.floor(Math.random()*sigs.length)]}<br>Muzna <span class="signature-icon">${randomDoodle}</span>`;
-            
-            if(activeLetter.ps) {
-                document.getElementById('paper-ps-box').style.display = 'block';
-                document.getElementById('paper-ps-content').innerText = activeLetter.ps;
-            } else {
-                document.getElementById('paper-ps-box').style.display = 'none';
+            // --- RAIN SOUND EFFECT (Reliable Play) ---
+            const rainMusic = document.getElementById('sfx-rain');
+            if (rainMusic) {
+                rainMusic.volume = 0;
+                let playPromise = rainMusic.play();
+                if (playPromise !== undefined) playPromise.catch(e => console.log("Rain playback prevented:", e));
+                let rainFadeIn = setInterval(() => {
+                    if (rainMusic.volume < 0.1) rainMusic.volume = Math.min(rainMusic.volume + 0.01, 0.1);
+                    else clearInterval(rainFadeIn);
+                }, 100);
             }
 
-            // Prepare Interactive Zones
-            const interactive = document.getElementById('interactive-zone');
-            interactive.innerHTML = '';
-            body.innerHTML = '';
-            footer.style.opacity = '0';
-            footer.style.display = 'none';
-            controls.style.opacity = '0'; // Hide buttons initially
-
-            room.style.display = 'flex';
-            window.startAmbientParticles(activeLetter.theme);
-            
-            setTimeout(() => { room.style.opacity = '1'; }, 50);
-            
-            setTimeout(() => { 
-                paper.classList.add('paper-ready'); 
+            setTimeout(() => {
+                const room = document.getElementById('letter-room');
+                const paper = document.getElementById('active-paper');
+                const body = document.getElementById('paper-body');
+                const footer = document.getElementById('paper-footer');
+                const controls = document.getElementById('letter-controls');
+                const graphicsContainer = document.getElementById('dynamic-graphics');
                 
-                // 7. TYPEWRITER REVEAL (SLOWER PACE)
-                if (activeLetter.interactive === "crying" || activeLetter.interactive === "hungry") {
-                    window.setupInteractive(activeLetter.interactive);
-                } else {
-                    window.typewriterEffect(body, activeLetter.content, footer);
+                document.getElementById('drawer-overlay').style.display = 'none';
+                room.className = `bg-${activeLetter.theme}`;
+                
+                // Theme application
+                paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
+                
+                // --- INJECT THEMATIC BACKGROUND GRAPHICS ---
+                graphicsContainer.innerHTML = ''; 
+                const graphics = themeGraphicsMap[activeLetter.theme] || themeGraphicsMap['warm'];
+                graphics.forEach(g => {
+                    const div = document.createElement('div');
+                    div.className = 'real-pressed-flower';
+                    div.style.backgroundImage = `url('${g.url}')`;
+                    div.style.cssText += g.css;
+                    graphicsContainer.appendChild(div);
+                });
+                
+                // Random Dynamics
+                document.getElementById('d-tl').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+                document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
+                document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
+                
+                // Sweet Note Top 
+                let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
+                while (randomTopNote.includes("always")) {
+                   randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
                 }
+                document.getElementById('paper-top-note').innerText = randomTopNote;
+
+                // Setup text
+                document.getElementById('paper-title').innerText = activeLetter.title;
+                document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
+                
+                // EMOJI EMBEDDED IN SIGNATURE SO IT DOESN'T MOVE
+                const randomDoodle = doodles[Math.floor(Math.random()*doodles.length)];
+                document.getElementById('paper-signature').innerHTML = `${sigs[Math.floor(Math.random()*sigs.length)]}<br>Muzna <span class="signature-icon">${randomDoodle}</span>`;
+                
+                if(activeLetter.ps) {
+                    document.getElementById('paper-ps-box').style.display = 'block';
+                    document.getElementById('paper-ps-content').innerText = activeLetter.ps;
+                } else {
+                    document.getElementById('paper-ps-box').style.display = 'none';
+                }
+
+                // Prepare Interactive Zones
+                const interactive = document.getElementById('interactive-zone');
+                interactive.innerHTML = '';
+                body.innerHTML = '';
+                footer.style.opacity = '0';
+                footer.style.display = 'none';
+                controls.style.opacity = '0'; // Hide buttons initially
+
+                room.style.display = 'flex';
+                void room.offsetWidth; // HARDWARE REFLOW FIX: Forces browser to render the background before fading in
+                window.startAmbientParticles(activeLetter.theme);
+                room.style.opacity = '1';
+                
+                setTimeout(() => { 
+                    paper.classList.add('paper-ready'); 
+                    
+                    // 7. TYPEWRITER REVEAL (SLOWER PACE)
+                    if (activeLetter.interactive === "crying" || activeLetter.interactive === "hungry") {
+                        window.setupInteractive(activeLetter.interactive);
+                    } else {
+                        window.typewriterEffect(body, activeLetter.content, footer);
+                    }
+                }, 1200); 
+
             }, 1200); 
 
-        }, 1200); 
+        } catch (error) {
+            console.error("Failsafe caught an error opening the letter: ", error);
+            // FAILSAFE: If something crashes, force the room to display so you aren't stuck on a blurred screen
+            const room = document.getElementById('letter-room');
+            if (room) {
+                room.style.display = 'flex';
+                room.style.opacity = '1';
+            }
+        }
     };
 
     window.setupInteractive = function(type) {
