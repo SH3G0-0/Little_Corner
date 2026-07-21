@@ -4,8 +4,9 @@
 
 /* 💡 TIP FOR CUSTOM PICTURES:
    If you want to use your own downloaded transparent pictures of dried flowers 
-   instead of the default ones, just scroll down to the "themeGraphicsMap" variable
-   and replace the "https://images.unsplash.com/..." links with the name of your file.
+   instead of the default ones, just scroll down to the "themeGraphicsMap" variable (around line 190) 
+   and replace the "https://images.unsplash.com/..." links with the name of your file 
+   (for example: "dried-rose.png").
 */
 
 try {
@@ -33,7 +34,7 @@ try {
         #envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 90px 40px; width: 90%; max-width: 1100px; margin-top: 20px; }
 
         .envelope-container { width: 280px; height: 180px; position: relative; cursor: pointer; perspective: 1500px; margin: 0 auto; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease; }
-
+        
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 12px;
             box-shadow: 0 15px 35px rgba(90, 74, 120, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
@@ -153,9 +154,12 @@ try {
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
         .floating-decor.d-tl { top: 40px; left: 40px; }
+        .floating-decor.d-br { bottom: 80px; right: 40px; animation-delay: 2s; }
 
-        .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
-        .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; top: 150px; right: 40px; }
+        .coffee-stain { position:absolute; top:15%; right:10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
+        .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; }
+        
+        /* Sweet Notes (Top corner) */
         .sweet-note-top { position: absolute; top: 40px; left: 40px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: inherit; opacity: 0.5; font-style: italic; z-index: 5; font-weight: 700;}
 
         /* Fonts */
@@ -175,11 +179,7 @@ try {
         
         .paper-divider { border-bottom: 2px dashed rgba(0,0,0,0.1); width: 40%; margin: 40px auto; }
         .ps-box { text-align: left; margin-top: 40px; opacity: 0.9; transform: scale(0.95); transform-origin: left; }
-        
-        /* Signature Area & Embedded Emoji */
         .signature-text { text-align: right; line-height: 1.2; font-weight: 700; margin-top: 60px; margin-right: 80px; font-size: 1.4em;}
-        .signature-icon { display: inline-block; font-size: 1.4rem; margin-left: 10px; animation: drift 6s ease-in-out infinite; vertical-align: middle; }
-        
         .you-exist { display: block; margin: 30px 0; text-align: center; opacity: 0.6; font-weight: 700; font-style: italic;}
 
         .letter-controls { display: flex; justify-content: center; gap: 20px; margin-top: 60px; opacity: 0; transition: opacity 1s ease; position: relative; z-index: 20; }
@@ -205,28 +205,28 @@ try {
     // --- Dynamic Theme Graphics Engine ---
     const themeGraphicsMap = {
         'warm': [
-            { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'top: 650px; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
-            { url: 'https://images.unsplash.com/photo-1596785236251-71fa49ac5760?auto=format&fit=crop&w=300&q=80', css: 'top: 150px; left: -20px; width: 180px; height: 180px; transform: rotate(25deg);' }
+            { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'bottom: 5%; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
+            { url: 'https://images.unsplash.com/photo-1596785236251-71fa49ac5760?auto=format&fit=crop&w=300&q=80', css: 'top: 15%; left: -20px; width: 180px; height: 180px; transform: rotate(25deg);' }
         ],
         'happy': [
-            { url: 'https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=300&q=80', css: 'top: 700px; right: -20px; width: 240px; height: 240px; transform: rotate(10deg); filter: sepia(0.5) contrast(1) opacity(0.3);' },
-            { url: 'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=300&q=80', css: 'top: 100px; left: -10px; width: 150px; height: 150px; transform: rotate(15deg);' }
+            { url: 'https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=300&q=80', css: 'bottom: 10%; right: -20px; width: 240px; height: 240px; transform: rotate(10deg); filter: sepia(0.5) contrast(1) opacity(0.3);' },
+            { url: 'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=300&q=80', css: 'top: 10%; left: -10px; width: 150px; height: 150px; transform: rotate(15deg);' }
         ],
         'sad': [
-            { url: 'https://images.unsplash.com/photo-1502481851512-e9e2529bfbf9?auto=format&fit=crop&w=300&q=80', css: 'top: 800px; left: -10px; width: 250px; height: 250px; filter: grayscale(1) opacity(0.15); transform: rotate(5deg);' },
-            { url: 'https://images.unsplash.com/photo-1518063319808-1f8cb1250cbc?auto=format&fit=crop&w=300&q=80', css: 'top: 250px; right: -20px; width: 200px; height: 200px; filter: grayscale(1) opacity(0.15);' }
+            { url: 'https://images.unsplash.com/photo-1502481851512-e9e2529bfbf9?auto=format&fit=crop&w=300&q=80', css: 'bottom: 0; left: -10px; width: 250px; height: 250px; filter: grayscale(1) opacity(0.15); transform: rotate(5deg);' },
+            { url: 'https://images.unsplash.com/photo-1518063319808-1f8cb1250cbc?auto=format&fit=crop&w=300&q=80', css: 'top: 20%; right: -20px; width: 200px; height: 200px; filter: grayscale(1) opacity(0.15);' }
         ],
         'night': [
-            { url: 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&w=300&q=80', css: 'top: 120px; right: -10px; width: 180px; height: 180px; filter: grayscale(1) opacity(0.25);' },
-            { url: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=300&q=80', css: 'top: 750px; left: -20px; width: 220px; height: 220px; filter: grayscale(1) opacity(0.2); transform: rotate(45deg);' }
+            { url: 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&w=300&q=80', css: 'top: 10%; right: -10px; width: 180px; height: 180px; filter: grayscale(1) opacity(0.25);' },
+            { url: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=300&q=80', css: 'bottom: 10%; left: -20px; width: 220px; height: 220px; filter: grayscale(1) opacity(0.2); transform: rotate(45deg);' }
         ],
         'sick': [
-            { url: 'https://images.unsplash.com/photo-1576092762791-dd9e222064af?auto=format&fit=crop&w=300&q=80', css: 'top: 700px; right: -10px; width: 200px; height: 200px; transform: rotate(-20deg);' },
-            { url: 'https://images.unsplash.com/photo-1596435035541-114400a9ec6f?auto=format&fit=crop&w=300&q=80', css: 'top: 180px; left: -10px; width: 160px; height: 160px; transform: rotate(15deg);' }
+            { url: 'https://images.unsplash.com/photo-1576092762791-dd9e222064af?auto=format&fit=crop&w=300&q=80', css: 'bottom: 10%; right: -10px; width: 200px; height: 200px; transform: rotate(-20deg);' },
+            { url: 'https://images.unsplash.com/photo-1596435035541-114400a9ec6f?auto=format&fit=crop&w=300&q=80', css: 'top: 15%; left: -10px; width: 160px; height: 160px; transform: rotate(15deg);' }
         ],
         'motivation': [
-            { url: 'https://images.unsplash.com/photo-1529144415895-6aaf8be872fb?auto=format&fit=crop&w=300&q=80', css: 'top: 750px; right: -15px; width: 200px; height: 200px; transform: rotate(-10deg); filter: sepia(1) contrast(1.2) opacity(0.3);' },
-            { url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=300&q=80', css: 'top: 150px; left: -10px; width: 170px; height: 170px; transform: rotate(20deg); filter: sepia(1) contrast(1.2) opacity(0.3);' }
+            { url: 'https://images.unsplash.com/photo-1529144415895-6aaf8be872fb?auto=format&fit=crop&w=300&q=80', css: 'bottom: 5%; right: -15px; width: 200px; height: 200px; transform: rotate(-10deg); filter: sepia(1) contrast(1.2) opacity(0.3);' },
+            { url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=300&q=80', css: 'top: 10%; left: -10px; width: 170px; height: 170px; transform: rotate(20deg); filter: sepia(1) contrast(1.2) opacity(0.3);' }
         ]
     };
 
@@ -388,31 +388,31 @@ try {
                     <div id="envelope-grid"></div>
                     <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
                     
+                    <!-- THE HOVER TOOLTIP -->
                     <div id="drawer-toast"></div>
                 </div>
 
                 <div id="letter-room">
-                    
-                    <div class="room-decor-bg">
-                        <div class="cloud" style="top: 20%; left: -10%; animation-duration: 60s;">☁️</div>
-                        <div class="cloud" style="top: 60%; left: -10%; animation-duration: 90s;">☁️</div>
-                        <div class="star" style="top: 15%; right: 10%;">⭐</div>
-                        <div class="star" style="top: 80%; left: 10%;">⭐</div>
-                    </div>
-
+                    <div id="room-particles"></div>
                     <div class="letter-paper-full" id="active-paper">
                         
                         <div class="paper-content-wrapper" id="paper-wrapper">
                             
+                            <!-- DYNAMIC GRAPHICS CONTAINER -->
                             <div id="dynamic-graphics"></div>
 
+                            <!-- COFFEE STAIN -->
                             <div id="paper-coffee" class="coffee-stain"></div>
                             
-                            <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
+                            <!-- MARGIN NOTE -->
+                            <div id="paper-margin-note" class="margin-note" style="top: 20px; right: 40px;"></div>
 
+                            <!-- SWEET NOTE (TOP) -->
                             <div id="paper-top-note" class="sweet-note-top"></div>
 
+                            <!-- FIXED FLOATING DECORATIONS -->
                             <div id="d-tl" class="floating-decor d-tl">🌸</div>
+                            <div id="d-br" class="floating-decor d-br">❀</div>
                             
                             <div class="paper-header ink-text" id="paper-title"></div>
                             <div class="paper-greeting ink-text" id="paper-greeting"></div>
@@ -428,6 +428,7 @@ try {
                                 <div class="signature-text ink-text" id="paper-signature"></div>
                             </div>
                             
+                            <!-- MOVED BUTTONS TO BOTTOM OF PAPER -->
                             <div class="letter-controls" id="letter-controls">
                                 <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
                                 <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
@@ -469,8 +470,8 @@ try {
         grid.innerHTML = '';
         window.lettersData.forEach(letter => {
             grid.innerHTML += `
-                <div class="envelope-container" 
-                     onmouseenter="window.showPreview('${letter.id}', this)" 
+                <div class="envelope-container" data-preview="${letter.preview || 'Open letter'}"
+                     onmouseenter="window.showPreview(this)" 
                      onmouseleave="window.hidePreview()"
                      onclick="window.openEnvelope('${letter.id}', this)">
                     <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
@@ -495,13 +496,11 @@ try {
         setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 1000);
     };
 
-    // --- FIXED HOVER PREVIEW (Attaches to Envelope) ---
-    window.showPreview = function(id, el) {
-        const letter = window.lettersData.find(l => l.id === id);
+    window.showPreview = function(el) {
         const toast = document.getElementById('drawer-toast');
-        if(toast && letter && letter.preview) {
+        if(toast) {
             const rect = el.getBoundingClientRect();
-            toast.innerText = letter.preview;
+            toast.innerText = el.getAttribute('data-preview');
             toast.style.left = (rect.left + rect.width / 2) + 'px';
             toast.style.top = (rect.bottom + 20) + 'px';
             toast.classList.add('show');
@@ -570,11 +569,13 @@ try {
             
             // Random Dynamics
             document.getElementById('d-tl').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+            document.getElementById('d-br').innerText = doodles[Math.floor(Math.random()*doodles.length)];
             document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
             document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
             
             // Sweet Note Top 
             let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
+            // Don't repeat the signature in the top note
             while (randomTopNote.includes("always")) {
                randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
             }
@@ -583,10 +584,7 @@ try {
             // Setup text
             document.getElementById('paper-title').innerText = activeLetter.title;
             document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
-            
-            // EMOJI EMBEDDED IN SIGNATURE SO IT DOESN'T MOVE
-            const randomDoodle = doodles[Math.floor(Math.random()*doodles.length)];
-            document.getElementById('paper-signature').innerHTML = `${sigs[Math.floor(Math.random()*sigs.length)]}<br>Muzna <span class="signature-icon">${randomDoodle}</span>`;
+            document.getElementById('paper-signature').innerHTML = sigs[Math.floor(Math.random()*sigs.length)] + "<br>Muzna";
             
             if(activeLetter.ps) {
                 document.getElementById('paper-ps-box').style.display = 'block';
