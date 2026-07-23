@@ -1,15 +1,27 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "The Indestructible Edition"
+// 💌 MAGICAL LETTERS ENGINE - "Custom Random Graphics Edition"
 // ==========================================================
 
 try {
-    // --- 1. Load Fonts ---
+    // --- 1. YOUR CUSTOM IMAGES ---
+    // The engine will randomly pick 2 different images for every letter you open!
+    const myCustomImages = [
+        "Butterfly1.jpg",
+        "Butterfly2.jpg",
+        "Butterfly3.jpg",
+        "Flower1.jpg",
+        "Flower2.jpg",
+        "Flower3.jpg",
+        "Flower4.jpg"
+    ];
+
+    // --- 2. Load Fonts ---
     const fontLink = document.createElement('link');
     fontLink.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Serif+Display&family=Handlee&family=Marck+Script&family=Patrick+Hand&family=Quicksand:wght@400;600;700&display=swap';
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 
-    // --- 2. CSS ---
+    // --- 3. CSS ---
     const letterStyles = document.createElement('style');
     letterStyles.innerHTML = `
         #drawer-overlay {
@@ -91,7 +103,6 @@ try {
         .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
         .bg-motivation { background: linear-gradient(135deg, #FFE4B5, #FFDAB9); }
 
-        /* THEMES ALLOWED TO SHOW THROUGH (No hardcoded brown color overriding it) */
         .paper-happy { background-color: #fffaf0; color: #4B4453; }
         .paper-sad { background-color: #e6f0f5; color: #3a4454; }
         .paper-night { background-color: #1a2235; color: #dce4f0; }
@@ -100,7 +111,6 @@ try {
         .paper-angry { background-color: #e6e4e5; color: #2b2b2b; }
         .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
 
-        /* FULL SIZED LETTER PAPER */
         .letter-paper-full {
             width: 95%; max-width: 900px; height: 95vh; padding: 0; 
             border-radius: 2px 5px 3px 6px; 
@@ -114,7 +124,6 @@ try {
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
-        /* FIXED: No moving linear-gradient bands, no hardcoded background color blocking themes */
         .paper-content-wrapper { 
             position: relative; z-index: 5; padding: 100px 50px 80px 50px; min-height: 100%; box-sizing: border-box;
             background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
@@ -127,16 +136,17 @@ try {
             pointer-events: none; z-index: 10;
         }
         
+        /* THIS IS THE MAGIC TRICK THAT HIDES WHITE BACKGROUNDS ON JPG/PNG FILES */
         .real-pressed-flower {
             position: absolute; z-index: 4; pointer-events: none; background-size: cover; background-position: center;
-            mix-blend-mode: multiply; filter: sepia(0.8) contrast(1.2) opacity(0.35); 
-            mask-image: radial-gradient(circle, black 30%, transparent 65%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 65%);
+            mix-blend-mode: multiply; 
+            filter: sepia(0.6) contrast(1.1) opacity(0.5); 
+            mask-image: radial-gradient(circle, black 40%, transparent 70%); 
+            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
         }
 
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
-        
-        /* Emoji on the Right */
         .floating-decor.d-tr { top: 40px; right: 50px; }
 
         .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
@@ -181,33 +191,6 @@ try {
         "Take a deep breath.", "I wish I was sitting next to you right now."
     ];
     const doodles = ["🌸", "☁️", "♡", "⭐", "🐇"];
-
-    const themeGraphicsMap = {
-        'warm': [
-            { url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=300&q=80', css: 'top: 650px; right: -10px; width: 220px; height: 220px; transform: rotate(-15deg);' },
-            { url: 'https://images.unsplash.com/photo-1596785236251-71fa49ac5760?auto=format&fit=crop&w=300&q=80', css: 'top: 150px; left: -20px; width: 180px; height: 180px; transform: rotate(25deg);' }
-        ],
-        'happy': [
-            { url: 'https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=300&q=80', css: 'top: 700px; right: -20px; width: 240px; height: 240px; transform: rotate(10deg); filter: sepia(0.5) contrast(1) opacity(0.3);' },
-            { url: 'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=300&q=80', css: 'top: 100px; left: -10px; width: 150px; height: 150px; transform: rotate(15deg);' }
-        ],
-        'sad': [
-            { url: 'https://images.unsplash.com/photo-1502481851512-e9e2529bfbf9?auto=format&fit=crop&w=300&q=80', css: 'top: 800px; left: -10px; width: 250px; height: 250px; filter: grayscale(1) opacity(0.15); transform: rotate(5deg);' },
-            { url: 'https://images.unsplash.com/photo-1518063319808-1f8cb1250cbc?auto=format&fit=crop&w=300&q=80', css: 'top: 250px; right: -20px; width: 200px; height: 200px; filter: grayscale(1) opacity(0.15);' }
-        ],
-        'night': [
-            { url: 'https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&w=300&q=80', css: 'top: 120px; right: -10px; width: 180px; height: 180px; filter: grayscale(1) opacity(0.25);' },
-            { url: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=300&q=80', css: 'top: 750px; left: -20px; width: 220px; height: 220px; filter: grayscale(1) opacity(0.2); transform: rotate(45deg);' }
-        ],
-        'sick': [
-            { url: 'https://images.unsplash.com/photo-1576092762791-dd9e222064af?auto=format&fit=crop&w=300&q=80', css: 'top: 700px; right: -10px; width: 200px; height: 200px; transform: rotate(-20deg);' },
-            { url: 'https://images.unsplash.com/photo-1596435035541-114400a9ec6f?auto=format&fit=crop&w=300&q=80', css: 'top: 180px; left: -10px; width: 160px; height: 160px; transform: rotate(15deg);' }
-        ],
-        'motivation': [
-            { url: 'https://images.unsplash.com/photo-1529144415895-6aaf8be872fb?auto=format&fit=crop&w=300&q=80', css: 'top: 750px; right: -15px; width: 200px; height: 200px; transform: rotate(-10deg); filter: sepia(1) contrast(1.2) opacity(0.3);' },
-            { url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=300&q=80', css: 'top: 150px; left: -10px; width: 170px; height: 170px; transform: rotate(20deg); filter: sepia(1) contrast(1.2) opacity(0.3);' }
-        ]
-    };
 
     window.lettersData = [
         { id: "insecure", title: "When You're Feeling Insecure", theme: "warm", font: "font-warm", paper: "paper-warm", envColor: "#F2E3D5", flapColor: "#E8D5C4", sealColor: "#A67B5B", sealIcon: "✨", preview: "Borrow my eyes for a minute.", greeting: "Hey, pretty girl.", ps: "If your brain keeps saying mean things about you, send it to me. I'd like to have a word with it.", content: `I need to ask you something.\nWho exactly convinced you that you weren't enough?\nBecause I'd like to have a very serious conversation with them.\n\nI know what it looks like when you get quiet. You start replaying every tiny mistake. You zoom in on every flaw. You convince yourself that everyone else has it figured out and you're the only one falling behind.\n\nI wish you could borrow my eyes for just one minute.\nIf you could see the way your face lights up when you talk about things you love...\nIf you could see how easily you make people feel safe...\nIf you could see how ridiculously beautiful you are even when you're just existing in a room...\nYou would never doubt yourself again.\n\nI'd probably steal your blanket right now and force you to listen to me list all the reasons you're amazing.\nYou'd roll your eyes, but I wouldn't stop.\n\nYou don't have to be perfect to be loved.\nYou just have to be you. The world doesn't need a flawless version of you.\nIt just needs *you*.\n\nSo please, be a little kinder to yourself today.\nTalk to yourself the way you talk to people you love.\n\nI'll keep reminding you until you believe it.` },
@@ -263,7 +246,6 @@ try {
                             <div id="paper-coffee" class="coffee-stain"></div>
                             <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
                             <div id="paper-top-note" class="sweet-note-top"></div>
-                            
                             <div id="d-tr" class="floating-decor d-tr">🌸</div>
                             
                             <div class="paper-header ink-text" id="paper-title"></div>
@@ -457,7 +439,27 @@ try {
                     paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
                     
                     graphicsContainer.innerHTML = ''; 
-                    const graphics = themeGraphicsMap[activeLetter.theme] || themeGraphicsMap['warm'];
+                    
+                    // Pick 2 random images from your custom list
+                    let randomImg1 = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                    let randomImg2 = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                    
+                    // Try to make sure they aren't the exact same image
+                    if (myCustomImages.length > 1) {
+                        while (randomImg1 === randomImg2) {
+                            randomImg2 = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                        }
+                    }
+
+                    // Randomize their rotation slightly for a natural look
+                    const rot1 = Math.floor(Math.random() * 40) - 20; 
+                    const rot2 = Math.floor(Math.random() * 40) - 20;
+
+                    const graphics = [
+                        { url: randomImg1, css: `top: 650px; right: -10px; width: 250px; height: 250px; transform: rotate(${rot1}deg);` },
+                        { url: randomImg2, css: `top: 150px; left: -20px; width: 200px; height: 200px; transform: rotate(${rot2}deg);` }
+                    ];
+
                     graphics.forEach(g => {
                         const div = document.createElement('div');
                         div.className = 'real-pressed-flower';
