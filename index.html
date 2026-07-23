@@ -502,9 +502,11 @@
                 
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
+                let scenery = document.getElementById('scenery-layer'); 
                 
                 if(nav) nav.style.display = 'flex';
                 if(corner) corner.style.display = 'flex';
+                if(scenery) scenery.classList.add('visible'); 
                 
                 setTimeout(() => {
                     if(nav) nav.style.opacity = '1';
