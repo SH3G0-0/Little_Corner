@@ -376,11 +376,12 @@
         </div>
     </div>
 
-    <!-- EXTERNAL SCRIPTS RESTORED -->
+    <!-- EXTERNAL SCRIPTS -->
     <script src="smilebox.js"></script>
     <script src="letters.js"></script>
 
     <script>
+        // --- Hover Toast Logic ---
         function showToast(text) {
             const toast = document.getElementById('hover-toast');
             if(toast) {
@@ -394,6 +395,7 @@
             if(toast) toast.style.display = 'none';
         }
 
+        // --- Click Burst Sparkle Effect ---
         document.addEventListener('click', function(e) {
             for(let i=0; i<3; i++) {
                 let sparkle = document.createElement('div');
@@ -415,6 +417,7 @@
             }
         });
 
+        // --- Cinematic Cassette Player Logic ---
         let isPlaying = false;
 
         function toggleMusic() {
@@ -448,11 +451,13 @@
             }
         }
 
+       // --- Hidden Interactions ---
         function twinkle(element) {
             element.classList.add('twinkle');
             setTimeout(() => { element.classList.remove('twinkle'); }, 1000);
         }
 
+        // --- Check for Secret Song ---
         let totalVisits = 0;
         try {
             totalVisits = localStorage.getItem('siteVisits') ? parseInt(localStorage.getItem('siteVisits')) : 0;
@@ -474,6 +479,7 @@
             }
         }
 
+        // --- Sequence Control ---
         setTimeout(() => {
             let loading = document.getElementById('loading-screen');
             if(loading) loading.style.opacity = '0';
@@ -496,9 +502,11 @@
                 
                 let nav = document.getElementById('main-nav');
                 let corner = document.getElementById('cozy-corner');
+                let scenery = document.getElementById('scenery-layer'); 
                 
                 if(nav) nav.style.display = 'flex';
                 if(corner) corner.style.display = 'flex';
+                if(scenery) scenery.classList.add('visible'); 
                 
                 setTimeout(() => {
                     if(nav) nav.style.opacity = '1';
