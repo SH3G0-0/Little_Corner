@@ -1,21 +1,20 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "Museum Artifact Edition"
+// 💌 MAGICAL LETTERS ENGINE - "Visual Novel / Museum Edition"
 // ==========================================================
 
 try {
     // --- 1. YOUR CUSTOM IMAGES ---
-    // The engine will randomly pick exactly 2 or 3 of these for every letter.
+    // The engine will randomly pick 2 or 3 of these for every letter.
     const myCustomImages = [
-        "Butterfly1.jpg",
-        "Butterfly2.jpg",
-        "Butterfly3.jpg",
-        "Carnation.png",
+        "Butterfly1.png",
+        "Butterfly2.png",
         "Daisy.png",
-        "Flower1.jpg",
-        "Flower2.jpg",
-        "Flower3.jpg",
-        "Flower4.jpg",
-        "Flower5.jpg"
+        "Flower1.png",
+        "Flower2.png",
+        "Flower3.png",
+        "Flower4.png",
+        "Leaves.png",
+        "Sunflower.png"
     ];
 
     // --- 2. Load Fonts ---
@@ -101,6 +100,7 @@ try {
         }
         #drawer-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+        /* The flex centering room */
         #letter-room {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 999999;
             opacity: 0; transition: opacity 1.2s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
@@ -121,10 +121,13 @@ try {
         .paper-angry { background-color: #e6e4e5; }
         .paper-motivation { background-color: #fcf6e5; }
 
+        /* --- VISUAL NOVEL PROPORTIONS --- */
         .letter-paper-full {
-            width: 95%; max-width: 900px; height: 95vh; padding: 0; 
-            border-radius: 2px 5px 3px 6px; 
-            /* Enhanced Burnt Edge Box Shadow */
+            width: 72vw; 
+            max-width: 1050px; 
+            height: 90vh; 
+            padding: 0; 
+            border-radius: 10px; 
             box-shadow: inset 0 0 70px rgba(40,10,0,0.8), inset 0 0 15px rgba(0,0,0,0.6), 0 20px 50px rgba(60, 20, 0, 0.3); 
             transform: translateY(120px) scale(0.6) rotate(-5deg); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
@@ -135,8 +138,9 @@ try {
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
+        /* Padding moved here to frame the text nicely inside the paper */
         .paper-content-wrapper { 
-            position: relative; z-index: 5; padding: 100px 50px 80px 50px; min-height: 100%; box-sizing: border-box;
+            position: relative; z-index: 5; padding: 90px; min-height: 100%; box-sizing: border-box;
             background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
             background-blend-mode: multiply;
         }
@@ -158,7 +162,7 @@ try {
         .real-pressed-flower {
             position: absolute; pointer-events: none; 
             background-repeat: no-repeat; background-size: contain; background-position: center;
-            mix-blend-mode: multiply; opacity: 0.82; z-index: 4; /* Sits below the text naturally */
+            mix-blend-mode: multiply; opacity: 0.82; z-index: 4; 
             filter: brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) drop-shadow(0 1px 2px rgba(0,0,0,0.15));
         }
 
@@ -229,7 +233,7 @@ try {
         { id: "reassurance", title: "When You Need Reassurance", theme: "warm", font: "font-warm", paper: "paper-warm", envColor: "#FFF5F5", flapColor: "#FCE8E8", sealColor: "#FFFFFF", sealIcon: "🤍", preview: "You don't have to carry this alone.", greeting: "Hey, love.", ps: "You don't have to ask if I'm free. Just call. We'll figure the rest out later. ❤️", content: `Can I be selfish for a second?\nI need you to promise me something.\nPromise me that when you're struggling...\nYou won't immediately decide to deal with everything on your own.\nI know that's what you usually do.\nYou tell yourself you'll figure it out.\nYou convince yourself you don't want to bother anyone.\nBut if there's one person I never want you to hesitate to bother...\nIt's me.\nSeriously.\nIf you're sad...\nCall me.\nIf you're angry...\nCall me.\nIf you're crying...\nCall me.\nIf you just had the best day ever and you're excited...\nPlease call me.\nI want to hear all of it.\nThe good days.\nThe bad days.\n<span class="imperfection-2">The completely random "guess what happened today" stories.</span>\nI don't just want to be around for your best moments.\nI want to be there for all of them.\nSo don't ever think you're too much.\nYou could never be too much for me.` },
         { id: "nosleep", title: "When You Can't Sleep", theme: "night", font: "font-night", paper: "paper-night", envColor: "#1A2235", flapColor: "#111826", sealColor: "#C0C0D0", sealIcon: "🌙", preview: "It's very late, isn't it?", greeting: "Hey, sleepyhead.", ps: "Sleep. That's an order. (A very loving one.)", content: `You're awake again, aren't you?\nI knew it.\nInstead of sleeping like a normal person, you're reading letters on a website.\nHonestly... that's kind of cute.\n\nI know why you're awake.\nThe house gets quiet, the distractions stop, and suddenly your brain decides it's the perfect time to review everything that happened since 2014.\nEvery awkward moment.\nEvery unresolved worry.\nEvery thing you have to do tomorrow.\n\nIf I was sitting beside you right now, I'd probably pull the phone out of your hands.\nI'd hand you a warm mug of tea and pretend I wasn't worried about you.\nWe'd talk until your eyes couldn't stay open anymore.\n\nBut since I can't do that...\nI need you to do it for yourself.\nTake a slow breath.\nRelease the tension in your jaw.\nDrop your shoulders.\n\nYou don't have to solve tomorrow tonight.\nTomorrow's problems belong to tomorrow's version of you.\nTonight's version of you only has one job: to rest.\n\nClose your eyes.\nI'll meet you in tomorrow.` },
         { id: "smile", title: "When You Need A Smile", theme: "happy", font: "font-happy", paper: "paper-happy", envColor: "#FFFAF0", flapColor: "#F5EEDC", sealColor: "#FFD166", sealIcon: "😊", preview: "Smile inspection.", greeting: "Well... look who showed up.", ps: "If you're still refusing to smile, I'm going to assume you're just being stubborn.", content: `Excuse me.\nYes, you.\nSmile inspection. I'm waiting.\n...\nWas that a smile?\nNo?\nLooks like I'm going to have to work a little harder.\n\nCan I tell you something?\nOne of my favorite things about you is how easily you make other people smile.\nWhich is honestly a little unfair. Because now I have to compete with that.\n\nSo here's my attempt.\nYou're ridiculously cute.\nYou have the most contagious laugh.\nYou somehow make even the most ordinary conversations memorable.\nAnd you look really pretty when you're smiling.\n\nYes. That was absolutely me trying to convince you to smile.\nDid it work?\nI hope so. Because I'd hate to lose this very important competition.\n\nNow...\nSmile for me.\nJust a little.\n...\nThere it is.\nI knew I'd win eventually.` },
-        { id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad", envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧", preview: "I know today probably wasnt your favorite.", greeting: "Hi, sunshine.", ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` },
+        { id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad", envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧", preview: "I know today probably wasn't your favorite.", greeting: "Hi, sunshine.", ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` },
         { id: "miss", title: "When You Miss Me", theme: "warm", font: "font-warm", paper: "paper-warm", envColor: "#F5ECE1", flapColor: "#E8DAC6", sealColor: "#C9A680", sealIcon: "🧸", preview: "Hmm... someone misses me.", greeting: "Oh! It's you again.", ps: "Stop reading this and come find me already. I think I've waited long enough.", content: `So...\nYou clicked on this one.\nInteresting.\nMissing me already?\nYou're such a weirdo.\n...\nI mean, I get it.\nI'm pretty cool.\nI'm kidding.\n(Kind of.)\nI wish I knew what made you open this letter. Maybe today was just one of those days where you wanted someone familiar around. If that's the case, I hope this is enough until we can actually hang out.\nI like knowing that even when we're doing our own thing, we still somehow end up thinking about each other.\nThat's nice.\nLife gets busy, people get caught up in things, and sometimes days pass faster than we'd like.\nBut none of that changes the fact that I'm always happy to hear from you.\nSo don't overthink it.\nSend the text.\nCall me.\nSend me a meme.\nTell me something random.\nOr just say "hi."\nI promise I won't mind.\nNow stop sitting there smiling at your screen.\n<span class="you-exist">"It's making you look suspicious."</span>` },
         { id: "exam", title: "Before An Exam", theme: "happy", font: "font-happy", paper: "paper-happy", envColor: "#EDF2E6", flapColor: "#DCE6D2", sealColor: "#A3B899", sealIcon: "✏️", preview: "Breathe first.", greeting: "Hello, trouble.", ps: "If you finish the exam and immediately start overthinking every answer, I'm legally obligated to tell you to stop. You can't change the answers anymore, so go celebrate surviving instead.", content: `Alright.\nDeep breath.\nNo, seriously.\nTake one.\nDone?\nGood.\nI know you're probably sitting there thinking about everything you don't know instead of everything you've already studied.\nThat's just your brain being dramatic again.\nYou've worked hard.\nYou've put the time in.\nAnd now the only thing left to do is trust yourself.\nDon't let one question throw you off.\nIf you don't know the answer, move on.\nCome back later.\nOne difficult question doesn't decide the whole exam.\nAnd one exam definitely doesn't decide your future.\nJust do your best.\nThat's all anyone—including me—could ever ask of you.\nI'm already proud of you.\nNow go show that exam who's actually in charge.` },
         { id: "overthinking", title: "When You're Overthinking", theme: "night", font: "font-night", paper: "paper-night", envColor: "#25243B", flapColor: "#1A1A2E", sealColor: "#79728A", sealIcon: "🌌", preview: "Your brain is doing it again.", greeting: "Hey. Yeah, you.", ps: "Your brain is grounded for the rest of the day. It has officially lost overthinking privileges.", content: `Let me guess.\nYou've replayed the same conversation at least twelve times already.\nYou've imagined seventeen different outcomes.\nYou've somehow convinced yourself that the worst possible scenario is definitely going to happen.\nSound about right?\nYour brain deserves an award.\nNot for being correct.\nJust for having an incredible imagination.\nTake a breath.\nNot every awkward moment is remembered forever.\nNot every unanswered message means something's wrong.\nNot every silence needs filling.\nSometimes things are just...\nNormal.\nGive yourself a break.\nYou don't have to solve tomorrow tonight.\nAnd you definitely don't have to fight battles that only exist in your imagination.\nYour brain means well.\nIt's just being a little dramatic today.` },
@@ -485,8 +489,10 @@ try {
                         let randomImg = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
                         
                         // Prevent exact duplicates in the same letter
-                        while (usedImages.includes(randomImg)) {
-                            randomImg = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                        if (myCustomImages.length > 2) {
+                            while (usedImages.includes(randomImg)) {
+                                randomImg = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                            }
                         }
                         usedImages.push(randomImg);
 
