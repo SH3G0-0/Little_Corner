@@ -1,5 +1,5 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "The External Failsafe Edition"
+// 💌 MAGICAL LETTERS ENGINE - "The Indestructible Edition"
 // ==========================================================
 
 try {
@@ -91,6 +91,7 @@ try {
         .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
         .bg-motivation { background: linear-gradient(135deg, #FFE4B5, #FFDAB9); }
 
+        /* THEMES ALLOWED TO SHOW THROUGH (No hardcoded brown color overriding it) */
         .paper-happy { background-color: #fffaf0; color: #4B4453; }
         .paper-sad { background-color: #e6f0f5; color: #3a4454; }
         .paper-night { background-color: #1a2235; color: #dce4f0; }
@@ -99,6 +100,7 @@ try {
         .paper-angry { background-color: #e6e4e5; color: #2b2b2b; }
         .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
 
+        /* FULL SIZED LETTER PAPER */
         .letter-paper-full {
             width: 95%; max-width: 900px; height: 95vh; padding: 0; 
             border-radius: 2px 5px 3px 6px; 
@@ -112,13 +114,11 @@ try {
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
+        /* FIXED: No moving linear-gradient bands, no hardcoded background color blocking themes */
         .paper-content-wrapper { 
             position: relative; z-index: 5; padding: 100px 50px 80px 50px; min-height: 100%; box-sizing: border-box;
-            background-image: 
-                url("https://www.transparenttextures.com/patterns/aged-paper.png"),
-                linear-gradient(to bottom, transparent 33%, rgba(0,0,0,0.04) 33%, rgba(255,255,255,0.04) 34%, transparent 34%),
-                linear-gradient(to bottom, transparent 66%, rgba(0,0,0,0.04) 66%, rgba(255,255,255,0.04) 67%, transparent 67%);
-            background-color: #d8b898; background-blend-mode: multiply;
+            background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
+            background-blend-mode: multiply;
         }
         
         .paper-content-wrapper::after {
@@ -136,7 +136,7 @@ try {
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
         
-        /* Floating Emoji on Top Right */
+        /* Emoji on the Right */
         .floating-decor.d-tr { top: 40px; right: 50px; }
 
         .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
@@ -263,6 +263,7 @@ try {
                             <div id="paper-coffee" class="coffee-stain"></div>
                             <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
                             <div id="paper-top-note" class="sweet-note-top"></div>
+                            
                             <div id="d-tr" class="floating-decor d-tr">🌸</div>
                             
                             <div class="paper-header ink-text" id="paper-title"></div>
