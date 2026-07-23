@@ -1,22 +1,21 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "The Indestructible Edition"
+// 💌 MAGICAL LETTERS ENGINE - "The External Failsafe Edition"
 // ==========================================================
 
 try {
-    // --- 1. Load All Storybook & Handwritten Fonts ---
+    // --- 1. Load Fonts ---
     const fontLink = document.createElement('link');
     fontLink.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Serif+Display&family=Handlee&family=Marck+Script&family=Patrick+Hand&family=Quicksand:wght@400;600;700&display=swap';
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 
-    // --- 2. The Magical CSS ---
+    // --- 2. CSS ---
     const letterStyles = document.createElement('style');
     letterStyles.innerHTML = `
-        /* --- The Drawer Environment --- */
         #drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(245, 240, 235, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            display: none; flex-direction: column; align-items: center; z-index: 2000;
+            display: none; flex-direction: column; align-items: center; z-index: 999998;
             opacity: 0; transition: opacity 0.8s ease; overflow-y: auto; padding-bottom: 100px;
             scroll-behavior: smooth;
         }
@@ -74,15 +73,14 @@ try {
             padding: 15px 30px; border-radius: 30px;
             background: linear-gradient(90deg, #FFDCEB, #F2ECFF, #DDEEFF, #FFF6CC);
             color: #5D4E75; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem;
-            z-index: 9999; opacity: 0; pointer-events: none;
+            z-index: 999999; opacity: 0; pointer-events: none;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid white; white-space: nowrap;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
         #drawer-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* --- The Reading Room --- */
         #letter-room {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 3000;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; z-index: 999999;
             opacity: 0; transition: opacity 1.2s ease; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🪶</text></svg>") 12 12, auto;
         }
 
@@ -101,7 +99,6 @@ try {
         .paper-angry { background-color: #e6e4e5; color: #2b2b2b; }
         .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
 
-        /* FULL SIZED LETTER PAPER */
         .letter-paper-full {
             width: 95%; max-width: 900px; height: 95vh; padding: 0; 
             border-radius: 2px 5px 3px 6px; 
@@ -139,7 +136,7 @@ try {
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
         
-        /* EMOJI MOVED TO OPPOSITE SIDE */
+        /* Floating Emoji on Top Right */
         .floating-decor.d-tr { top: 40px; right: 50px; }
 
         .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
@@ -239,113 +236,136 @@ try {
 
     const hungryText = `I have one very important question.\nHave. You. Eaten?\n\nNo, "I'll eat later" is not an acceptable answer.\nNeither is "I forgot."\nAnd absolutely not "I just had coffee." That is not food.\n\nI know you.\nYou'll keep saying, "I'll eat in five minutes." And somehow five minutes turns into three hours.\nWe're not doing that today.\n\nSo here's the deal.\nPause whatever you're doing.\nGo find something to eat.\nI genuinely don't care if it's a full meal, leftovers from yesterday, instant noodles, a sandwich, or breakfast at 4 p.m.\nJust eat something.\n\nYour body has been working hard for you all day. The least you can do is give it some fuel.\nAnd before you say, "I'm not that hungry." You probably are. You've just ignored it long enough that your stomach gave up trying to convince you.\n\nIf you're sitting there thinking, "I don't really have anything to eat." Tell me.\nSeriously. I'll order you food.\nNo arguments. No "it's okay." No "you don't have to."\nI know exactly what you're about to say, and the answer is still no. Let me.\n\nNow... close this letter.\nGo eat.\nThen you can come back and tell me what you had.\nAnd if your answer is, "Nothing." I'm going to pretend to be very disappointed in you. (Okay... not pretend. I actually will be.)\n\nSo go. Shoo.\nYour food is waiting.`;
 
-    // --- 4. HTML Injection Engine ---
+    // --- 4. HTML Injection Engine (WITH ABSOLUTE FAILSAFE) ---
     window.injectHTML = function() {
-        const oldOverlay = document.getElementById('drawer-overlay');
-        const oldRoom = document.getElementById('letter-room');
-        if (oldOverlay) oldOverlay.remove();
-        if (oldRoom) oldRoom.remove();
+        try {
+            const oldOverlay = document.getElementById('drawer-overlay');
+            const oldRoom = document.getElementById('letter-room');
+            if (oldOverlay) oldOverlay.remove();
+            if (oldRoom) oldRoom.remove();
 
-        const engineHTML = `
-            <div id="drawer-overlay">
-                <div class="drawer-header">
-                    A Drawer Full Of Days<br>I Couldn't Be There
-                    <div class="drawer-subtitle">Pick whichever one your heart needs today.</div>
+            const engineHTML = `
+                <div id="drawer-overlay">
+                    <div class="drawer-header">
+                        A Drawer Full Of Days<br>I Couldn't Be There
+                        <div class="drawer-subtitle">Pick whichever one your heart needs today.</div>
+                    </div>
+                    <div id="envelope-grid"></div>
+                    <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
+                    <div id="drawer-toast"></div>
                 </div>
-                <div id="envelope-grid"></div>
-                <button class="letter-btn" onclick="window.closeDrawer()" style="margin-top: 60px;">🏡 Close Drawer</button>
-                
-                <div id="drawer-toast"></div>
-            </div>
 
-            <div id="letter-room">
-                <div id="room-particles"></div> 
-
-                <div class="letter-paper-full" id="active-paper">
-                    
-                    <div class="paper-content-wrapper" id="paper-wrapper">
-                        
-                        <div id="dynamic-graphics"></div>
-
-                        <div id="paper-coffee" class="coffee-stain"></div>
-                        
-                        <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
-
-                        <div id="paper-top-note" class="sweet-note-top"></div>
-
-                        <div id="d-tr" class="floating-decor d-tr">🌸</div>
-                        
-                        <div class="paper-header ink-text" id="paper-title"></div>
-                        <div class="paper-greeting ink-text" id="paper-greeting"></div>
-                        <div class="paper-body ink-text" id="paper-body"></div>
-                        <div id="interactive-zone" style="margin-top: 20px; position:relative; z-index:10;"></div>
-                        
-                        <div class="paper-footer" id="paper-footer" style="display:none; opacity:0; transition: opacity 1s;">
-                            <div class="paper-divider"></div>
-                            <div class="ps-box" id="paper-ps-box">
-                                <span class="ps-title ink-text">P.S.</span><br>
-                                <span class="ps-content ink-text" id="paper-ps-content"></span>
+                <div id="letter-room">
+                    <div id="room-particles"></div> 
+                    <div class="letter-paper-full" id="active-paper">
+                        <div class="paper-content-wrapper" id="paper-wrapper">
+                            <div id="dynamic-graphics"></div>
+                            <div id="paper-coffee" class="coffee-stain"></div>
+                            <div id="paper-margin-note" class="margin-note" style="top: 150px; right: 40px;"></div>
+                            <div id="paper-top-note" class="sweet-note-top"></div>
+                            <div id="d-tr" class="floating-decor d-tr">🌸</div>
+                            
+                            <div class="paper-header ink-text" id="paper-title"></div>
+                            <div class="paper-greeting ink-text" id="paper-greeting"></div>
+                            <div class="paper-body ink-text" id="paper-body"></div>
+                            <div id="interactive-zone" style="margin-top: 20px; position:relative; z-index:10;"></div>
+                            
+                            <div class="paper-footer" id="paper-footer" style="display:none; opacity:0; transition: opacity 1s;">
+                                <div class="paper-divider"></div>
+                                <div class="ps-box" id="paper-ps-box">
+                                    <span class="ps-title ink-text">P.S.</span><br>
+                                    <span class="ps-content ink-text" id="paper-ps-content"></span>
+                                </div>
+                                <div class="signature-text ink-text" id="paper-signature"></div>
                             </div>
-                            <div class="signature-text ink-text" id="paper-signature"></div>
+                            
+                            <div class="letter-controls" id="letter-controls">
+                                <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
+                                <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
+                            </div>
                         </div>
-                        
-                        <div class="letter-controls" id="letter-controls">
-                            <button class="letter-btn" onclick="window.backToDrawer()">📖 Read Another</button>
-                            <button class="letter-btn" onclick="window.foldLetter()">📩 Fold Letter</button>
-                        </div>
-
                     </div>
                 </div>
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', engineHTML);
+            `;
+            
+            if (document.body) {
+                document.body.insertAdjacentHTML('beforeend', engineHTML);
+            } else {
+                document.documentElement.insertAdjacentHTML('beforeend', engineHTML);
+            }
 
-        const paper = document.getElementById('active-paper');
-        const wrapper = document.getElementById('paper-wrapper');
-        paper.addEventListener('mousemove', (e) => {
-            const rect = wrapper.getBoundingClientRect();
-            wrapper.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
-            wrapper.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
-        });
+            const paper = document.getElementById('active-paper');
+            const wrapper = document.getElementById('paper-wrapper');
+            if (paper && wrapper) {
+                paper.addEventListener('mousemove', (e) => {
+                    const rect = wrapper.getBoundingClientRect();
+                    wrapper.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+                    wrapper.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+                });
+            }
+        } catch (e) {
+            console.error("Injection failed: ", e);
+        }
     };
 
-    window.injectHTML();
+    // The Failsafe Loader
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.injectHTML);
+    } else {
+        window.injectHTML();
+    }
 
     // --- 5. Logic & Animation ---
     let activeLetter = null;
     window.isTyping = false;
 
     window.openLetters = function() {
-        const dash = document.getElementById('main-dashboard');
-        const overlay = document.getElementById('drawer-overlay');
-        const grid = document.getElementById('envelope-grid');
-        
-        if(dash) {
-            dash.style.transition = 'filter 0.8s ease';
-            dash.style.filter = 'blur(12px) brightness(0.7)';
-        }
-        
-        let gridHTML = '';
-        window.lettersData.forEach(letter => {
-            gridHTML += `
-                <div class="envelope-container" 
-                     onmouseenter="window.showPreview('${letter.id}', this)" 
-                     onmouseleave="window.hidePreview()"
-                     onclick="window.openEnvelope('${letter.id}', this)">
-                    <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
-                    <div class="envelope-paper-preview"></div>
-                    <div class="envelope-body" style="background: ${letter.envColor};">
-                        <div class="envelope-label">${letter.title}</div>
-                    </div>
-                    <div class="wax-seal" style="background: ${letter.sealColor};">${letter.sealIcon}</div>
-                </div>
-            `;
-        });
-        grid.innerHTML = gridHTML;
+        try {
+            let overlay = document.getElementById('drawer-overlay');
+            let grid = document.getElementById('envelope-grid');
+            
+            if (!overlay || !grid) {
+                window.injectHTML();
+                overlay = document.getElementById('drawer-overlay');
+                grid = document.getElementById('envelope-grid');
+            }
 
-        overlay.style.display = 'flex';
-        void overlay.offsetWidth; 
-        overlay.style.opacity = '1';
+            if (!overlay || !grid) {
+                alert("Hold on! The letters are still loading. Please click again.");
+                return;
+            }
+
+            const dash = document.getElementById('main-dashboard');
+            if (dash) {
+                dash.style.transition = 'filter 0.8s ease';
+                dash.style.filter = 'blur(12px) brightness(0.7)';
+            }
+            
+            let gridHTML = '';
+            window.lettersData.forEach(letter => {
+                gridHTML += `
+                    <div class="envelope-container" 
+                         onmouseenter="window.showPreview('${letter.id}', this)" 
+                         onmouseleave="window.hidePreview()"
+                         onclick="window.openEnvelope('${letter.id}', this)">
+                        <div class="envelope-flap" style="border-top-color: ${letter.flapColor};"></div>
+                        <div class="envelope-paper-preview"></div>
+                        <div class="envelope-body" style="background: ${letter.envColor};">
+                            <div class="envelope-label">${letter.title}</div>
+                        </div>
+                        <div class="wax-seal" style="background: ${letter.sealColor};">${letter.sealIcon}</div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = gridHTML;
+
+            overlay.style.display = 'flex';
+            void overlay.offsetWidth; 
+            overlay.style.opacity = '1';
+
+        } catch (err) {
+            alert("Oops! Something went wrong opening the drawer: " + err.message);
+        }
     };
 
     window.closeDrawer = function() {
@@ -353,7 +373,7 @@ try {
         const overlay = document.getElementById('drawer-overlay');
         if(overlay) overlay.style.opacity = '0';
         if(dash) dash.style.filter = 'none';
-        setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 1000);
+        setTimeout(() => { if(overlay) overlay.style.display = 'none'; }, 800);
     };
 
     window.showPreview = function(id, el) {
@@ -391,95 +411,112 @@ try {
                 }, 100);
             }
             
-            const rainMusic = document.getElementById('sfx-rain');
-            if (rainMusic) {
-                rainMusic.volume = 0;
-                let playPromise = rainMusic.play();
-                if (playPromise !== undefined) playPromise.catch(e => console.log("Rain playback prevented:", e));
-                let rainFadeIn = setInterval(() => {
-                    if (rainMusic.volume < 0.25) rainMusic.volume = Math.min(rainMusic.volume + 0.02, 0.25);
-                    else clearInterval(rainFadeIn);
-                }, 100);
+            try {
+                const rainMusic = document.getElementById('sfx-rain');
+                if (rainMusic) {
+                    if (!window.rainLoopAttached) {
+                        rainMusic.addEventListener('timeupdate', function() {
+                            const buffer = 0.4; 
+                            if (this.duration && this.currentTime >= this.duration - buffer) {
+                                this.currentTime = 0.1;
+                                this.play().catch(e => console.log(e));
+                            }
+                        });
+                        window.rainLoopAttached = true;
+                    }
+
+                    if (rainMusic.paused || rainMusic.volume === 0) {
+                        rainMusic.volume = 0;
+                        let playPromise = rainMusic.play();
+                        if (playPromise !== undefined) playPromise.catch(e => console.log("Rain playback prevented:", e));
+                        let rainFadeIn = setInterval(() => {
+                            if (rainMusic.volume < 0.35) rainMusic.volume = Math.min(rainMusic.volume + 0.02, 0.35);
+                            else clearInterval(rainFadeIn);
+                        }, 100);
+                    } else {
+                        rainMusic.volume = 0.35;
+                    }
+                }
+            } catch (audioErr) {
+                console.log("Audio skipped", audioErr);
             }
 
             setTimeout(() => {
-                const room = document.getElementById('letter-room');
-                const paper = document.getElementById('active-paper');
-                const body = document.getElementById('paper-body');
-                const footer = document.getElementById('paper-footer');
-                const controls = document.getElementById('letter-controls');
-                const graphicsContainer = document.getElementById('dynamic-graphics');
-                
-                document.getElementById('drawer-overlay').style.display = 'none';
-                room.className = `bg-${activeLetter.theme}`;
-                
-                paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
-                
-                graphicsContainer.innerHTML = ''; 
-                const graphics = themeGraphicsMap[activeLetter.theme] || themeGraphicsMap['warm'];
-                graphics.forEach(g => {
-                    const div = document.createElement('div');
-                    div.className = 'real-pressed-flower';
-                    div.style.backgroundImage = `url('${g.url}')`;
-                    div.style.cssText += g.css;
-                    graphicsContainer.appendChild(div);
-                });
-                
-                // Using the updated 'd-tr' ID
-                document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
-                document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
-                document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
-                
-                let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
-                while (randomTopNote.includes("always")) {
-                   randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
-                }
-                document.getElementById('paper-top-note').innerText = randomTopNote;
-
-                document.getElementById('paper-title').innerText = activeLetter.title;
-                document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
-                
-                const randomDoodle = doodles[Math.floor(Math.random()*doodles.length)];
-                document.getElementById('paper-signature').innerHTML = `${sigs[Math.floor(Math.random()*sigs.length)]}<br>Muzna <span class="signature-icon">${randomDoodle}</span>`;
-                
-                if(activeLetter.ps) {
-                    document.getElementById('paper-ps-box').style.display = 'block';
-                    document.getElementById('paper-ps-content').innerText = activeLetter.ps;
-                } else {
-                    document.getElementById('paper-ps-box').style.display = 'none';
-                }
-
-                const interactive = document.getElementById('interactive-zone');
-                interactive.innerHTML = '';
-                body.innerHTML = '';
-                footer.style.opacity = '0';
-                footer.style.display = 'none';
-                controls.style.opacity = '0'; 
-
-                room.style.display = 'flex';
-                void room.offsetWidth; 
-                window.startAmbientParticles(activeLetter.theme);
-                room.style.opacity = '1';
-                
-                setTimeout(() => { 
-                    paper.classList.add('paper-ready'); 
+                try {
+                    const room = document.getElementById('letter-room');
+                    const paper = document.getElementById('active-paper');
+                    const body = document.getElementById('paper-body');
+                    const footer = document.getElementById('paper-footer');
+                    const controls = document.getElementById('letter-controls');
+                    const graphicsContainer = document.getElementById('dynamic-graphics');
                     
-                    if (activeLetter.interactive === "crying" || activeLetter.interactive === "hungry") {
-                        window.setupInteractive(activeLetter.interactive);
-                    } else {
-                        window.typewriterEffect(body, activeLetter.content, footer);
+                    document.getElementById('drawer-overlay').style.display = 'none';
+                    room.className = `bg-${activeLetter.theme}`;
+                    
+                    paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
+                    
+                    graphicsContainer.innerHTML = ''; 
+                    const graphics = themeGraphicsMap[activeLetter.theme] || themeGraphicsMap['warm'];
+                    graphics.forEach(g => {
+                        const div = document.createElement('div');
+                        div.className = 'real-pressed-flower';
+                        div.style.backgroundImage = `url('${g.url}')`;
+                        div.style.cssText += g.css;
+                        graphicsContainer.appendChild(div);
+                    });
+                    
+                    document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
+                    document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
+                    document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
+                    
+                    let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
+                    while (randomTopNote.includes("always")) {
+                       randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
                     }
-                }, 1200); 
+                    document.getElementById('paper-top-note').innerText = randomTopNote;
 
+                    document.getElementById('paper-title').innerText = activeLetter.title;
+                    document.getElementById('paper-greeting').innerText = activeLetter.greeting || "";
+                    
+                    const randomDoodle = doodles[Math.floor(Math.random()*doodles.length)];
+                    document.getElementById('paper-signature').innerHTML = `${sigs[Math.floor(Math.random()*sigs.length)]}<br>Muzna <span class="signature-icon">${randomDoodle}</span>`;
+                    
+                    if(activeLetter.ps) {
+                        document.getElementById('paper-ps-box').style.display = 'block';
+                        document.getElementById('paper-ps-content').innerText = activeLetter.ps;
+                    } else {
+                        document.getElementById('paper-ps-box').style.display = 'none';
+                    }
+
+                    const interactive = document.getElementById('interactive-zone');
+                    interactive.innerHTML = '';
+                    body.innerHTML = '';
+                    footer.style.opacity = '0';
+                    footer.style.display = 'none';
+                    controls.style.opacity = '0'; 
+
+                    room.style.display = 'flex';
+                    void room.offsetWidth; 
+                    window.startAmbientParticles(activeLetter.theme);
+                    room.style.opacity = '1';
+                    
+                    setTimeout(() => { 
+                        paper.classList.add('paper-ready'); 
+                        
+                        if (activeLetter.interactive === "crying" || activeLetter.interactive === "hungry") {
+                            window.setupInteractive(activeLetter.interactive);
+                        } else {
+                            window.typewriterEffect(body, activeLetter.content, footer);
+                        }
+                    }, 1200); 
+
+                } catch (innerError) {
+                    console.error("Error setting up letter:", innerError);
+                }
             }, 1200); 
 
         } catch (error) {
-            console.error("Failsafe caught an error opening the letter: ", error);
-            const room = document.getElementById('letter-room');
-            if (room) {
-                room.style.display = 'flex';
-                room.style.opacity = '1';
-            }
+            console.error("Failsafe caught an error opening the letter:", error);
         }
     };
 
@@ -509,6 +546,7 @@ try {
 
     window.typewriterEffect = async function(container, text, footerElement) {
         window.isTyping = true;
+        text = text || "";
         const lines = text.split('\n');
         const controls = document.getElementById('letter-controls');
         
@@ -581,12 +619,12 @@ try {
         }
     };
 
+    let particleInterval;
     window.startAmbientParticles = function(theme) {
         clearInterval(particleInterval);
         const container = document.getElementById('room-particles');
         
         if (!container) return; 
-        
         container.innerHTML = '';
         
         let type = '✨';
@@ -698,5 +736,5 @@ try {
     };
 
 } catch (globalError) {
-    alert("CRITICAL ERROR loading letters.js: " + globalError.message);
+    console.error("CRITICAL ERROR loading letters.js: ", globalError);
 }
