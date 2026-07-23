@@ -1,18 +1,21 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "Custom Random Graphics Edition"
+// 💌 MAGICAL LETTERS ENGINE - "Museum Artifact Edition"
 // ==========================================================
 
 try {
     // --- 1. YOUR CUSTOM IMAGES ---
-    // The engine will randomly pick 2 different images for every letter you open!
+    // The engine will randomly pick exactly 2 or 3 of these for every letter.
     const myCustomImages = [
         "Butterfly1.jpg",
         "Butterfly2.jpg",
         "Butterfly3.jpg",
+        "Carnation.png",
+        "Daisy.png",
         "Flower1.jpg",
         "Flower2.jpg",
         "Flower3.jpg",
-        "Flower4.jpg"
+        "Flower4.jpg",
+        "Flower5.jpg"
     ];
 
     // --- 2. Load Fonts ---
@@ -62,10 +65,17 @@ try {
             border-radius: 8px; z-index: 2; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); border: 1px solid rgba(60,20,0,0.2);
         }
 
+        /* --- REALISTIC WAX SEAL --- */
         .wax-seal {
             position: absolute; top: 80px; left: 120px; width: 40px; height: 40px; border-radius: 50%; z-index: 6;
             display: flex; justify-content: center; align-items: center; color: white;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.15), inset 0 -3px 5px rgba(0,0,0,0.2); font-size: 1.2rem; transition: all 0.5s ease;
+            box-shadow: inset -5px -6px 10px rgba(0,0,0,0.35), inset 4px 4px 8px rgba(255,255,255,0.2), 0 10px 18px rgba(0,0,0,0.3) !important;
+            font-size: 1.2rem; transition: all 0.5s ease; overflow: hidden;
+        }
+        .wax-glare {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.4), transparent 60%);
+            pointer-events: none;
         }
         @keyframes seal-crack { 0% { transform: scale(1); opacity:1; } 50% { transform: scale(1.3) rotate(15deg); filter: blur(2px); opacity:0.8;} 100% { transform: scale(0); opacity:0; } }
 
@@ -103,18 +113,19 @@ try {
         .bg-warm { background: linear-gradient(135deg, #FAD0C4, #FFD1FF); }
         .bg-motivation { background: linear-gradient(135deg, #FFE4B5, #FFDAB9); }
 
-        .paper-happy { background-color: #fffaf0; color: #4B4453; }
-        .paper-sad { background-color: #e6f0f5; color: #3a4454; }
-        .paper-night { background-color: #1a2235; color: #dce4f0; }
-        .paper-warm { background-color: #f2e3d5; color: #4a3b32; }
-        .paper-sick { background-color: #eef7f2; color: #3b4a41; }
-        .paper-angry { background-color: #e6e4e5; color: #2b2b2b; }
-        .paper-motivation { background-color: #fcf6e5; color: #4a3b22; }
+        .paper-happy { background-color: #fffaf0; }
+        .paper-sad { background-color: #e6f0f5; }
+        .paper-night { background-color: #1a2235; color: #e6eef8 !important; }
+        .paper-warm { background-color: #f2e3d5; }
+        .paper-sick { background-color: #eef7f2; }
+        .paper-angry { background-color: #e6e4e5; }
+        .paper-motivation { background-color: #fcf6e5; }
 
         .letter-paper-full {
             width: 95%; max-width: 900px; height: 95vh; padding: 0; 
             border-radius: 2px 5px 3px 6px; 
-            box-shadow: inset 0 0 100px rgba(60, 20, 0, 0.4), 0 20px 50px rgba(60, 20, 0, 0.3); 
+            /* Enhanced Burnt Edge Box Shadow */
+            box-shadow: inset 0 0 70px rgba(40,10,0,0.8), inset 0 0 15px rgba(0,0,0,0.6), 0 20px 50px rgba(60, 20, 0, 0.3); 
             transform: translateY(120px) scale(0.6) rotate(-5deg); opacity: 0; transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto; overflow-x: hidden; position: relative; scroll-behavior: smooth;
         }
@@ -129,6 +140,13 @@ try {
             background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
             background-blend-mode: multiply;
         }
+
+        /* --- PAPER FIBERS OVERLAY --- */
+        .paper-content-wrapper::before {
+            content: ""; position: absolute; inset: 0;
+            background: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+            opacity: 0.35; mix-blend-mode: overlay; pointer-events: none; z-index: 1;
+        }
         
         .paper-content-wrapper::after {
             content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
@@ -136,20 +154,26 @@ try {
             pointer-events: none; z-index: 10;
         }
         
-        /* THIS IS THE MAGIC TRICK THAT HIDES WHITE BACKGROUNDS ON JPG/PNG FILES */
+        /* --- REALISTIC BOTANICALS --- */
         .real-pressed-flower {
-            position: absolute; z-index: 4; pointer-events: none; background-size: cover; background-position: center;
-            mix-blend-mode: multiply; 
-            filter: sepia(0.6) contrast(1.1) opacity(0.5); 
-            mask-image: radial-gradient(circle, black 40%, transparent 70%); 
-            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+            position: absolute; pointer-events: none; 
+            background-repeat: no-repeat; background-size: contain; background-position: center;
+            mix-blend-mode: multiply; opacity: 0.82; z-index: 4; /* Sits below the text naturally */
+            filter: brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) drop-shadow(0 1px 2px rgba(0,0,0,0.15));
         }
 
         @keyframes drift { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
         .floating-decor { position: absolute; font-size: 2rem; opacity: 0.6; z-index: 10; animation: drift 6s ease-in-out infinite; pointer-events:none; }
         .floating-decor.d-tr { top: 40px; right: 50px; }
 
-        .coffee-stain { position:absolute; top: 120px; right: 10%; width:180px; height:180px; background:url('https://www.transparenttextures.com/patterns/stucco.png'); border-radius:50%; border: 6px solid rgba(80,40,10,0.12); opacity:0.7; mix-blend-mode:multiply; pointer-events:none; z-index:0; }
+        /* --- REALISTIC COFFEE STAIN --- */
+        .coffee-stain { 
+            position:absolute; top: 60px; right: 50px; width:180px; height:180px; 
+            background:url('https://www.transparenttextures.com/patterns/stucco.png'); 
+            border-radius:50%; border: 6px solid rgba(80,40,10,0.12); 
+            opacity:0.18; mix-blend-mode:multiply; pointer-events:none; z-index:2; 
+        }
+
         .margin-note { position: absolute; font-family: 'Caveat', cursive; font-size: 1.2rem; color: inherit; opacity: 0.4; transform: rotate(-10deg); z-index: 5; pointer-events:none; top: 110px; right: 40px; }
         .sweet-note-top { position: absolute; top: 30px; left: 40px; font-family: 'Caveat', cursive; font-size: 1.4rem; color: inherit; opacity: 0.5; font-style: italic; z-index: 5; font-weight: 700;}
 
@@ -161,8 +185,16 @@ try {
         .font-warm { font-family: 'Caveat', cursive; font-size: 26px; }
         .font-angry { font-family: 'Patrick Hand', cursive; font-size: 24px; }
         
-        .ink-text { text-shadow: 0 0 1px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.05); line-height: 2.1; white-space: pre-wrap; font-weight: 500; position: relative; z-index: 6;}
-        .paper-night .ink-text { text-shadow: 0 0 2px rgba(255,255,255,0.15); } 
+        /* --- HANDWRITTEN INK REALISM --- */
+        .ink-text { 
+            color: #24160f; text-shadow: 0 0.5px 0.5px rgba(0,0,0,0.15); 
+            line-height: 2.1; white-space: pre-wrap; font-weight: 500; position: relative; z-index: 6;
+        }
+        
+        /* Alternating line rotation to look handwritten */
+        .handwritten-line { display: inline-block; width: 100%; }
+        .handwritten-line:nth-child(odd) { transform: rotate(-0.2deg); }
+        .handwritten-line:nth-child(even) { transform: rotate(0.15deg); }
 
         .paper-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; font-weight: 700; font-size: 1.3em;}
         .paper-greeting { margin-bottom: 30px; font-weight: 700; font-size: 1.2em;}
@@ -197,7 +229,7 @@ try {
         { id: "reassurance", title: "When You Need Reassurance", theme: "warm", font: "font-warm", paper: "paper-warm", envColor: "#FFF5F5", flapColor: "#FCE8E8", sealColor: "#FFFFFF", sealIcon: "🤍", preview: "You don't have to carry this alone.", greeting: "Hey, love.", ps: "You don't have to ask if I'm free. Just call. We'll figure the rest out later. ❤️", content: `Can I be selfish for a second?\nI need you to promise me something.\nPromise me that when you're struggling...\nYou won't immediately decide to deal with everything on your own.\nI know that's what you usually do.\nYou tell yourself you'll figure it out.\nYou convince yourself you don't want to bother anyone.\nBut if there's one person I never want you to hesitate to bother...\nIt's me.\nSeriously.\nIf you're sad...\nCall me.\nIf you're angry...\nCall me.\nIf you're crying...\nCall me.\nIf you just had the best day ever and you're excited...\nPlease call me.\nI want to hear all of it.\nThe good days.\nThe bad days.\n<span class="imperfection-2">The completely random "guess what happened today" stories.</span>\nI don't just want to be around for your best moments.\nI want to be there for all of them.\nSo don't ever think you're too much.\nYou could never be too much for me.` },
         { id: "nosleep", title: "When You Can't Sleep", theme: "night", font: "font-night", paper: "paper-night", envColor: "#1A2235", flapColor: "#111826", sealColor: "#C0C0D0", sealIcon: "🌙", preview: "It's very late, isn't it?", greeting: "Hey, sleepyhead.", ps: "Sleep. That's an order. (A very loving one.)", content: `You're awake again, aren't you?\nI knew it.\nInstead of sleeping like a normal person, you're reading letters on a website.\nHonestly... that's kind of cute.\n\nI know why you're awake.\nThe house gets quiet, the distractions stop, and suddenly your brain decides it's the perfect time to review everything that happened since 2014.\nEvery awkward moment.\nEvery unresolved worry.\nEvery thing you have to do tomorrow.\n\nIf I was sitting beside you right now, I'd probably pull the phone out of your hands.\nI'd hand you a warm mug of tea and pretend I wasn't worried about you.\nWe'd talk until your eyes couldn't stay open anymore.\n\nBut since I can't do that...\nI need you to do it for yourself.\nTake a slow breath.\nRelease the tension in your jaw.\nDrop your shoulders.\n\nYou don't have to solve tomorrow tonight.\nTomorrow's problems belong to tomorrow's version of you.\nTonight's version of you only has one job: to rest.\n\nClose your eyes.\nI'll meet you in tomorrow.` },
         { id: "smile", title: "When You Need A Smile", theme: "happy", font: "font-happy", paper: "paper-happy", envColor: "#FFFAF0", flapColor: "#F5EEDC", sealColor: "#FFD166", sealIcon: "😊", preview: "Smile inspection.", greeting: "Well... look who showed up.", ps: "If you're still refusing to smile, I'm going to assume you're just being stubborn.", content: `Excuse me.\nYes, you.\nSmile inspection. I'm waiting.\n...\nWas that a smile?\nNo?\nLooks like I'm going to have to work a little harder.\n\nCan I tell you something?\nOne of my favorite things about you is how easily you make other people smile.\nWhich is honestly a little unfair. Because now I have to compete with that.\n\nSo here's my attempt.\nYou're ridiculously cute.\nYou have the most contagious laugh.\nYou somehow make even the most ordinary conversations memorable.\nAnd you look really pretty when you're smiling.\n\nYes. That was absolutely me trying to convince you to smile.\nDid it work?\nI hope so. Because I'd hate to lose this very important competition.\n\nNow...\nSmile for me.\nJust a little.\n...\nThere it is.\nI knew I'd win eventually.` },
-        { id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad", envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧", preview: "I know today probably wasn't your favorite.", greeting: "Hi, sunshine.", ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` },
+        { id: "down", title: "When You're Feeling Down", theme: "sad", font: "font-sad", paper: "paper-sad", envColor: "#EEF5F8", flapColor: "#DCE6EA", sealColor: "#9BAEBC", sealIcon: "🌧", preview: "I know today probably wasnt your favorite.", greeting: "Hi, sunshine.", ps: "Today's allowed to be a bad day. Just don't let it convince you that you're having a bad life.", content: `I don't know what happened today.\nMaybe something huge happened.\nMaybe nothing actually happened at all.\nMaybe it was just one of those strange days where everything felt heavier than it should have.\n\nYou woke up already tired.\nSmall things felt bigger.\nPeople were a little colder.\nAnd somehow by the time you got here... you just didn't have much left in you.\n\nYou know something funny?\nI think everyone has days like that. The difference is that nobody really talks about them. We all walk around pretending we're completely okay while secretly hoping someone notices we're carrying a little too much.\n\nI wish I could knock on your door right now.\nI wouldn't ask you a hundred questions.\nI wouldn't tell you to "cheer up."\nI'd probably just sit next to you.\nMaybe we'd make tea. Maybe we'd watch something stupid. Maybe we'd just sit in silence. Because sometimes people don't need solutions. Sometimes they just need company.\n\nTake a breath.\n...\nAgain.\nI'm serious.\n\nIf today feels impossible... don't try to fix your entire life tonight.\nDrink some water. Eat something warm. Get under your blanket.\nThose tiny things are still victories.\n\nAnd if tomorrow isn't any better... come back.\nThis letter isn't going anywhere. Neither am I.` },
         { id: "miss", title: "When You Miss Me", theme: "warm", font: "font-warm", paper: "paper-warm", envColor: "#F5ECE1", flapColor: "#E8DAC6", sealColor: "#C9A680", sealIcon: "🧸", preview: "Hmm... someone misses me.", greeting: "Oh! It's you again.", ps: "Stop reading this and come find me already. I think I've waited long enough.", content: `So...\nYou clicked on this one.\nInteresting.\nMissing me already?\nYou're such a weirdo.\n...\nI mean, I get it.\nI'm pretty cool.\nI'm kidding.\n(Kind of.)\nI wish I knew what made you open this letter. Maybe today was just one of those days where you wanted someone familiar around. If that's the case, I hope this is enough until we can actually hang out.\nI like knowing that even when we're doing our own thing, we still somehow end up thinking about each other.\nThat's nice.\nLife gets busy, people get caught up in things, and sometimes days pass faster than we'd like.\nBut none of that changes the fact that I'm always happy to hear from you.\nSo don't overthink it.\nSend the text.\nCall me.\nSend me a meme.\nTell me something random.\nOr just say "hi."\nI promise I won't mind.\nNow stop sitting there smiling at your screen.\n<span class="you-exist">"It's making you look suspicious."</span>` },
         { id: "exam", title: "Before An Exam", theme: "happy", font: "font-happy", paper: "paper-happy", envColor: "#EDF2E6", flapColor: "#DCE6D2", sealColor: "#A3B899", sealIcon: "✏️", preview: "Breathe first.", greeting: "Hello, trouble.", ps: "If you finish the exam and immediately start overthinking every answer, I'm legally obligated to tell you to stop. You can't change the answers anymore, so go celebrate surviving instead.", content: `Alright.\nDeep breath.\nNo, seriously.\nTake one.\nDone?\nGood.\nI know you're probably sitting there thinking about everything you don't know instead of everything you've already studied.\nThat's just your brain being dramatic again.\nYou've worked hard.\nYou've put the time in.\nAnd now the only thing left to do is trust yourself.\nDon't let one question throw you off.\nIf you don't know the answer, move on.\nCome back later.\nOne difficult question doesn't decide the whole exam.\nAnd one exam definitely doesn't decide your future.\nJust do your best.\nThat's all anyone—including me—could ever ask of you.\nI'm already proud of you.\nNow go show that exam who's actually in charge.` },
         { id: "overthinking", title: "When You're Overthinking", theme: "night", font: "font-night", paper: "paper-night", envColor: "#25243B", flapColor: "#1A1A2E", sealColor: "#79728A", sealIcon: "🌌", preview: "Your brain is doing it again.", greeting: "Hey. Yeah, you.", ps: "Your brain is grounded for the rest of the day. It has officially lost overthinking privileges.", content: `Let me guess.\nYou've replayed the same conversation at least twelve times already.\nYou've imagined seventeen different outcomes.\nYou've somehow convinced yourself that the worst possible scenario is definitely going to happen.\nSound about right?\nYour brain deserves an award.\nNot for being correct.\nJust for having an incredible imagination.\nTake a breath.\nNot every awkward moment is remembered forever.\nNot every unanswered message means something's wrong.\nNot every silence needs filling.\nSometimes things are just...\nNormal.\nGive yourself a break.\nYou don't have to solve tomorrow tonight.\nAnd you definitely don't have to fight battles that only exist in your imagination.\nYour brain means well.\nIt's just being a little dramatic today.` },
@@ -250,7 +282,10 @@ try {
                             
                             <div class="paper-header ink-text" id="paper-title"></div>
                             <div class="paper-greeting ink-text" id="paper-greeting"></div>
+                            
+                            <!-- The body where alternating line rotations happen -->
                             <div class="paper-body ink-text" id="paper-body"></div>
+                            
                             <div id="interactive-zone" style="margin-top: 20px; position:relative; z-index:10;"></div>
                             
                             <div class="paper-footer" id="paper-footer" style="display:none; opacity:0; transition: opacity 1s;">
@@ -336,7 +371,10 @@ try {
                         <div class="envelope-body" style="background: ${letter.envColor};">
                             <div class="envelope-label">${letter.title}</div>
                         </div>
-                        <div class="wax-seal" style="background: ${letter.sealColor};">${letter.sealIcon}</div>
+                        <div class="wax-seal" style="background: ${letter.sealColor};">
+                            <div class="wax-glare"></div>
+                            ${letter.sealIcon}
+                        </div>
                     </div>
                 `;
             });
@@ -438,38 +476,39 @@ try {
                     
                     paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
                     
+                    // --- DYNAMIC MUSEUM ARTIFACT GENERATOR ---
                     graphicsContainer.innerHTML = ''; 
+                    const numGraphics = Math.floor(Math.random() * 2) + 2; // Randomly 2 or 3 images
                     
-                    // Pick 2 random images from your custom list
-                    let randomImg1 = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
-                    let randomImg2 = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
-                    
-                    // Try to make sure they aren't the exact same image
-                    if (myCustomImages.length > 1) {
-                        while (randomImg1 === randomImg2) {
-                            randomImg2 = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                    let usedImages = [];
+                    for (let i = 0; i < numGraphics; i++) {
+                        let randomImg = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
+                        
+                        // Prevent exact duplicates in the same letter
+                        while (usedImages.includes(randomImg)) {
+                            randomImg = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
                         }
-                    }
+                        usedImages.push(randomImg);
 
-                    // Randomize their rotation slightly for a natural look
-                    const rot1 = Math.floor(Math.random() * 40) - 20; 
-                    const rot2 = Math.floor(Math.random() * 40) - 20;
+                        const scale = 0.5 + (Math.random() * 0.4); 
+                        const rot = (Math.random() * 80) - 40;
+                        const top = Math.random() * 70; // 0% to 70% down the page
+                        const left = Math.random() * 75; // 0% to 75% across the page
 
-                    const graphics = [
-                        { url: randomImg1, css: `top: 650px; right: -10px; width: 250px; height: 250px; transform: rotate(${rot1}deg);` },
-                        { url: randomImg2, css: `top: 150px; left: -20px; width: 200px; height: 200px; transform: rotate(${rot2}deg);` }
-                    ];
-
-                    graphics.forEach(g => {
                         const div = document.createElement('div');
                         div.className = 'real-pressed-flower';
-                        div.style.backgroundImage = `url('${g.url}')`;
-                        div.style.cssText += g.css;
+                        div.style.backgroundImage = `url('${randomImg}')`;
+                        div.style.top = `${top}%`;
+                        div.style.left = `${left}%`;
+                        div.style.width = '300px';
+                        div.style.height = '300px';
+                        div.style.transform = `rotate(${rot}deg) scale(${scale})`;
+                        
                         graphicsContainer.appendChild(div);
-                    });
+                    }
                     
                     document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
-                    document.getElementById('paper-coffee').style.display = (Math.random() < 0.05) ? 'block' : 'none';
+                    document.getElementById('paper-coffee').style.display = (Math.random() < 0.25) ? 'block' : 'none'; // 25% chance for coffee stain
                     document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
                     
                     let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
@@ -556,21 +595,25 @@ try {
         for(let i=0; i<lines.length; i++) {
             if(!window.isTyping) break;
             
+            // Wrap each line in a div so we can apply the handwritten rotation CSS to it
+            const lineWrapper = document.createElement('div');
+            lineWrapper.className = 'handwritten-line';
+            container.appendChild(lineWrapper);
+            
             if(lines[i].trim() === '') {
-                container.appendChild(document.createElement('br'));
+                lineWrapper.innerHTML = '&nbsp;';
                 continue;
             }
             
             const span = document.createElement('span');
             if (lines[i].includes('<span')) {
                 span.innerHTML = lines[i];
-                container.appendChild(span);
-                container.appendChild(document.createElement('br'));
+                lineWrapper.appendChild(span);
                 await new Promise(r => setTimeout(r, 600));
                 continue;
             }
 
-            container.appendChild(span);
+            lineWrapper.appendChild(span);
             let lineStr = lines[i];
             
             if (lineStr.trim() === '...') {
@@ -583,7 +626,6 @@ try {
                     await new Promise(r => setTimeout(r, 35)); 
                 }
             }
-            container.appendChild(document.createElement('br'));
             await new Promise(r => setTimeout(r, 400)); 
         }
         
