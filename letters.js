@@ -1,18 +1,18 @@
 // ==========================================================
-// 💌 MAGICAL LETTERS ENGINE - "Visual Novel / Museum Edition"
+// 💌 MAGICAL LETTERS ENGINE - "Perfect Border Framing Edition"
 // ==========================================================
 
 try {
     // --- 1. YOUR CUSTOM IMAGES ---
-    // The engine will randomly pick 2 or 3 of these for every letter.
+    // The engine will randomly pick exactly 2 or 3 of these for every letter.
     const myCustomImages = [
         "Butterfly1.png",
         "Butterfly2.png",
         "Daisy.png",
-        "Flower1.png",
-        "Flower2.png",
-        "Flower3.png",
-        "Flower4.png",
+        "Flower1.jpg",
+        "Flower2.jpg",
+        "Flower3.jpg",
+        "Flower4.jpg",
         "Leaves.png",
         "Sunflower.png"
     ];
@@ -138,7 +138,7 @@ try {
         
         .letter-paper-full::-webkit-scrollbar { display: none; }
         
-        /* Padding moved here to frame the text nicely inside the paper */
+        /* Padding frames the text nicely inside the paper */
         .paper-content-wrapper { 
             position: relative; z-index: 5; padding: 90px; min-height: 100%; box-sizing: border-box;
             background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
@@ -480,10 +480,24 @@ try {
                     
                     paper.className = `letter-paper-full ${activeLetter.paper} ${activeLetter.font}`;
                     
-                    // --- DYNAMIC MUSEUM ARTIFACT GENERATOR ---
+                    // --- STATIC BORDER ZONE PLACEMENT ENGINE ---
+                    // By using fixed pixels from the top, they will NEVER move when text is typing!
                     graphicsContainer.innerHTML = ''; 
-                    const numGraphics = Math.floor(Math.random() * 2) + 2; // Randomly 2 or 3 images
+                    const numGraphics = Math.floor(Math.random() * 2) + 2; 
                     
+                    // Pre-calculate 6 distinct border zones 
+                    let borderZones = [
+                        `top: ${Math.floor(Math.random() * 80 + 20)}px; left: ${Math.floor(Math.random() * 40 - 20)}px;`,   // Top Left Corner
+                        `top: ${Math.floor(Math.random() * 80 + 20)}px; right: ${Math.floor(Math.random() * 40 - 20)}px;`,  // Top Right Corner
+                        `top: ${Math.floor(Math.random() * 150 + 350)}px; left: ${Math.floor(Math.random() * 30 - 15)}px;`, // Mid Left Border
+                        `top: ${Math.floor(Math.random() * 150 + 350)}px; right: ${Math.floor(Math.random() * 30 - 15)}px;`,// Mid Right Border
+                        `top: ${Math.floor(Math.random() * 100 + 650)}px; left: ${Math.floor(Math.random() * 40 - 20)}px;`, // Bottom Left Area
+                        `top: ${Math.floor(Math.random() * 100 + 650)}px; right: ${Math.floor(Math.random() * 40 - 20)}px;` // Bottom Right Area
+                    ];
+                    
+                    // Shuffle the zones so they are different every time
+                    borderZones.sort(() => 0.5 - Math.random());
+
                     let usedImages = [];
                     for (let i = 0; i < numGraphics; i++) {
                         let randomImg = myCustomImages[Math.floor(Math.random() * myCustomImages.length)];
@@ -498,23 +512,20 @@ try {
 
                         const scale = 0.5 + (Math.random() * 0.4); 
                         const rot = (Math.random() * 80) - 40;
-                        const top = Math.random() * 70; // 0% to 70% down the page
-                        const left = Math.random() * 75; // 0% to 75% across the page
 
                         const div = document.createElement('div');
                         div.className = 'real-pressed-flower';
                         div.style.backgroundImage = `url('${randomImg}')`;
-                        div.style.top = `${top}%`;
-                        div.style.left = `${left}%`;
-                        div.style.width = '300px';
-                        div.style.height = '300px';
+                        div.style.width = '280px';
+                        div.style.height = '280px';
+                        div.style.cssText += borderZones[i]; // Apply the fixed pixel zone
                         div.style.transform = `rotate(${rot}deg) scale(${scale})`;
                         
                         graphicsContainer.appendChild(div);
                     }
                     
                     document.getElementById('d-tr').innerText = doodles[Math.floor(Math.random()*doodles.length)];
-                    document.getElementById('paper-coffee').style.display = (Math.random() < 0.25) ? 'block' : 'none'; // 25% chance for coffee stain
+                    document.getElementById('paper-coffee').style.display = (Math.random() < 0.25) ? 'block' : 'none'; 
                     document.getElementById('paper-margin-note').innerText = (Math.random() < 0.3) ? marginNotes[Math.floor(Math.random()*marginNotes.length)] : '';
                     
                     let randomTopNote = topNotes[Math.floor(Math.random()*topNotes.length)];
